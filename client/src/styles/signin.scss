@@ -1,0 +1,47 @@
+@import './variables';
+
+
+
+.auth{
+
+    min-width: 25rem;
+    box-shadow: $box-shadow;
+    margin-top: 2rem;
+
+    &__header{
+        background-image: url('https://miro.medium.com/max/3440/0*8UNAgR_1_4SMV4BY.png');
+        background-position: center;
+        background-size: cover;
+        height: 8rem;
+        border-radius: 5px 5px 0 0;
+
+        &__overlay{
+            border-radius: 5px 5px 0 0;
+            background-color: #677b8699;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+    }
+
+    &__body{
+        background-color: white;
+        padding: 30px;
+        border-radius: 0 0 5px 5px;
+    }
+
+    &__btn{
+        // width: 8rem !important;
+        border-radius: 10rem !important;
+    }
+}
+
+
+@media screen and (max-width: 380px){
+        
+    .auth{
+        min-width: auto;
+    }
+}
