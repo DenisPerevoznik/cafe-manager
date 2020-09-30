@@ -27,12 +27,7 @@ const User = db.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    token: {
-        type: DataTypes.STRING,
-        allowNull: true
-    }
 });
 
-User.hasMany(Company, {onDelete: 'cascade'});
-
+User.hasMany(Company, {as: 'companies', foreignKey: 'userId', onDelete: 'cascade'});
 module.exports = User;
