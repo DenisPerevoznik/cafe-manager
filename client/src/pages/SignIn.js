@@ -1,14 +1,44 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {MDBBtn, MDBInput} from 'mdbreact';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import {useToasts} from 'react-toast-notifications';
+import { useDispatch, useSelector } from 'react-redux';
 import '../styles/signin.scss';
+import { hideLoader, showLoader } from '../redux/actions';
 
 export const SignIn = () => {
 
-    const [loading, setLoading] = useState(false);
-    const [form, setForm] = useState({});
+    const loader = useSelector(state => state.main.loader);
+    const dispatch = useDispatch();
+    const [form, setForm] = useState({
+        email: '',
+        password: ''
+    });
+    const auth = useContext(AuthContext);
+    const {addToast} = useToasts();
 
     function changeHandler(event){
 
+        setForm({...form, [event.target.name]: event.target.value});
+    }
+
+    async function sendForm(event){
+
+        event.preventDefault();
+
+        dispatch(showLoader());
+        axios.post('/api/auth/signin', form, {headers: {'Content-Type': 'application/json'}})
+        .then(response => {
+            
+            const {userId, token} = response.data;
+            auth.login(userId, token);
+            dispatch(hideLoader());
+        })
+        .catch(error => {
+            addToast(error.response.data.message, {appearance: "error"});
+            dispatch(hideLoader());
+        });
     }
 
     return (
@@ -24,7 +54,7 @@ export const SignIn = () => {
                     
                     <div className="auth__body">
 
-                        <form>
+                        <form onSubmit={sendForm}>
                             <div className="grey-text">
                                 <MDBInput label="Email" icon="envelope" group type="email" validate error="wrong"
                                     success="right" name="email" value={form.email} onChange={changeHandler} required/>
@@ -33,8 +63,9 @@ export const SignIn = () => {
                                     validate name="password" value={form.password} onChange={changeHandler}/>
                             </div>
                             <div className="text-center">
-                                <MDBBtn color="success" type={loading ? "button" : "submit"} disabled={loading} className="auth__btn">
-                                {loading ? 
+                                <MDBBtn color="success" type={loader ? "button" : "submit"} disabled={loader} 
+                                    className="auth__btn">
+                                {loader ? 
                                     <>
                                         <span className="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
                                         Обработка...</> 
