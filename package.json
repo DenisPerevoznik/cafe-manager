@@ -26,12 +26,18 @@
   },
   "homepage": "https://github.com/DenisPerevoznik/sleam#readme",
   "devDependencies": {
+    "color": "^3.1.2",
     "concurrently": "^5.3.0",
     "cross-env": "^7.0.2",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "config": "^3.3.2",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
   }
 }
