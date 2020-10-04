@@ -29,5 +29,5 @@ const User = db.define('User', {
     },
 });
 
-User.hasMany(Company, {as: 'companies', foreignKey: 'userId', onDelete: 'cascade'});
+User.hasMany(Company, {onDelete: 'cascade'});
 module.exports = User;

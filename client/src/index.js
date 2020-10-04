@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { rootReducer } from './redux/rootReducer';
 import {Provider} from 'react-redux';
+import {ToastProvider} from 'react-toast-notifications';
 import thunk from 'redux-thunk';
 import './index.scss';
 import App from './App';
@@ -11,7 +12,9 @@ import * as serviceWorker from './serviceWorker';
 const store = createStore(rootReducer, ['Use Redux'], applyMiddleware(thunk));
 const app = (
   <Provider store={store}>
-    <App/>
+    <ToastProvider autoDismiss={true}>
+      <App/>
+    </ToastProvider>
   </Provider>
 );
 

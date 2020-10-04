@@ -1,6 +1,7 @@
 const {DataTypes} = require('sequelize');
 const User = require('./User');
 const db = require('../config/database');
+const Account = require('./Account');
 
 const Company = db.define('Company', {
 
@@ -15,5 +16,7 @@ const Company = db.define('Company', {
         allowNull: false
     },
 });
+
+Company.hasMany(Account, {onDelete: 'cascade'});
 
 module.exports = Company;

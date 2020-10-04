@@ -5,6 +5,7 @@ const User = require('../models/User');
 const {check, validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
 const config = require('config');
+const auth = require('../middleware/auth.middleware');
 
 router.post('/signup', 
 [
@@ -29,7 +30,8 @@ router.post('/signup',
         const secretPass = await bcrypt.hash(password, 15);
         User.create({name, surname, email, password: secretPass})
         .then(user => {
-            res.status(200).json({user, message: 'Пользователь успешно создан'});
+            const token = createToken(user.id);
+            res.status(200).json({token, userId: user.id, message: 'Пользователь успешно создан'});
         })
         .catch(error => {res.status(400).json({message: `Ошибка создания пользователя: ${error.message}`})});
     } catch (error) {
@@ -59,9 +61,7 @@ router.post('/signin',
             
             if(checkPass){
 
-                const token = jwt.sign({userId: user.id}, 
-                    config.get('jwtSecretKey'), {expiresIn: '2 days'});
-                
+                const token = createToken(user.id);
                 return res.json({token, userId: user.id});
             }
         }
@@ -71,5 +71,16 @@ router.post('/signin',
         res.status(400).json({message: config.get('unknownErrorMessage')});
     }
 });
+
+router.get('/check', auth, (req, res) => {
+
+    res.status(200).json({message: 'Авторизация выполнена'});
+});
+
+function createToken(userId){
+
+    return jwt.sign({userId}, 
+        config.get('jwtSecretKey'), {expiresIn: '2 days'});
+}
 
 module.exports = router;

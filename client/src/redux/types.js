@@ -1,3 +1,14 @@
 
 export const SHOW_LOADER = 'APP/SHOW_LOADER';
 export const HIDE_LOADER = 'APP/HIDE_LOADER';
+export const TOGGLE_MODAL = 'APP/TOGGLE_MODAL';
+export const ERROR = 'APP/ERROR';
+export const CLEAR_ERROR = 'APP/CLEAR_ERROR';
+
+// AUTH
+export const CHANGE_AUTH_FORM = 'AUTH/CHANGE_AUTH_FORM';
+
+// COMPANY
+export const ADD_COMPANY = 'COMPANY/CREATE';
+export const GET_COMPANIES = 'COMPANY/GET_ALL';
+export const CLEAR_COMPANIES = 'COMPANY/CLEAR_ALL';

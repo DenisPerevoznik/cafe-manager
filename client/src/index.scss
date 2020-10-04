@@ -14,3 +14,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.new-company-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 15rem;
+  height: 15rem;
+  border: 2px dashed gray;
+  transition: 0.3s ease;
+
+  > i{
+    font-size: 60px;
+  }
+
+  &:hover{
+    opacity: 0.5;
+    cursor: pointer;
+  }
+}
