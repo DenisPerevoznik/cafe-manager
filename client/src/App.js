@@ -11,7 +11,7 @@ import 'mdbreact/dist/css/mdb.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.scss';
 import axios from 'axios';
-import { clearError } from './redux/actions';
+import { clearError, clearMessage } from './redux/actions';
 
 function App() {
 
@@ -19,6 +19,7 @@ function App() {
   const isAuthenticated = !!token;
   const routes = useRoutes(isAuthenticated);
   const error = useSelector(state => state.main.error);
+  const message = useSelector(state => state.main.message);
   const {addToast} = useToasts();
   const dispatch = useDispatch();
 
@@ -30,7 +31,7 @@ function App() {
         logout();
       })
     }
-  }, [isAuthenticated]);
+  }, []);
 
   useEffect(() => {
 
@@ -42,6 +43,14 @@ function App() {
       dispatch(clearError());
     }
   }, [error]);
+
+  useEffect(() => {
+
+    if(Object.keys(message).length){
+      addToast(message.text, {appearance: message.type});
+      dispatch(clearMessage());
+    }
+  }, [message]);
 
   return (
     <>

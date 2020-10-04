@@ -1,9 +1,10 @@
-import {SHOW_LOADER, HIDE_LOADER, TOGGLE_MODAL, ERROR, CLEAR_ERROR} from './types';
+import {SHOW_LOADER, HIDE_LOADER, ERROR, 
+    CLEAR_ERROR, MESSAGE, CLEAR_MESSAGE} from './types';
 
 const initialState = {
     loader: false,
-    toggleModal: false,
-    error: {}
+    error: {},
+    message: {}
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -15,15 +16,17 @@ export const mainReducer = (state = initialState, action) => {
         case HIDE_LOADER:
             return {...state, loader: false};
 
-        case TOGGLE_MODAL:
-            return {...state, toggleModal: !state.toggleModal};
-
         case ERROR:
             return {...state, error: action.payload};
 
-        case CLEAR_ERROR:{
+        case CLEAR_ERROR:
             return {...state, error: {}};
-        }
+
+        case MESSAGE:
+            return {...state, message: action.payload}
+
+        case CLEAR_MESSAGE:
+            return {...state, message: {}}
         default:
             return state;
     }

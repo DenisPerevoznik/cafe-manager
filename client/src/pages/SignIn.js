@@ -33,12 +33,11 @@ export const SignIn = () => {
             
             const {userId, token} = response.data;
             auth.login(userId, token);
-            dispatch(hideLoader());
         })
         .catch(error => {
             addToast(error.response.data.message, {appearance: "error"});
-            dispatch(hideLoader());
-        });
+        })
+        .finally(() => {dispatch(hideLoader())});
     }
 
     return (

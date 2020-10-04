@@ -15,16 +15,11 @@ export const Companies = () => {
     const auth = useContext(AuthContext);
 
     useEffect(() => {
-        if(auth.token){
-            dispatch(getCompanies(auth.token));
-        }
-    }, [auth])
+        dispatch(getCompanies(auth.token));
+    }, [])
 
     function create(name){
-        dispatch(createCompany({name}, auth.token))
-        .then(() => {
-            addToast('Новая компания успешно создана', {appearance: "success"});
-        });
+        dispatch(createCompany({name}, auth.token));
     }
 
     return (

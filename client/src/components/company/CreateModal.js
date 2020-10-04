@@ -1,17 +1,14 @@
 import { MDBBtn, MDBInput, MDBModal, MDBModalBody, MDBModalFooter, MDBModalHeader } from 'mdbreact';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleModal } from '../../redux/actions';
 
 export const CreateModal = ({onCreate}) => {
 
-    const toggle = useSelector(state => state.main.toggleModal);
-    const dispatch = useDispatch();
     const [name, setName] = useState('');
     const [valid, setValid] = useState(false);
+    const [toggle, setToggle] = useState(false);
 
     function changeToggle(){
-        dispatch(toggleModal(toggle));
+        setToggle(!toggle);
     }
 
     function changeHandler(event){
@@ -23,7 +20,7 @@ export const CreateModal = ({onCreate}) => {
     function create(){
         if(valid){
             onCreate(name);
-            changeToggle();
+            setToggle(false);
         }
     }
 

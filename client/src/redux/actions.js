@@ -1,4 +1,4 @@
-import { SHOW_LOADER, HIDE_LOADER, TOGGLE_MODAL, ERROR, CLEAR_ERROR } from "./types";
+import { SHOW_LOADER, HIDE_LOADER, ERROR, CLEAR_ERROR, MESSAGE, CLEAR_MESSAGE } from "./types";
 
 export function showLoader(){
 
@@ -15,12 +15,7 @@ export function hideLoader(){
     };
 }
 
-export function toggleModal(){
-    return {
-        type: TOGGLE_MODAL
-    };
-}
-
+// Уведомления
 export function createError(error = {}){
 
     return {
@@ -28,7 +23,17 @@ export function createError(error = {}){
         payload: error
     };
 }
-
 export function clearError(){
     return {type: CLEAR_ERROR};
+}
+
+export function createMessgae(message = {text: 'Текст сообщения не задан', type: 'info'}){
+    return {
+        type: MESSAGE,
+        payload: message
+    };
+}
+
+export function clearMessage(){
+    return {type: CLEAR_MESSAGE};
 }

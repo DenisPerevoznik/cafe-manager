@@ -1,9 +1,10 @@
 
 export const SHOW_LOADER = 'APP/SHOW_LOADER';
 export const HIDE_LOADER = 'APP/HIDE_LOADER';
-export const TOGGLE_MODAL = 'APP/TOGGLE_MODAL';
 export const ERROR = 'APP/ERROR';
 export const CLEAR_ERROR = 'APP/CLEAR_ERROR';
+export const MESSAGE = 'APP/MESSAGE';
+export const CLEAR_MESSAGE = 'APP/CLEAR_MESSAGE';
 
 // AUTH
 export const CHANGE_AUTH_FORM = 'AUTH/CHANGE_AUTH_FORM';

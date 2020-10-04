@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createError, hideLoader, showLoader } from "../actions";
+import { createError, createMessgae, hideLoader, showLoader } from "../actions";
 import { ADD_COMPANY, CLEAR_COMPANIES, GET_COMPANIES } from "../types";
 import {createErrorObject} from '../../utils/utils';
 
@@ -10,17 +10,18 @@ export function createCompany(data = {}, token){
         axios.post('/api/companies/create', data, 
             {headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`}})
             .then(res => {
-                dispatch(hideLoader());
-                const {createdCompany, companies} = res.data;
+                const {createdCompany, companies, message} = res.data;
 
                 dispatch({type: ADD_COMPANY, payload: {
                     createdCompany,
                     companies
                 }});
+                dispatch(createMessgae({text: message, type: 'success'}));
             })
             .catch(err => {
                 dispatch(createError(createErrorObject(err)));
-            });
+            })
+            .finally(() => {dispatch(hideLoader())});
     }
 }
 
@@ -31,13 +32,13 @@ export function getCompanies(token){
         await axios.get(`/api/companies/`, 
             {headers: {Authorization: `Bearer ${token}`}})
             .then(res => {
-                dispatch(hideLoader());
                 const {companies} = res.data;
                 dispatch({type: GET_COMPANIES, payload: companies});
             })
             .catch(err => {
                 dispatch(createError(createErrorObject(err)));
-            });
+            })
+            .finally(() => {dispatch(hideLoader())});
     }
 }
 
