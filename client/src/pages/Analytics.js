@@ -1,19 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { hryvniaSign } from '../utils/constants';
+import { hryvniaSign, years } from '../utils/constants';
 import { getDate } from '../utils/utils';
-import {Line, Doughnut, Bar} from 'react-chartjs-2';
-import Axios from 'axios';
+import {Line, Pie, Bar} from 'react-chartjs-2';
 import { AuthContext } from '../context/AuthContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { createDailyChart } from '../utils/charts/dailyChart';
+import {getDeilyChartData} from '../redux/charts/actions';
 
 export const Analytics = () => {
 
-    /** ЭТА СТРАНИЦА В РАЗРАБОТКЕ (ВСЕ ЧТО НИЖЕ - ЭТО ТЕСТИРОВАНИЕ) */
-    
-    const nowDate = getDate();
-    const [chart, setChart] = useState({});
+    /** ЭТА СТРАНИЦА В РАЗРАБОТКЕ (НЕКОТОРЫЕ ЭЛЕМЕНТЫ НИЖЕ - ЭТО ТЕСТИРОВАНИЕ) */
+
     const [pie, setPie] = useState({});
     const [bar, setBar] = useState({});
+    const dailyChartData = useSelector(state => state.charts.dailyChartData);
+    const company = useSelector(state => state.company.selectedCompany);
+    const dispatch = useDispatch();
     const auth = useContext(AuthContext);
+    const nowDate = getDate();
+    const [selectedMonth, setSelectedMonth] = useState(`${nowDate.year}-${nowDate.month}`);
 
     function pieInit(){
         setPie({
@@ -61,60 +66,17 @@ export const Analytics = () => {
         });
     }
 
-    function chartInit(){
-        setChart({
-            labels: ['Пн, 21', "Вт, 22", "Ср, 23", "Чт, 24", "Пт, 25", '26', '27', '26', '27', '27',
-            'Пн, 21', "Вт, 22", "Ср, 23", "Чт, 24", "Пт, 25", '26', '27', '26', '27', '27',
-            'Пн, 21', "Вт, 22", "Ср, 23", "Чт, 24", "Пт, 25", '26', '27', '26', '27', '27'],
-            datasets: [
-                {
-                    label: "Выручка",
-                    data: [1500, 1268, 1020, 2100, 1954, 1500, 1268, 1020, 2100, 1954, 1500, 1268, 1020, 2100, 1954, 1500, 1268, 1020, 2100, 1954, 1500, 1268, 1020, 2100, 1954, 1500, 1268, 1020, 2100, 1954],
-                    backgroundColor: ['rgba(33, 150, 243, 0.05)'],
-                    borderWidth: 4,
-                    borderColor: ['rgb(33, 150, 243)'],
-                    pointBorderColor: 'rgb(33, 150, 243)',
-                    pointBorderWidth: 2,
-                    pointerHitRadius: 2
-                },
-                {
-                    label: "Марж. прибыль",
-                    data: [1000, 700, 570, 1600, 1454, 1000, 700, 570, 1600, 1454, 1000, 950, 1570, 1600, 1454, 1070, 700, 570, 1600, 1454, 1040, 700, 570, 160, 1054, 1000, 70, 570, 2000, 1454],
-                    backgroundColor: 'rgba(28, 56, 83, 0.05)',
-                    borderWidth: 3,
-                    borderColor: 'rgba(28, 56, 83, 0.9)',
-                    pointBorderColor: 'rgb(28, 56, 83)',
-                    borderDash: [20, 5],
-                    pointBorderWidth: 2,
-                    pointerHitRadius: 2
-                },
-                {
-                    label: "Посещаемость",
-                    data: [50, 70, 60, 54, 32, 50, 70, 60, 54, 32, 50, 70, 60, 54, 32, 50, 70, 60, 54, 32, 50, 70, 60, 54, 32, 50, 70, 60, 54, 32],
-                    backgroundColor: ['rgba(255, 179, 0, 0.05)'],
-                    borderWidth: 3,
-                    borderColor: 'rgba(255, 179, 0, 0.9)',
-                    pointBorderColor: 'rgb(255, 179, 0)',
-                    pointBorderWidth: 2,
-                    pointerHitRadius: 2
-                }
-            ]
-        });
-    }
     useEffect(() => {
-        chartInit();
         pieInit();
         barInit();
-
-        test();
     }, []);
 
-    async function test(){
+    useEffect(() => {
+        dispatch(getDeilyChartData(selectedMonth, auth.token, company.id));
+    }, [selectedMonth])
 
-        const data = await Axios.post('/api/analytics/daily', {date: '2020-10-07', companyId: 1}, 
-            {headers: {'Content-Type': 'application/json', Authorization: `Bearer ${auth.token}`}});
-        
-        console.log('axios data', data);
+    function changeDateHandler(event){
+        setSelectedMonth(event.target.value);
     }
 
     return (
@@ -164,8 +126,8 @@ export const Analytics = () => {
             <div className="row">
                 <h4>Отчет за:</h4>
                 <div className="col-md-4 col-lg-3 col-sm-6">
-                    <input type="month" style={{marginLeft: '1rem'}} 
-                        className="form-control" value="2020-10"/>
+                    <input type="month" style={{marginLeft: '1rem'}} onChange={changeDateHandler}
+                        className="form-control" value={selectedMonth}/>
                 </div>
             </div>
 
@@ -173,14 +135,14 @@ export const Analytics = () => {
                 <div className="col-md-8 col-lg-8 col-sm-12">
                     <div className="card">
                         <span style={chartTitleStyles}>Ежедневный отчет</span>
-                        <Line data={chart} options={{responsive: true}}/>
+                        <Line data={createDailyChart(dailyChartData)} options={{responsive: true}}/>
                     </div>
                 </div>
                 <div className="col-md-4 col-lg-4 col-sm-12">
                     <div className="card" style={{height: '100%'}}>
                         <span style={chartTitleStyles}>Финансы</span>
                         <div style={{height: '17.5rem'}}>
-                            <Doughnut data={pie} options={{cutoutPercentage: 67, maintainAspectRatio: false}}/>
+                            <Pie data={pie} options={{maintainAspectRatio: false}}/>
                         </div>
                         <div style={{padding: '17px'}}>
                             Text footer
@@ -188,11 +150,25 @@ export const Analytics = () => {
                     </div>
                 </div>
             </div>
+            <hr/>
             <div className="row mt-4">
-                <div className="col-md-9 col-lg-9 col-sm-12">
+                <h4>Укажите год:</h4>
+                <div className="col-md-4 col-lg-3 col-sm-6">
+                    <select className="form-control">
+                        {years.map(y => <option>{y}</option>)}
+                    </select>
+                </div>
+            </div>
+            <div className="row mt-4">
+                <div className="col-md-12 col-lg-9 col-sm-12">
                     <div className="card">
                         <span style={chartTitleStyles}>Ежемесячный отчет</span>
                         <Bar data={bar}/>
+                    </div>
+                </div>
+                <div className="col-lg-3 col-md-12 col-sm-12">
+                    <div className="card">
+                        <h5>Сотрудники работавшие в этом году</h5>
                     </div>
                 </div>
             </div>

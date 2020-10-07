@@ -36,5 +36,6 @@ const Product = db.define('Product', {
 });
 
 Product.hasMany(Report);
+Report.belongsTo(Product);
 
 module.exports = Product;
