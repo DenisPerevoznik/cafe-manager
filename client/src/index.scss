@@ -1,4 +1,7 @@
 @import '~bootstrap/scss/bootstrap';
+@import './styles/sidebar';
+@import './styles/variables';
+@import './styles/scroll.scss';
 
 body {
   background-color: #F7F9FC !important;
@@ -33,4 +36,27 @@ code {
     opacity: 0.5;
     cursor: pointer;
   }
+}
+
+.dashboard-field{
+  margin-left: $sidebar-width;
+  margin-top: $header-height + 20;
+
+  @media (max-width: 1440px){
+    &{
+      margin-left: 0;
+    }
+  }
+}
+
+.with-header{
+  margin-top: $header-height + 20;
+}
+
+.ttt{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  position: absolute;
+  top: 36%;
 }

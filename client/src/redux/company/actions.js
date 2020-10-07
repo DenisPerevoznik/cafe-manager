@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createError, createMessgae, hideLoader, showLoader } from "../actions";
-import { ADD_COMPANY, CLEAR_COMPANIES, GET_COMPANIES } from "../types";
+import { ADD_COMPANY, CLEAR_COMPANIES, GET_COMPANIES, SELECT_COMPANY } from "../types";
 import {createErrorObject} from '../../utils/utils';
 
 export function createCompany(data = {}, token){
@@ -45,5 +45,12 @@ export function getCompanies(token){
 export function clearCompanies(){
     return {
         type: CLEAR_COMPANIES
+    }
+}
+
+export function selectCompany(company){
+    return {
+        type: SELECT_COMPANY,
+        payload: company
     }
 }

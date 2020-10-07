@@ -1,7 +1,8 @@
-import { ADD_COMPANY, GET_COMPANIES, CLEAR_COMPANIES } from "../types";
+import { ADD_COMPANY, GET_COMPANIES, CLEAR_COMPANIES, SELECT_COMPANY } from "../types";
 
 const initialState = {
     companies: [],
+    selectedCompany: null
 };
 
 export const companyReducer = (state = initialState, action) => {
@@ -15,6 +16,9 @@ export const companyReducer = (state = initialState, action) => {
 
         case CLEAR_COMPANIES:
             return {...state, ...initialState}
+
+        case SELECT_COMPANY:
+            return {...state, selectedCompany: action.payload};
         default:
             return state;
     }

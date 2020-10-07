@@ -23,10 +23,10 @@ export const Companies = () => {
     }
 
     return (
-        <div className="container">
+        <div className="container with-header">
             <div className="row">
                 {companies.map(c => <div className="col-md-3 col-sm-12" key={c.id}>
-                    <CompanyItem name={c.name}/></div>)}
+                    <CompanyItem company={c}/></div>)}
                 {!loader
                 ? <CreateModal onCreate={create}/>
                 : <span className="spinner-border mr-2" role="status" aria-hidden="true"></span>

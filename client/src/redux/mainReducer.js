@@ -4,7 +4,7 @@ import {SHOW_LOADER, HIDE_LOADER, ERROR,
 const initialState = {
     loader: false,
     error: {},
-    message: {}
+    message: {},
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -23,10 +23,10 @@ export const mainReducer = (state = initialState, action) => {
             return {...state, error: {}};
 
         case MESSAGE:
-            return {...state, message: action.payload}
+            return {...state, message: action.payload};
 
         case CLEAR_MESSAGE:
-            return {...state, message: {}}
+            return {...state, message: {}};
         default:
             return state;
     }

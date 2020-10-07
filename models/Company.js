@@ -1,7 +1,10 @@
 const {DataTypes} = require('sequelize');
-const User = require('./User');
 const db = require('../config/database');
 const Account = require('./Account');
+const Employee = require('./Employee');
+const Product = require('./Product');
+const Report = require('./Report');
+const WorkShift = require('./WorkShift');
 
 const Company = db.define('Company', {
 
@@ -18,5 +21,9 @@ const Company = db.define('Company', {
 });
 
 Company.hasMany(Account, {onDelete: 'cascade'});
+Company.hasMany(Product, {onDelete: 'cascade'});
+Company.hasMany(Report, {onDelete: 'cascade'});
+Company.hasMany(Employee, {onDelete: 'cascade'});
+Company.hasMany(WorkShift, {onDelete: 'cascade'});
 
 module.exports = Company;
