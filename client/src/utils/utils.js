@@ -20,3 +20,11 @@ export function getDate(date = null){
         seconds: localDate.getSeconds(),
     };
 }
+
+export function generateHeaders(token = null){
+    const head = {headers: {'Content-Type': 'application/json'}};
+    if(token){
+        head.headers.Authorization = `Bearer ${token}`;
+    }
+    return head;
+}

@@ -5,62 +5,31 @@ import {Line, Pie, Bar} from 'react-chartjs-2';
 import { AuthContext } from '../context/AuthContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { createDailyChart } from '../utils/charts/dailyChart';
-import {getDeilyChartData} from '../redux/charts/actions';
+import {getDailyChartData, getMonthlyChartData} from '../redux/charts/actions';
+import { createMonthlyChart } from '../utils/charts/monthlyChart';
 
 export const Analytics = () => {
 
     /** ЭТА СТРАНИЦА В РАЗРАБОТКЕ (НЕКОТОРЫЕ ЭЛЕМЕНТЫ НИЖЕ - ЭТО ТЕСТИРОВАНИЕ) */
 
     const [pie, setPie] = useState({});
-    const [bar, setBar] = useState({});
     const dailyChartData = useSelector(state => state.charts.dailyChartData);
+    const monthlyChartData = useSelector(state => state.charts.monthlyChartData);
     const company = useSelector(state => state.company.selectedCompany);
     const dispatch = useDispatch();
     const auth = useContext(AuthContext);
     const nowDate = getDate();
     const [selectedMonth, setSelectedMonth] = useState(`${nowDate.year}-${nowDate.month}`);
+    const [selectedYear, setSelectedYear] = useState(nowDate.year);
 
     function pieInit(){
         setPie({
-            labels: ['Сумма доходов', "Сумма расходов", "Выплата работникам"],
+            labels: ['Сумма доходов', "Сумма расходов", "Выплата работникам", "Средний чек"],
             datasets: [
                 {
-                    data: [30334, 6060, 10000],
-                    backgroundColor: ['rgb(33, 150, 243)', '#F44336', '#ffc107'],
+                    data: [30334, 6060, 10000, 1150],
+                    backgroundColor: ['rgb(33, 150, 243)', '#F44336', '#ffc107', '#EEEEEE'],
                     borderWidth: 4
-                }
-            ]
-        });
-    }
-
-    function barInit(){
-
-        setBar({
-            labels: ['Январь', "Февраль", "Март", "Апрель", "Май", 'Июнь', 'Июль', 'Август',
-            'Сентябрь', 'Октябрь', 'Ноябрь', "Декабрь"],
-            datasets: [
-                {
-                    label: "Выручка",
-                    data: [1500, 1268, 1020, 2100, 1954, 1500, 1268, 1020, 2100, 1954, 1500, 1268],
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
-                    borderWidth: 4,
-                    borderColor: 'rgb(33, 150, 243)',
-                    curvature: 1
-                },
-                {
-                    label: "Марж. прибыль",
-                    data: [1000, 700, 570, 1600, 1454, 1000, 700, 570, 1600, 1454, 1000, 950],
-                    backgroundColor: 'rgba(28, 56, 83, 0.1)',
-                    borderWidth: 3,
-                    borderColor: 'rgba(28, 56, 83, 0.9)',
-                    borderDash: [20, 5],
-                },
-                {
-                    label: "Посещаемость",
-                    data: [50, 70, 60, 54, 32, 50, 70, 60, 54, 32, 50, 70],
-                    backgroundColor: 'rgba(255, 179, 0, 0.05)',
-                    borderWidth: 3,
-                    borderColor: 'rgba(255, 179, 0, 0.9)',
                 }
             ]
         });
@@ -68,15 +37,22 @@ export const Analytics = () => {
 
     useEffect(() => {
         pieInit();
-        barInit();
     }, []);
 
     useEffect(() => {
-        dispatch(getDeilyChartData(selectedMonth, auth.token, company.id));
+        dispatch(getDailyChartData(selectedMonth, auth.token, company.id));
     }, [selectedMonth])
+
+    useEffect(() => {
+        dispatch(getMonthlyChartData(selectedYear, auth.token, company.id));
+    }, [selectedYear]);
 
     function changeDateHandler(event){
         setSelectedMonth(event.target.value);
+    }
+
+    function changeYearHandler(event){
+        setSelectedYear(event.target.value);
     }
 
     return (
@@ -154,8 +130,8 @@ export const Analytics = () => {
             <div className="row mt-4">
                 <h4>Укажите год:</h4>
                 <div className="col-md-4 col-lg-3 col-sm-6">
-                    <select className="form-control">
-                        {years.map(y => <option>{y}</option>)}
+                    <select className="form-control" onChange={changeYearHandler}>
+                        {years.map(y => <option value={y} selected={y === selectedYear}>{y}</option>)}
                     </select>
                 </div>
             </div>
@@ -163,7 +139,7 @@ export const Analytics = () => {
                 <div className="col-md-12 col-lg-9 col-sm-12">
                     <div className="card">
                         <span style={chartTitleStyles}>Ежемесячный отчет</span>
-                        <Bar data={bar}/>
+                        <Bar data={createMonthlyChart(monthlyChartData)}/>
                     </div>
                 </div>
                 <div className="col-lg-3 col-md-12 col-sm-12">
