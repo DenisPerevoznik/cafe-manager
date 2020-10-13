@@ -1,8 +1,9 @@
-import { GET_DAILY_CHART, GET_MONTHLY_CHART } from "../types";
+import { GET_DAILY_CHART, GET_FINANCE_CHART, GET_MONTHLY_CHART } from "../types";
 
 const initialState = {
     dailyChartData: {},
-    monthlyChartData: {}
+    monthlyChartData: {},
+    financeChartData: {}
 };
 
 export const chartReducer = (state = initialState, action) => {
@@ -13,6 +14,9 @@ export const chartReducer = (state = initialState, action) => {
 
         case GET_MONTHLY_CHART:
             return {...state, monthlyChartData: action.payload}
+
+        case GET_FINANCE_CHART:
+            return {...state, financeChartData: action.payload};
     
         default:
             return state;

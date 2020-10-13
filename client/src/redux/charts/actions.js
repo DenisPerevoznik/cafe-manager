@@ -1,7 +1,7 @@
 import Axios from "axios"
 import { createErrorObject, generateHeaders } from "../../utils/utils"
 import { createError } from "../actions"
-import { GET_DAILY_CHART, GET_MONTHLY_CHART } from "../types"
+import { GET_DAILY_CHART, GET_FINANCE_CHART, GET_MONTHLY_CHART } from "../types"
 
 export function getDailyChartData(yearAndMonth, token, companyId){
     return async dispatch => {
@@ -23,6 +23,20 @@ export function getMonthlyChartData(year, token, companyId){
         Axios.post('/api/analytics/monthly', {year, companyId}, generateHeaders(token))
         .then(res => {
             dispatch({type: GET_MONTHLY_CHART, payload: res.data});
+        })
+        .catch(err => {
+            dispatch(createError(createErrorObject(err)));
+        });
+    }
+}
+
+export function getFinanceChartData(token, companyId){
+
+    return async dispatch => {
+
+        Axios.post('/api/analytics/finance', {companyId}, generateHeaders(token))
+        .then(res => {
+            dispatch({type: GET_FINANCE_CHART, payload: res.data});
         })
         .catch(err => {
             dispatch(createError(createErrorObject(err)));

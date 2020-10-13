@@ -9,7 +9,7 @@ const port = process.env.NODE_ENV === 'production' ? process.env.PORT : config.g
 app.use(express.json({extended: true}));
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/companies', require('./routes/company.routes'));
-app.use('/api/analytics', require('./routes/analytics.routes'));
+app.use('/api/analytics', require('./routes/analytics/analytics.routes'));
 
 db.sync({alter: true});
 
