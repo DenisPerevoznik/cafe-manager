@@ -10,6 +10,7 @@ app.use(express.json({extended: true}));
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/companies', require('./routes/company.routes'));
 app.use('/api/analytics', require('./routes/analytics/analytics.routes'));
+app.use('/api/work-shifts', require('./routes/workShifts.routes'));
 
 db.sync({alter: true});
 

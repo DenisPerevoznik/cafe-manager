@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { hryvniaSign, years } from '../utils/constants';
-import { generateHeaders, getDate } from '../utils/utils';
+import { hryvniaSign, years } from '../../utils/constants';
+import { generateHeaders, getDate } from '../../utils/utils';
 import {Line, Pie, Bar} from 'react-chartjs-2';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { createDailyChart } from '../utils/charts/dailyChart';
-import {getDailyChartData, getFinanceChartData, getMonthlyChartData} from '../redux/charts/actions';
-import { createMonthlyChart } from '../utils/charts/monthlyChart';
+import { createDailyChart } from '../../utils/charts/dailyChart';
+import {getDailyChartData, getFinanceChartData, getMonthlyChartData} from '../../redux/charts/actions';
+import { createMonthlyChart } from '../../utils/charts/monthlyChart';
 import { MDBListGroup, MDBListGroupItem } from 'mdbreact';
 import Axios from 'axios';
-import { createFinanceChart } from '../utils/charts/financeChart';
+import { createFinanceChart } from '../../utils/charts/financeChart';
 
 export const Analytics = () => {
 

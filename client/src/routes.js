@@ -1,8 +1,8 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
-import { Sidebar } from './components/Sidebar';
-import { Analytics } from './pages/Analytics';
-import { Categories } from './pages/Categories';
+import { Analytics } from './pages/dashboard/Analytics';
+import { Categories } from './pages/dashboard/Categories';
+import {WorkShifts} from './pages/dashboard/WorkShifts';
 import { Companies } from './pages/Companies';
 import { Dashboard } from './pages/Dashboard';
 import { SignIn } from './pages/SignIn';
@@ -25,6 +25,10 @@ export const useRoutes = (isAuthenticated) => {
 
                 <Route path="/categories" exact>
                     <Dashboard component={Categories} title="Категории"/>
+                </Route>
+
+                <Route path="/shifts">
+                    <Dashboard component={WorkShifts} title="Рабочие смены"/>
                 </Route>
 
                 <Redirect to='/companies'/>

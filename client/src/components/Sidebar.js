@@ -49,10 +49,12 @@ export const Sidebar = ({companyName}) => {
                             <Link to="/analytics" onClick={changeToggle}>
                                 <li><i className="far fa-chart-bar"></i> Аналитика</li>
                             </Link>
-                            <li><i className="fas fa-exchange-alt"/> Смены</li>
+                            <Link to='/shifts' onClick={changeToggle}>
+                                <li><i className="fas fa-exchange-alt"/> Смены</li>
+                            </Link>
                             <li><i className="fas fa-donate"/> Расходы вне смены</li>
                             <li><i className="fas fa-money-check-alt"/> Счета</li>
-                            <Link to="/categories">
+                            <Link to="/categories" onClick={changeToggle}>
                                 <li><i className="fas fa-th-large"/> Категории</li>
                             </Link>
                             <li><i className="fas fa-boxes"/> Продукция</li>

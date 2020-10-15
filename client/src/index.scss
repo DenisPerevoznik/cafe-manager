@@ -53,10 +53,14 @@ code {
   margin-top: $header-height + 20;
 }
 
-.ttt{
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  position: absolute;
-  top: 36%;
+.shift-card{
+
+  p{
+    margin-bottom: 0.7rem;
+  }
+
+  hr{
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
 }
