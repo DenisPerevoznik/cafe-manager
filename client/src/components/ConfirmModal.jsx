@@ -5,8 +5,8 @@ export const ConfirmModal = ({title, description, onYes, onNo, toggle}) => {
 
     return (
         <>
-        <MDBModal isOpen={toggle} toggle={false}>
-            <MDBModalHeader toggle={false}>{title}</MDBModalHeader>
+        <MDBModal isOpen={toggle}>
+            <MDBModalHeader>{title}</MDBModalHeader>
             <MDBModalBody>
                 {description}
             </MDBModalBody>

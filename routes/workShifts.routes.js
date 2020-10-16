@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const auth = require('../middleware/auth.middleware');
+const Employee = require('../models/Employee');
 const WorkShift = require('../models/WorkShift');
 const router = Router();
 

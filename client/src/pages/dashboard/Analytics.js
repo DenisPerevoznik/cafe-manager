@@ -26,7 +26,7 @@ export const Analytics = () => {
 
     useEffect(() => {
         dispatch(getFinanceChartData(auth.token, company.id));
-    }, [financeChartData]);
+    }, []);
 
     useEffect(() => {
         Axios.post('/api/analytics/now', {companyId: company.id}, generateHeaders(auth.token))
@@ -132,7 +132,7 @@ export const Analytics = () => {
                 <h4>Укажите год:</h4>
                 <div className="col-md-4 col-lg-3 col-sm-6">
                     <select className="form-control" onChange={changeYearHandler}>
-                        {years.map(y => <option value={y} selected={y === selectedYear}>{y}</option>)}
+                        {years.map(y => <option value={y} selected={y === selectedYear} key={y}>{y}</option>)}
                     </select>
                 </div>
             </div>

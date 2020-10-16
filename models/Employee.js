@@ -21,5 +21,6 @@ const Employee = db.define('Employee', {
 });
 
 Employee.hasMany(WorkShift);
+WorkShift.belongsTo(Employee);
 
 module.exports = Employee;

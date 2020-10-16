@@ -44,7 +44,7 @@ export const WorkShifts = () => {
             <div className="row">
                 {loader
                 ? <span className="spinner-border mr-2" role="status" aria-hidden="true"></span>
-                : workShifts.map(shift => <WorkShiftItem shift={shift}/>)}
+                : workShifts.map(shift => <WorkShiftItem shift={shift} key={shift.id}/>)}
             </div>
         </div>
     );
