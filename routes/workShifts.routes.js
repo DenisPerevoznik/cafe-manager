@@ -9,8 +9,15 @@ router.get('/:companyId', auth, (req, res) => {
     const {companyId} = req.params;
 
     WorkShift.findAll({where: {CompanyId: companyId}})
-    .then(shifts => {
-        res.json({workShifts: shifts});
+    .then(async shifts => {
+
+        const responseData = [];
+        for (const shift of shifts) {
+            
+            const emp = await shift.getEmployee();
+            responseData.push({...shift.dataValues, employeeName: emp.name});
+        }
+        res.json({workShifts: responseData.reverse()});
     })
     .catch(error => {
         res.status(400).json({message: error.message});

@@ -3,9 +3,14 @@ import React from 'react';
 import { getDate } from '../utils/utils';
 import { hryvniaSign } from '../utils/constants';
 
-export const WorkShiftItem = ({shift}) => {
+export const WorkShiftItem = ({shift, onCheck}) => {
 
     const shiftDate = getDate(shift.date);
+
+    function onCheckHandler(event){
+        onCheck(shift.id, event.target.checked);
+    }
+
     return (
         <>
         <div className="col-sm-12 col-md-4 col-lg-3">
@@ -19,7 +24,7 @@ export const WorkShiftItem = ({shift}) => {
                     <hr/>
                     <div className="d-flex align-items-center justify-content-between">
                         <a href="#"><i className="fas fa-external-link-alt"/> Подробнее</a>
-                        <input type="checkbox"/>
+                        <input type="checkbox" onChange={onCheckHandler}/>
                     </div>
                 </div>
             </div>
@@ -37,7 +42,7 @@ function getForOpenedCardContent(shift){
             <p><b>Начало смены:</b> {shift.openingTime.substr(0, 5)}</p>
             <p><b>Касса в начале:</b> {`${hryvniaSign} ${shift.openingBalance}`}</p>
             <p><b>Касса:</b> {`${hryvniaSign} ${shift.revenue}`}</p>
-            <p><b>На смене:</b> Employee name</p>
+            <p><b>На смене:</b> {shift.employeeName}</p>
         </>
     );
 }
@@ -46,11 +51,11 @@ function getForClosedCardContent(shift){
     return (
         <>
             <MDBBadge className="mb-2" style={{width: '100%'}} pill color={'success'}>
-                <i className="fas fa-clock"/> Закрыта</MDBBadge>
+                <i className="fas fa-check-circle"/> Закрыта</MDBBadge>
             <p><b>Время работы:</b> С {shift.openingTime.substr(0, 5)} до {shift.closingTime.substr(0, 5)}</p>
             <p><b>Касса в начале:</b> {`${hryvniaSign} ${shift.openingBalance}`}</p>
             <p><b>Остаток на размен:</b> {`${hryvniaSign} ${shift.closingBalance}`}</p>
-            <p><b>Был(а) на смене:</b> Employee name</p>
+            <p><b>Был(а) на смене:</b> {shift.employeeName}</p>
         </>
     );
 }

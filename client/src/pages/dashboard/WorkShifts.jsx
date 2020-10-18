@@ -15,10 +15,18 @@ export const WorkShifts = () => {
     const workShifts = useSelector(state => state.workShifts.workShifts);
     const company = useSelector(state => state.company.selectedCompany);
     const auth = useContext(AuthContext);
+    const [selectedToRemove, setSelectedToRemove] = useState([]);
 
     useEffect(() => {
         dispatch(getAllWorkShifts(company.id, auth.token));
     }, [])
+
+    function onChangeCheckShiftItem(id, status){
+
+        setSelectedToRemove(status 
+            ? [...selectedToRemove, id]
+            : selectedToRemove.filter(_id => _id !== id));
+    }
 
     function removeSelectedShifts(){}
 
@@ -29,14 +37,15 @@ export const WorkShifts = () => {
                 onNo={() => {setRmvConfirm(false)}}
                 onYes={removeSelectedShifts}
                 title="Удаление рабочих смен"
-                description="После удаленыя выбранных смен, все отчеты так же будут удалены! Вы действительно хотите это сделать ? "/>
+                description="После удаления выбранных смен, все отчеты так же будут удалены!
+                Вы действительно хотите это сделать ? "/>
                 
                 <div className="col-sm-12 col-md-4 col-lg-4">
                     <MDBInput label="Поиск по дате" icon="search" group type="text" />
                 </div>
 
                 <div className="col-sm-12 col-md-4 col-lg-4 d-flex align-items-center">
-                    <button disabled className="btn btn-danger btn-sm" onClick={() => {setRmvConfirm(true)}}>
+                    <button disabled={!selectedToRemove.length} className="btn btn-danger btn-sm" onClick={() => {setRmvConfirm(true)}}>
                         <i className="far fa-trash-alt"/> Удалить выбранные</button>
                 </div>
 
@@ -44,7 +53,7 @@ export const WorkShifts = () => {
             <div className="row">
                 {loader
                 ? <span className="spinner-border mr-2" role="status" aria-hidden="true"></span>
-                : workShifts.map(shift => <WorkShiftItem shift={shift} key={shift.id}/>)}
+                : workShifts.map(shift => <WorkShiftItem onCheck={onChangeCheckShiftItem} shift={shift} key={shift.id}/>)}
             </div>
         </div>
     );

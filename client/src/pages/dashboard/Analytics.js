@@ -54,44 +54,22 @@ export const Analytics = () => {
     return (
         <div className="container-fluid p-4">
             <div className="row">
-                <div className="col-md-4 col-lg-3 col-sm-12">
-                    <Card>
-                        <div>
-                            <h4 className="card-title">Сегодня</h4>
-                            <p className="card-subtitle mb-2" style={cardData}>
-                                {`${nowDate.day}.${nowDate.month}.${nowDate.year}`}
-                            </p>
-                        </div>
-                        <i className="material-icons" style={cardIcon}>event</i>
-                    </Card>
-                </div>
-                <div className="col-md-4 col-lg-3 col-sm-12">
-                    <Card>
-                        <div>
-                            <h4 className="card-title">Выручка</h4>
-                            <p className="card-subtitle mb-2" style={cardData}>{hryvniaSign} {nowDayData.revenue}</p>
-                        </div>
-                        <i className="material-icons" style={cardIcon}>monetization_on</i>
-                    </Card>
-                </div>
-                <div className="col-md-4 col-lg-3 col-sm-12">
-                    <Card>
-                        <div>
-                            <h4 className="card-title">Марж. прибыль</h4>
-                            <p className="card-subtitle mb-2" style={cardData}>{hryvniaSign} {nowDayData.profit}</p>
-                        </div>
-                        <i className="material-icons" style={cardIcon}>account_balance_wallet</i>
-                    </Card>
-                </div>
-                <div className="col-md-4 col-lg-3 col-sm-12">
-                    <Card>
-                        <div>
-                            <h4 className="card-title">Чеки</h4>
-                            <p className="card-subtitle mb-2" style={cardData}>{nowDayData.receipts} шт.</p>
-                        </div>
-                        <i className="material-icons" style={cardIcon}>receipt_long</i>
-                    </Card>
-                </div>
+
+                <NowDayCardItem title="Сегодня" materialIcon="event">
+                    {`${nowDate.day}.${nowDate.month}.${nowDate.year}`}
+                </NowDayCardItem>
+
+                <NowDayCardItem title="Выручка" materialIcon="monetization_on">
+                    {hryvniaSign} {nowDayData.revenue}
+                </NowDayCardItem>
+
+                <NowDayCardItem title="Марж. прибыль" materialIcon="account_balance_wallet">
+                    {hryvniaSign} {nowDayData.profit}
+                </NowDayCardItem>
+
+                <NowDayCardItem title="Чеки" materialIcon="receipt_long">
+                    {nowDayData.receipts} шт.
+                </NowDayCardItem>
             </div>
             <hr/>
             {/* chart */}
@@ -174,23 +152,28 @@ const chartTitleStyles = {
     margin: "15px 20px"
 }
 
-const cardData = {
-    fontSize: "19px",
-}
-
 const cardIcon = {
     fontSize: '40px',
     color: '#1976d2'
 }
 
-const Card = (props) => {
+const NowDayCardItem = (props) => {
+    
     return (
+    <div className="col-md-4 col-lg-3 col-sm-12">
         <div className="card" style={{height: '120px', marginBottom: '1rem'}}>
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
-                    {props.children}
+                    <div>
+                        <h4 className="card-title">{props.title}</h4>
+                        <p className="card-subtitle mb-2" style={{fontSize: "19px"}}>
+                            {props.children}
+                        </p>
+                    </div>
+                    <i className="material-icons" style={cardIcon}>{props.materialIcon}</i>
                 </div>
             </div>
         </div>
+    </div>
     );
 }
