@@ -1,7 +1,7 @@
 import { GET_WORK_SHIFTS } from "../types";
 
 const initialState = {
-    workShifts: []
+    workShifts: [],
 };
 
 export const workShiftReducer = (state = initialState, action) => {

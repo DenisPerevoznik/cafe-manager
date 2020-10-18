@@ -64,3 +64,16 @@ code {
     margin-bottom: 5px;
   }
 }
+
+.loader-panel{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: $overlay-color;
+  z-index: 10;
+}

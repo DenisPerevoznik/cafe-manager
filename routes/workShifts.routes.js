@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const auth = require('../middleware/auth.middleware');
-const Employee = require('../models/Employee');
+const config = require('config');
 const WorkShift = require('../models/WorkShift');
 const router = Router();
 
@@ -22,6 +22,20 @@ router.get('/:companyId', auth, (req, res) => {
     .catch(error => {
         res.status(400).json({message: error.message});
     });
+});
+
+router.post('/remove', auth, async (req, res) => {
+
+    try {
+        const {removeIds} = req.body;
+    
+        for (const id of removeIds) {
+            await WorkShift.destroy({where: {id}});
+        }
+        res.json({message: 'Выбранные рабочие смены удалены'});
+    } catch (error) {
+        res.status(400).json({message: config.get('unknownErrorMessage')});
+    }
 });
 
 module.exports = router;

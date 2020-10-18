@@ -10,7 +10,6 @@ export const Companies = () => {
 
     const {addToast} = useToasts();
     const dispatch = useDispatch();
-    const loader = useSelector(state => state.main.loader);
     const companies = useSelector(state => state.company.companies);
     const auth = useContext(AuthContext);
 
@@ -27,10 +26,7 @@ export const Companies = () => {
             <div className="row">
                 {companies.map(c => <div className="col-md-3 col-sm-12" key={c.id}>
                     <CompanyItem company={c}/></div>)}
-                {!loader
-                ? <CreateModal onCreate={create}/>
-                : <span className="spinner-border mr-2" role="status" aria-hidden="true"></span>
-                }
+                <CreateModal onCreate={create}/>
             </div>
         </div>
     );

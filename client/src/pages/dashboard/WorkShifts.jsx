@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { WorkShiftItem } from '../../components/WorkShiftItem';
 import { AuthContext } from '../../context/AuthContext';
-import { getAllWorkShifts } from '../../redux/workShifts/actions';
+import { getAllWorkShifts, removeWorkShifts, searchWorkShift } from '../../redux/workShifts/actions';
+import { getDate } from '../../utils/utils';
 
 export const WorkShifts = () => {
 
     const [rmvConfirm, setRmvConfirm] = useState(false);
     const dispatch = useDispatch();
-    const loader = useSelector(state => state.main.loader);
     const workShifts = useSelector(state => state.workShifts.workShifts);
+    const [shiftsForSearch, setShiftsForSearch] = useState([]);
     const company = useSelector(state => state.company.selectedCompany);
     const auth = useContext(AuthContext);
     const [selectedToRemove, setSelectedToRemove] = useState([]);
@@ -21,6 +22,10 @@ export const WorkShifts = () => {
         dispatch(getAllWorkShifts(company.id, auth.token));
     }, [])
 
+    useEffect(() => {
+        setShiftsForSearch(workShifts);
+    }, [workShifts]);
+
     function onChangeCheckShiftItem(id, status){
 
         setSelectedToRemove(status 
@@ -28,7 +33,26 @@ export const WorkShifts = () => {
             : selectedToRemove.filter(_id => _id !== id));
     }
 
-    function removeSelectedShifts(){}
+    async function removeSelectedShifts(){
+
+        if(selectedToRemove.length){
+            setSelectedToRemove([]);
+            setRmvConfirm(false);
+            dispatch(removeWorkShifts(selectedToRemove, auth.token, company.id));
+        }
+    }
+
+    function searchHandler(event){
+        const searchText = event.target.value.trim();
+        setShiftsForSearch(workShifts.filter(shift => {
+            const dateObj = getDate(shift.date);
+            const date = `${dateObj.day}.${dateObj.month}.${dateObj.year}`;
+
+            if(date.includes(searchText)){
+                return shift;
+            }
+        }));
+    }
 
     return (
         <div className="container-fluid">
@@ -37,11 +61,11 @@ export const WorkShifts = () => {
                 onNo={() => {setRmvConfirm(false)}}
                 onYes={removeSelectedShifts}
                 title="Удаление рабочих смен"
-                description="После удаления выбранных смен, все отчеты так же будут удалены!
+                description="После удаления выбранных смен, вся статистика за эти даты так же будет утеряна!
                 Вы действительно хотите это сделать ? "/>
                 
                 <div className="col-sm-12 col-md-4 col-lg-4">
-                    <MDBInput label="Поиск по дате" icon="search" group type="text" />
+                    <MDBInput label="Поиск по дате" icon="search" group type="text" onInput={searchHandler}/>
                 </div>
 
                 <div className="col-sm-12 col-md-4 col-lg-4 d-flex align-items-center">
@@ -51,9 +75,8 @@ export const WorkShifts = () => {
 
             </div>
             <div className="row">
-                {loader
-                ? <span className="spinner-border mr-2" role="status" aria-hidden="true"></span>
-                : workShifts.map(shift => <WorkShiftItem onCheck={onChangeCheckShiftItem} shift={shift} key={shift.id}/>)}
+                {shiftsForSearch.map(shift => <WorkShiftItem onCheck={onChangeCheckShiftItem} 
+                    shift={shift} key={shift.id}/>)}
             </div>
         </div>
     );

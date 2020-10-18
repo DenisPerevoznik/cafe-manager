@@ -36,5 +36,6 @@ const headerStyles = {
     position: 'fixed',
     width: "100%",
     background: "#24292E",
-    zIndex: '3'
+    zIndex: '3',
+    top: 0 
 }

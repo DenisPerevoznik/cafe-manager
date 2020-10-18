@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {MDBBtn, MDBInput} from 'mdbreact';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import {useToasts} from 'react-toast-notifications';
-import { useDispatch, useSelector } from 'react-redux';
-import { hideLoader, showLoader, changeAuthStatus } from '../redux/actions';
 import '../styles/signin.scss';
 
 export const SignIn = () => {
 
-    const loader = useSelector(state => state.main.loader);
-    const dispatch = useDispatch();
+    const [loader, setLoader] = useState(false);
     const [form, setForm] = useState({
         email: '',
         password: ''
@@ -27,7 +24,7 @@ export const SignIn = () => {
 
         event.preventDefault();
 
-        dispatch(showLoader());
+        setLoader(true);
         axios.post('/api/auth/signin', form, {headers: {'Content-Type': 'application/json'}})
         .then(response => {
             
@@ -37,7 +34,7 @@ export const SignIn = () => {
         .catch(error => {
             addToast(error.response.data.message, {appearance: "error"});
         })
-        .finally(() => {dispatch(hideLoader())});
+        .finally(() => {setLoader(false)});
     }
 
     return (

@@ -12,6 +12,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './index.scss';
 import axios from 'axios';
 import { clearError, clearMessage } from './redux/actions';
+import { LoaderPanel } from './components/LoaderPanel';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
   const routes = useRoutes(isAuthenticated);
   const error = useSelector(state => state.main.error);
   const message = useSelector(state => state.main.message);
+  const loader = useSelector(state => state.main.loader);
   const {addToast} = useToasts();
   const dispatch = useDispatch();
 
@@ -54,6 +56,7 @@ function App() {
 
   return (
     <>
+    {loader && <LoaderPanel />}
     <AuthContext.Provider value={{userId, token, login, logout}}>
         <Router>
           {isAuthenticated && 
