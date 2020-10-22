@@ -4,7 +4,7 @@
 @import './styles/scroll.scss';
 
 body {
-  background-color: #F7F9FC !important;
+  background-color: #f7f9fc !important;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -18,7 +18,7 @@ code {
     monospace;
 }
 
-.new-company-btn{
+.new-company-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,44 +28,43 @@ code {
   border: 2px dashed gray;
   transition: 0.3s ease;
 
-  > i{
+  > i {
     font-size: 60px;
   }
 
-  &:hover{
+  &:hover {
     opacity: 0.5;
     cursor: pointer;
   }
 }
 
-.dashboard-field{
+.dashboard-field {
   margin-left: $sidebar-width;
   margin-top: $header-height + 20;
 
-  @media (max-width: 1440px){
-    &{
+  @media (max-width: 1440px) {
+    & {
       margin-left: 0;
     }
   }
 }
 
-.with-header{
+.with-header {
   margin-top: $header-height + 20;
 }
 
-.shift-card{
-
-  p{
+.shift-card {
+  p {
     margin-bottom: 0.7rem;
   }
 
-  hr{
+  hr {
     margin-top: 0;
     margin-bottom: 5px;
   }
 }
 
-.loader-panel{
+.loader-panel {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -73,7 +72,14 @@ code {
   right: 0;
   left: 0;
   top: 0;
-  bottom: 0;
+  // bottom: 0;
+  height: 100vh;
   background-color: $overlay-color;
   z-index: 10;
+}
+
+.card-col-workshift {
+  @media (min-width: 576px) {
+    column-count: 4 !important;
+  }
 }

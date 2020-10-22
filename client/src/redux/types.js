@@ -1,4 +1,3 @@
-
 export const SHOW_LOADER = 'APP/SHOW_LOADER';
 export const HIDE_LOADER = 'APP/HIDE_LOADER';
 export const ERROR = 'APP/ERROR';
@@ -22,3 +21,4 @@ export const GET_FINANCE_CHART = 'CHART/GET_FINANCE_CHART';
 
 // WORK_SHIFTS
 export const GET_WORK_SHIFTS = 'SHIFTS/GET_WORK_SHIFTS';
+export const SELECT_WORK_SHIFT = 'SHIFT/SELECT';

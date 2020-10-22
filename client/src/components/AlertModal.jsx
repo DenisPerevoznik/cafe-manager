@@ -7,17 +7,14 @@ import {
 } from 'mdbreact';
 import React from 'react';
 
-export const ConfirmModal = ({ title, children, onYes, onCancel, toggle }) => {
+export const AlertModal = ({ title, children, onOkClick, toggle }) => {
   return (
     <>
       <MDBModal isOpen={toggle}>
         <MDBModalHeader>{title}</MDBModalHeader>
         <MDBModalBody>{children}</MDBModalBody>
         <MDBModalFooter>
-          <MDBBtn color="elegant" onClick={onCancel.bind(null)}>
-            Отмена
-          </MDBBtn>
-          <MDBBtn color="primary" onClick={onYes.bind(null)}>
+          <MDBBtn color="primary" onClick={onOkClick.bind(null)}>
             Ок
           </MDBBtn>
         </MDBModalFooter>

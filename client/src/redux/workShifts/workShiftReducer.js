@@ -1,16 +1,19 @@
-import { GET_WORK_SHIFTS } from "../types";
+import { GET_WORK_SHIFTS, SELECT_WORK_SHIFT } from '../types';
 
 const initialState = {
-    workShifts: [],
+  workShifts: [],
+  selected: {},
 };
 
 export const workShiftReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case GET_WORK_SHIFTS:
+      return { ...state, workShifts: action.payload };
 
-    switch (action.type) {
-        case GET_WORK_SHIFTS:
-            return {...state, workShifts: action.payload};
-    
-        default:
-            return state;
-    }
-}
+    case SELECT_WORK_SHIFT:
+      return { ...state, selected: action.payload };
+
+    default:
+      return state;
+  }
+};
