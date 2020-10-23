@@ -8,6 +8,7 @@ import { Dashboard } from './pages/Dashboard';
 import { SignIn } from './pages/SignIn';
 import { Signup } from './pages/Signup';
 import { WorkShiftSingle } from './pages/dashboard/WorkShifts/WorkShiftSingle';
+import { Accounts } from './pages/dashboard/accounts/Accounts';
 
 export const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
@@ -31,6 +32,10 @@ export const useRoutes = (isAuthenticated) => {
 
         <Route path="/shifts/details" exact>
           <Dashboard component={WorkShiftSingle} />
+        </Route>
+
+        <Route path="/accounts">
+          <Dashboard component={Accounts} title="Денежные ячейки" />
         </Route>
 
         <Redirect to="/companies" />

@@ -41,9 +41,13 @@ export const WorkShiftSingle = () => {
             className="browser-default custom-select"
             onChange={onChangeShift}
           >
-            <option value="false">Выберите дату для загрузки смены</option>
+            <option value="false" defaultValue>
+              Выберите дату для загрузки смены
+            </option>
             {workShifts.map((s) => (
-              <option value={s.date}>{s.date}</option>
+              <option value={s.date} key={s.id}>
+                {s.date}
+              </option>
             ))}
           </select>
         </div>
@@ -166,8 +170,8 @@ export const WorkShiftSingle = () => {
                 </tr>
               </MDBTableHead>
               <MDBTableBody>
-                {shift.sales.map((sale) => (
-                  <tr>
+                {shift.sales.map((sale, index) => (
+                  <tr key={index}>
                     <td>{sale.productName}</td>
                     <td>
                       {sale.unitPrice} {hryvniaSign}

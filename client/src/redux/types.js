@@ -4,6 +4,7 @@ export const ERROR = 'APP/ERROR';
 export const CLEAR_ERROR = 'APP/CLEAR_ERROR';
 export const MESSAGE = 'APP/MESSAGE';
 export const CLEAR_MESSAGE = 'APP/CLEAR_MESSAGE';
+export const SIDEBAR_TOGGLE = 'APP/SIDEBAR_TOGGLE';
 
 // AUTH
 export const CHANGE_AUTH_FORM = 'AUTH/CHANGE_AUTH_FORM';
