@@ -22,6 +22,7 @@ router.get('/:companyId', auth, (req, res) => {
           closingTime: shift.closingTime
             ? shift.closingTime.substr(0, 5)
             : null,
+          sales: await getSales(shift),
         });
       }
       res.json({ workShifts: responseData.reverse() });
@@ -43,5 +44,21 @@ router.post('/remove', auth, async (req, res) => {
     res.status(400).json({ message: config.get('unknownErrorMessage') });
   }
 });
+
+async function getSales(shift) {
+  const sales = [];
+  const reports = await shift.getReports();
+  for (const report of reports) {
+    const product = await report.getProduct();
+    sales.push({
+      productName: product.title,
+      unitPrice: product.price,
+      numberOfSales: report.quantity,
+      revenue: report.total,
+    });
+  }
+
+  return sales;
+}
 
 module.exports = router;

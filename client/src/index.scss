@@ -65,15 +65,14 @@ code {
 }
 
 .loader-panel {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   right: 0;
   left: 0;
   top: 0;
-  // bottom: 0;
-  height: 100vh;
+  bottom: 0;
   background-color: $overlay-color;
   z-index: 10;
 }

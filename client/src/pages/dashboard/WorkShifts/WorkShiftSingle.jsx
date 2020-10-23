@@ -166,24 +166,18 @@ export const WorkShiftSingle = () => {
                 </tr>
               </MDBTableHead>
               <MDBTableBody>
-                <tr>
-                  <td>Американо</td>
-                  <td>15</td>
-                  <td>2</td>
-                  <td>30</td>
-                </tr>
-                <tr>
-                  <td>Эспрессо</td>
-                  <td>13</td>
-                  <td>3</td>
-                  <td>35</td>
-                </tr>
-                <tr>
-                  <td>Латте</td>
-                  <td>20</td>
-                  <td>10</td>
-                  <td>200</td>
-                </tr>
+                {shift.sales.map((sale) => (
+                  <tr>
+                    <td>{sale.productName}</td>
+                    <td>
+                      {sale.unitPrice} {hryvniaSign}
+                    </td>
+                    <td>{sale.numberOfSales} шт.</td>
+                    <td>
+                      {sale.revenue} {hryvniaSign}
+                    </td>
+                  </tr>
+                ))}
               </MDBTableBody>
             </MDBTable>
           </div>
