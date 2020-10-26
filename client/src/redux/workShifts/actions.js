@@ -24,14 +24,13 @@ export function removeWorkShifts(removeIds = [], token, companyId) {
     dispatch(showLoader());
     Axios.post('/api/work-shifts/remove', { removeIds }, generateHeaders(token))
       .then((res) => {
-        dispatch(getAllWorkShifts(companyId, token));
         dispatch(createMessgae({ text: res.data.message, type: 'info' }));
       })
       .catch((err) => {
         dispatch(createError(createErrorObject(err)));
       })
       .finally(() => {
-        dispatch(hideLoader());
+        dispatch(getAllWorkShifts(companyId, token));
       });
   };
 }

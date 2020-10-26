@@ -174,11 +174,11 @@ export const WorkShiftSingle = () => {
                   <tr key={index}>
                     <td>{sale.productName}</td>
                     <td>
-                      {sale.unitPrice} {hryvniaSign}
+                      {hryvniaSign} {sale.unitPrice}
                     </td>
                     <td>{sale.numberOfSales} шт.</td>
                     <td>
-                      {sale.revenue} {hryvniaSign}
+                      {hryvniaSign} {sale.revenue}
                     </td>
                   </tr>
                 ))}

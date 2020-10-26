@@ -82,3 +82,11 @@ code {
     column-count: 4 !important;
   }
 }
+
+.table-resp {
+  overflow-x: auto;
+}
+
+table td {
+  font-size: 16px !important;
+}

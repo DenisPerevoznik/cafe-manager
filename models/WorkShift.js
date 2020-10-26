@@ -26,16 +26,16 @@ const WorkShift = db.define('WorkShift', {
     allowNull: true,
   },
   openingBalance: {
-    type: DataTypes.DECIMAL,
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
   closingBalance: {
-    type: DataTypes.DECIMAL,
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: true,
     defaultValue: 0,
   },
   collection: {
-    type: DataTypes.DECIMAL,
+    type: DataTypes.DECIMAL(10, 2),
     defaultValue: 0,
     allowNull: false,
   },

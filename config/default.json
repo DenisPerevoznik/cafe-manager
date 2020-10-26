@@ -1,11 +1,16 @@
 {
-    "port": 5000,
-    "jwtSecretKey": "sleam#company#manager",
-    "mysql": [
-        "sleam", "root", "", { 
-        "dialect": "mysql",
-        "host": "localhost",
-        "port": "3307"
-    }],
-    "unknownErrorMessage": "Произошла ошибка. Повторите запрос позже"
+  "port": 5000,
+  "jwtSecretKey": "sleam#company#manager",
+  "mysql": [
+    "sleam",
+    "root",
+    "",
+    {
+      "dialect": "mysql",
+      "host": "localhost",
+      "port": "3307"
+    }
+  ],
+  "unknownErrorMessage": "Произошла ошибка. Повторите запрос позже",
+  "accountsTypes": ["Банковская карта", "Наличные"]
 }
