@@ -9,5 +9,8 @@ module.exports = function getDate(date = null) {
     hours: localDate.getHours(),
     minutes: localDate.getMinutes(),
     seconds: localDate.getSeconds(),
+    stringFullDate: `${day < 10 ? '0' + day : day}.${
+      month < 10 ? '0' + month : month
+    }.${localDate.getFullYear()}`,
   };
 };

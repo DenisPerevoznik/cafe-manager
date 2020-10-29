@@ -13,8 +13,9 @@ app.use('/api/companies', require('./routes/company.routes'));
 app.use('/api/analytics', require('./routes/analytics/analytics.routes'));
 app.use('/api/work-shifts', require('./routes/workShifts.routes'));
 app.use('/api/accounts', require('./routes/accounts.routes'));
+app.use('/api/expenses-outside', require('./routes/expensesOutside.routes'));
 
-db.sync({ alter: true });
+db.sync({ alter: false });
 
 app.listen(port, () => {
   console.log('server started on port 5000!');

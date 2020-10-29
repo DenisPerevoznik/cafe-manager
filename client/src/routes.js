@@ -8,7 +8,8 @@ import { Dashboard } from './pages/Dashboard';
 import { SignIn } from './pages/SignIn';
 import { Signup } from './pages/Signup';
 import { WorkShiftSingle } from './pages/dashboard/WorkShifts/WorkShiftSingle';
-import { Accounts } from './pages/dashboard/accounts/Accounts';
+import { Accounts } from './pages/dashboard/Accounts';
+import { ExpensesOutside } from './pages/dashboard/ExpensesOutside';
 
 export const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
@@ -36,6 +37,10 @@ export const useRoutes = (isAuthenticated) => {
 
         <Route path="/accounts">
           <Dashboard component={Accounts} title="Денежные ячейки" />
+        </Route>
+
+        <Route path="/expenses-outside">
+          <Dashboard component={ExpensesOutside} title="Расходы вне смены" />
         </Route>
 
         <Redirect to="/companies" />

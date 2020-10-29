@@ -10,18 +10,18 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AlertModal } from '../../../components/AlertModal';
-import { AuthContext } from '../../../context/AuthContext';
+import { AlertModal } from '../../components/AlertModal';
+import { AuthContext } from '../../context/AuthContext';
 import {
   changeTitle,
   createAccount,
   getAccounts,
   removeAccount,
-} from '../../../redux/accounts/actions';
-import { hryvniaSign } from '../../../utils/constants';
-import { CreateAccountModal } from './CreateAccountModal';
-import { ConfirmModal } from '../../../components/ConfirmModal';
-import { createMessgae } from '../../../redux/actions';
+} from '../../redux/accounts/actions';
+import { hryvniaSign } from '../../utils/constants';
+import { ModalCreateAccount } from '../../components/accounts/ModalCreateAccount';
+import { ConfirmModal } from '../../components/ConfirmModal';
+import { createMessgae } from '../../redux/actions';
 
 export const Accounts = () => {
   const { accounts, accountsTypes } = useSelector(
@@ -41,9 +41,9 @@ export const Accounts = () => {
     dispatch(getAccounts(auth.token, company.id));
   }, []);
 
-  function onCreateHandler(formData) {
-    dispatch(createAccount(formData, company.id, auth.token));
-  }
+  // function onCreateHandler(formData) {
+  //   dispatch(createAccount(formData, company.id, auth.token));
+  // }
 
   function handleRemove() {
     if (confirmToRemove.id) {
@@ -70,9 +70,10 @@ export const Accounts = () => {
     <div className="container">
       <div className="row">
         <div className="col-sm-12 col-md-4 col-lg-4 d-flex align-items-center">
-          <CreateAccountModal
-            onCreate={onCreateHandler}
+          <ModalCreateAccount
             types={accountsTypes}
+            companyId={company.id}
+            token={auth.token}
           />
         </div>
       </div>

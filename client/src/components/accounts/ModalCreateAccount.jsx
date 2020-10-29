@@ -9,10 +9,13 @@ import {
 } from 'mdbreact';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { createAccount } from '../../redux/accounts/actions';
 
-export const CreateAccountModal = ({ onCreate, types }) => {
+export const ModalCreateAccount = ({ types, companyId, token }) => {
   const [valid, setValid] = useState(true);
   const [toggle, setToggle] = useState(false);
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     title: '',
     type: types[0],
@@ -40,8 +43,9 @@ export const CreateAccountModal = ({ onCreate, types }) => {
       setValid(false);
     } else {
       setValid(true);
-      onCreate(form);
       setToggle(false);
+      dispatch(createAccount(form, companyId, token));
+      // onCreate(form);
     }
   }
 

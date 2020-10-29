@@ -10,22 +10,7 @@ router.get('/:companyId', auth, (req, res) => {
 
   WorkShift.findAll({ where: { CompanyId: companyId } })
     .then(async (shifts) => {
-      const responseData = [];
-      for (const shift of shifts) {
-        const emp = await shift.getEmployee();
-        const d = getDate(shift.date);
-        responseData.push({
-          ...shift.dataValues,
-          date: `${d.day}.${d.month}.${d.year}`,
-          employeeName: emp.name,
-          openingTime: shift.openingTime.substr(0, 5),
-          closingTime: shift.closingTime
-            ? shift.closingTime.substr(0, 5)
-            : null,
-          sales: await getSales(shift),
-        });
-      }
-      res.json({ workShifts: responseData.reverse() });
+      res.json({ workShifts: await generateResponseData(shifts) });
     })
     .catch((error) => {
       res.status(400).json({ message: error.message });
@@ -59,6 +44,23 @@ async function getSales(shift) {
   }
 
   return sales;
+}
+
+async function generateResponseData(shifts) {
+  const responseData = [];
+  for (const shift of shifts) {
+    const emp = await shift.getEmployee();
+
+    responseData.push({
+      ...shift.dataValues,
+      date: getDate(shift.date).stringFullDate,
+      employeeName: emp.name,
+      openingTime: shift.openingTime.substr(0, 5),
+      closingTime: shift.closingTime ? shift.closingTime.substr(0, 5) : null,
+      sales: await getSales(shift),
+    });
+  }
+  return responseData.reverse();
 }
 
 module.exports = router;

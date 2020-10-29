@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const Company = require('./Company');
+const Expense = require('./Expense');
 
 const Account = db.define('Account', {
   id: {
@@ -25,4 +25,6 @@ const Account = db.define('Account', {
   },
 });
 
+Account.hasMany(Expense);
+Expense.belongsTo(Account);
 module.exports = Account;

@@ -25,7 +25,7 @@ router.post(
     check('balance', 'Нужно указать начальный баланс')
       .not()
       .isEmpty()
-      .isDecimal(),
+      .isFloat(),
     check('type', 'Выберите тип хранения денежных средств').custom((value) =>
       config.get('accountsTypes').includes(value)
     ),
@@ -38,8 +38,7 @@ router.post(
 
     Company.findByPk(req.body.companyId)
       .then((company) => {
-        const { title, balance, type } = req.body;
-        company.createAccount({ title, balance, type }).then((account) => {
+        company.createAccount({ ...req.body }).then((account) => {
           res.json({ account, message: 'Новая ячейка создана' });
         });
       })

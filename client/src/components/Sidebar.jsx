@@ -56,9 +56,11 @@ export const Sidebar = ({ companyName }) => {
                   <i className="fas fa-exchange-alt" /> Смены
                 </li>
               </Link>
-              <li>
-                <i className="fas fa-donate" /> Расходы вне смены
-              </li>
+              <Link to="/expenses-outside">
+                <li>
+                  <i className="fas fa-donate" /> Расходы вне смены
+                </li>
+              </Link>
               <Link to="/accounts">
                 <li>
                   <i className="fas fa-money-check-alt" /> Денежные ячейки

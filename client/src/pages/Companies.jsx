@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { CompanyItem } from '../components/company/CompanyItem';
-import { CreateModal } from '../components/company/CreateModal';
+import { ModalCreateCompany } from '../components/company/ModalCreateCompany';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthContext } from '../context/AuthContext';
 import { createCompany, getCompanies } from '../redux/company/actions';
@@ -14,10 +14,6 @@ export const Companies = () => {
     dispatch(getCompanies(auth.token));
   }, []);
 
-  function create(name) {
-    dispatch(createCompany({ name }, auth.token));
-  }
-
   return (
     <div className="container with-header">
       <div className="row">
@@ -26,7 +22,7 @@ export const Companies = () => {
             <CompanyItem company={c} />
           </div>
         ))}
-        <CreateModal onCreate={create} />
+        <ModalCreateCompany token={auth.token} />
       </div>
     </div>
   );

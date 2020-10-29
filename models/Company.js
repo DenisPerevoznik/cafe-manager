@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 const Account = require('./Account');
 const Employee = require('./Employee');
+const Expense = require('./Expense');
 const Product = require('./Product');
 const Report = require('./Report');
 const WorkShift = require('./WorkShift');
@@ -28,5 +29,6 @@ Company.hasMany(Product, { onDelete: 'cascade' });
 Company.hasMany(Report, { onDelete: 'cascade' });
 Company.hasMany(Employee, { onDelete: 'cascade' });
 Company.hasMany(WorkShift, { onDelete: 'cascade' });
+Company.hasMany(Expense, { onDelete: 'cascade' });
 
 module.exports = Company;

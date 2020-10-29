@@ -75,14 +75,14 @@ export const Analytics = () => {
         </NowDayCardItem>
 
         <NowDayCardItem title="Выручка" materialIcon="monetization_on">
-          {hryvniaSign} {nowDayData.revenue}
+          <i className="fas fa-hryvnia" /> {nowDayData.revenue}
         </NowDayCardItem>
 
         <NowDayCardItem
           title="Марж. прибыль"
           materialIcon="account_balance_wallet"
         >
-          {hryvniaSign} {nowDayData.profit}
+          <i className="fas fa-hryvnia" /> {nowDayData.profit}
         </NowDayCardItem>
 
         <NowDayCardItem title="Чеки" materialIcon="receipt_long">
@@ -137,8 +137,8 @@ export const Analytics = () => {
                 <i
                   style={{ color: '#2196F3', marginRight: '1rem' }}
                   className="fas fa-chart-pie"
-                />{' '}
-                +20 %{' '}
+                />
+                +20 %
                 <i style={{ right: '2rem' }} className="fas fa-caret-up" />
               </span>
               <span
@@ -151,14 +151,14 @@ export const Analytics = () => {
                 <i
                   style={{ color: '#F44336', marginRight: '1rem' }}
                   className="fas fa-chart-pie"
-                />{' '}
+                />
                 -12 % <i className="fas fa-caret-down" />
               </span>
               <span style={{ color: '#2ac02a', ...spanPieStyles }}>
                 <i
                   style={{ color: '#FFC107', marginRight: '1rem' }}
                   className="fas fa-chart-pie"
-                />{' '}
+                />
                 +14 % <i className="fas fa-caret-up" />
               </span>
             </div>

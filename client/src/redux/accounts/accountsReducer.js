@@ -1,4 +1,4 @@
-import { CREATE_ACCOUNT, GET_ACCOUNTS } from '../types';
+import { GET_ACCOUNTS } from '../types';
 
 const initialState = {
   accountsData: { accounts: [], accountsTypes: [] },

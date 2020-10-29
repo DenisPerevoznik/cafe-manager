@@ -11,6 +11,7 @@ const {
   getDailyChartData,
   getMonthlyChartData,
 } = require('./functions');
+const Expense = require('../../models/Expense');
 
 router.post('/now', auth, (req, res) => {
   const { companyId } = req.body;
