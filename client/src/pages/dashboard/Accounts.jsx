@@ -88,7 +88,7 @@ export const Accounts = () => {
                       <th style={{ width: '19rem' }}>Название</th>
                       <th>Тип</th>
                       <th>Баланс</th>
-                      <th style={{ width: '11rem' }}></th>
+                      <th style={{ width: '18rem' }}></th>
                     </tr>
                   ) : (
                     <tr colspan="4">Список ячеек пуст</tr>
@@ -165,14 +165,31 @@ export const Accounts = () => {
                             />
                           </>
                         ) : (
-                          <button
-                            onClick={() => {
-                              setConfirmToRemove({ toggle: true, id: acc.id });
-                            }}
-                            className="btn btn-danger btn-sm"
-                          >
-                            <i className="far fa-trash-alt" /> Удалить
-                          </button>
+                          <>
+                            <button
+                              onClick={() => {
+                                setConfirmToRemove({
+                                  toggle: true,
+                                  id: acc.id,
+                                });
+                              }}
+                              className="btn btn-success btn-sm"
+                            >
+                              <i className="fas fa-money-bill-wave" /> Пополнить
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setConfirmToRemove({
+                                  toggle: true,
+                                  id: acc.id,
+                                });
+                              }}
+                              className="btn btn-danger btn-sm"
+                            >
+                              <i className="far fa-trash-alt" /> Удалить
+                            </button>
+                          </>
                         )}
                       </td>
                     </tr>
