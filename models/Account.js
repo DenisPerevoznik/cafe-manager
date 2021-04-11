@@ -14,10 +14,6 @@ const Account = db.define('Account', {
     allowNull: false,
     unique: true,
   },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   balance: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,

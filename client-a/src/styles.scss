@@ -299,6 +299,33 @@ table td {
 
 .invalid{
   color: #ec1c50;
+  font-weight: 500;
+}
+
+table.custom-tbl{
+  td{
+    padding: 0px !important;
+    font-weight: 600;
+    vertical-align: inherit;
+    text-align: center;
+  }
+
+  th{
+    padding: 15px !important;
+    font-size: 15px;
+  }
+}
+
+table{
+  th.th-icon{
+    display: flex;
+    justify-content: center;
+    color: #868686;
+
+    span{
+      font-size: 25px;
+    }
+  }
 }
 
 /* LOADER */

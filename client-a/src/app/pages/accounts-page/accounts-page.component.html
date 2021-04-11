@@ -1,0 +1,128 @@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Денежные ячейки</h3>
+        </div>
+
+        <div class="col-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+            (click)="onCreateClick()">Создать новую ячейку</button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="savings" title="Список счетов пуст" [show]="!loader && !accounts.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && accounts.length">
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2">
+                    <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">add</span>
+                                <span class="material-icons-outlined">paid</span>
+                            </th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Баланс</th>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">delete_sweep</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr mdbTableCol *ngFor="let acc of accounts">
+                            <td style="width: 15%">
+                                <button mdbBtn size="sm" color="primary" (click)="openUpdateBalanceModal(acc)">Пополнить</button>
+                            </td>
+                            <td>{{acc.title}}</td>
+                            <td>
+                                <mdb-badge color="pink" style="font-size: 15px" *ngIf="acc.balance < 0">₴ {{acc.balance}}</mdb-badge>
+                                <mdb-badge success="true" style="font-size: 15px" *ngIf="acc.balance >= 0">₴ {{acc.balance}}</mdb-badge>
+                            </td>
+                            <td style="width: 18%">
+                                <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(acc)">Удалить</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #createAccModal>
+    <div class="container-fluid">
+        <form [formGroup]="createForm" (ngSubmit)="createExpenseSubmit()">
+            <div class="row">
+                <div class="col-12">
+                    <label for="title">Название</label>
+                    <input formControlName="title" id="title" class="form-control" placeholder="Введите название">
+                    <small class="invalid" *ngIf="createForm.get('title').invalid && formSubmitted">Это поле обязательно к заполнению</small>
+                </div>
+                <div class="col-12 mt-2">
+                    <label for="balance">Начальный баланс</label>
+                    <input type="number" formControlName="balance" placeholder="0" id="balance" class="form-control">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="success" type="submit" (click)="createAccount()" *ngIf="!modalLoader">Создать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeAccModal>
+
+    <div class="container-fluid">
+        <ng-container *ngIf="selectedAccount">
+            <div class="row">
+                <div class="col-12">
+                    <p>Вы уверены, что хотите удалить выбранную ячейку ?</p>
+                    <div class="alert alert-warning" role="alert">
+                        Обратите внимание! После удаления данной ячейки, она больше не будет 
+                        отображатся в тех местах, где используется
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="danger" type="submit" (click)="removeAccount()"
+                     *ngIf="!modalLoader">Подтвердить удаление</button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>
+
+<ng-template #topUpBalanceModal>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 mt-2">
+                <label for="balance">Сумма пополнения</label>
+                <input type="number" [(ngModel)]="topUpBalance" placeholder="0" id="balance" class="form-control">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button mdbBtn size="sm" color="success" type="submit" (click)="topUpBalanceClick()" *ngIf="!modalLoader">Пополнить</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

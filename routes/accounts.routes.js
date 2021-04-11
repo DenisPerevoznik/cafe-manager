@@ -25,10 +25,7 @@ router.post(
     check('balance', 'Нужно указать начальный баланс')
       .not()
       .isEmpty()
-      .isFloat(),
-    check('type', 'Выберите тип хранения денежных средств').custom((value) =>
-      config.get('accountsTypes').includes(value)
-    ),
+      .isFloat()
   ],
   (req, res) => {
     const errors = validationResult(req);
@@ -59,6 +56,29 @@ router.delete('/remove/:id', auth, async (req, res) => {
     res.status(400).json({ message: config.get('unknownErrorMessage') });
   }
 });
+
+router.put('/update-balance', 
+[
+auth, check('balance', 'Нужно указать начальный баланс')
+.not()
+.isEmpty()
+.isFloat()
+], async (req, res) => {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array()[0].msg });
+  }
+  
+  const { balance, accountId } = req.body;
+    Account.update({ balance }, { where: { id: accountId } })
+      .then(() => {
+        res.json({ message: 'Баланс пополнен' });
+      })
+      .catch((err) => {
+        res.status(400).json({ message: err.message });
+      });
+})
 
 router.put(
   '/update',

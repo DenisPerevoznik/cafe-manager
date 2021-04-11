@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { getSelectedCompany } from '@app/store/selectors/common.selector';
 import { AppState } from '@app/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { first, map, mergeMap, takeUntil } from 'rxjs/operators';
-import { Company, Expense, WorkShift } from '../interfaces';
+import { first, map, mergeMap } from 'rxjs/operators';
+import { Account, Company, Expense, WorkShift } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -66,8 +66,33 @@ export class CompanyService {
   }
 
   // ACCOUNTS:
-  getAccounts(): Observable<Account[]>{
+  getAccounts(withoutMain: boolean = false): Observable<Account[]>{
     return this.http.get<{accounts: Account[]}>(`/api/accounts/${this.selectedCompany.id}`)
-    .pipe(map(response => response.accounts));  
+    .pipe(map(response => {
+
+      const accounts = response.accounts.map(acc => ({...acc, balance: parseFloat(acc.balance.toString())}));
+      if(withoutMain){
+        return accounts.filter(acc => acc.id !== this.selectedCompany.mainAccount)
+      }
+
+      return accounts;
+    }));  
+  }
+
+  createAccount(account: Account): Observable<string>{
+    return this.http.post<any>('/api/accounts/create', account)
+    .pipe(map(resp => resp.message));
+  }
+
+  removeAccount(accountId): Observable<string>{
+    return this.http.delete<any>(`/api/accounts/remove/${accountId}`)
+    .pipe(map(resp => resp.message));
+  }
+
+  topUpAccountBalance(balance: number, account: Account): Observable<string>{
+
+    const readyBalance = account.balance + balance;
+    return this.http.put<any>('/api/accounts/update-balance', {balance: readyBalance, accountId: account.id})
+    .pipe(map(resp => resp.message));
   }
 }

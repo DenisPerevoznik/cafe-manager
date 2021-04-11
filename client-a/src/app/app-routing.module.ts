@@ -3,6 +3,7 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { AccountsPageComponent } from './pages/accounts-page/accounts-page.component';
 import { AnalyticsPageComponent } from './pages/analytics-page/analytics-page.component';
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
@@ -26,6 +27,7 @@ const routes: Routes = [
       { path: 'shifts', component: ShiftsPageComponent },
       { path: 'shifts/:id', component: ShiftSinglePageComponent },
       { path: 'expenses', component: ExpensesPageComponent },
+      { path: 'accounts', component: AccountsPageComponent },
       { path: '**', redirectTo: '/companies' }
     ],
   },

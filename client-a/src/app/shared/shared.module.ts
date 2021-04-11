@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { PageLoaderComponent } from './components/page-loader/page-loader.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { NoDataComponent } from './components/no-data/no-data.component';
+import { CheckAccountPipe } from './pipes/check-account.pipe';
 
 @NgModule({
   imports: [
@@ -20,6 +21,8 @@ import { NoDataComponent } from './components/no-data/no-data.component';
     SimpleNotificationsModule.forRoot({position: ['top', 'right'], pauseOnHover: true, timeOut: 5000}),
     MDBBootstrapModule.forRoot(),
   ],
+  providers: [ToastService, MDBModalService],
+  declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent, CheckAccountPipe],
   exports: [
     HttpClientModule,
     CommonModule,
@@ -28,10 +31,9 @@ import { NoDataComponent } from './components/no-data/no-data.component';
     MDBBootstrapModule,
     HeaderComponent,
     PageLoaderComponent,
+    CheckAccountPipe,
     NoDataComponent,
     ModalComponent
   ],
-  providers: [ToastService, MDBModalService],
-  declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent]
 })
 export class SharedModule {}

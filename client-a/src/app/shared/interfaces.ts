@@ -6,6 +6,7 @@ export interface User {
 export interface Company {
   id?: number;
   name: string;
+  mainAccount?: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,8 +34,8 @@ export interface CurrentStatistic{
 }
 
 export interface WorkShift {
-  CompanyId: number;
-  EmployeeId: number;
+  CompanyId?: number;
+  EmployeeId?: number;
   closingBalance: number;
   closingTime: string;
   collection: number;
@@ -59,9 +60,9 @@ export interface Sales {
 }
 
 export interface Expense {
-  AccountId: number | string;
-  CompanyId: number | string;
-  accountTitle: string;
+  AccountId?: number | string;
+  CompanyId?: number | string;
+  // accountTitle: string;
   createdAt?: string;
   description: string;
   expenseAmount: number;
@@ -70,11 +71,10 @@ export interface Expense {
 }
 
 export interface Account{
-  CompanyId: number;
+  CompanyId?: number;
   balance: number;
   createdAt?: string;
   id?: string | number;
   title: string;
-  type: string;
   updatedAt?: string;
 }

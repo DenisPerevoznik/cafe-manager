@@ -22,6 +22,7 @@ import { MonthlyChartComponent } from './pages/analytics-page/monthly-chart/mont
 import { ShiftsPageComponent } from './pages/shifts-page/shifts-page.component';
 import { ShiftSinglePageComponent } from './pages/shifts-page/shift-single-page/shift-single-page.component';
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
+import { AccountsPageComponent } from './pages/accounts-page/accounts-page.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.compo
     ShiftsPageComponent,
     ShiftSinglePageComponent,
     ExpensesPageComponent,
+    AccountsPageComponent,
   ],
   imports: [
     BrowserModule,

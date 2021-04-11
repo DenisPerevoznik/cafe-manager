@@ -134,7 +134,7 @@ async function generateResponseData(expenses) {
   for (const expense of expenses) {
     responseData.push({
       ...expense.dataValues,
-      accountTitle: (await expense.getAccount()).title,
+      // accountTitle: (await expense.getAccount()).title,
       expenseAmount: parseFloat(expense.expenseAmount),
       createdAt: getDate(expense.createdAt).stringFullDate,
       updatedAt: getDate(expense.updatedAt).stringFullDate,
