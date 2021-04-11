@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <div class="auth">
+      <div class="auth__header">
+        <div class="auth__header__overlay">
+          <h2>Вход в систему</h2>
+        </div>
+      </div>
+
+      <div class="auth__body">
+        <form [formGroup]="signInForm" (ngSubmit)="signIn()">
+          <div class="grey-text">
+            <div class="md-form">
+              <mdb-icon fas icon="envelope" class="prefix"></mdb-icon>
+              <input mdbInput type="email" formControlName="email" id="email" class="form-control">
+              <label for="email" class="">Email</label>
+            </div>
+            <div class="md-form">
+              <mdb-icon fas icon="lock" class="prefix"></mdb-icon>
+              <input mdbInput formControlName="password" type="password" id="password" class="form-control">
+              <label for="password" class="">Пароль</label>
+            </div>
+          </div>
+          <div class="text-center">
+            <button mdbBtn color="success" type="submit"
+              [disabled]="loader" class="rounded-btn">
+
+              <span *ngIf="!loader; else loading">Войти <i class="fa fa-key"></i></span>
+              <ng-template #loading>
+                <span class="spinner-border spinner-border-sm mr-2" role="status"
+                  aria-hidden="true"></span>
+              </ng-template>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

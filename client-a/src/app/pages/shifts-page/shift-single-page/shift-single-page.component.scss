@@ -1,0 +1,32 @@
+
+.user-photo{
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-image: url("https://nogivruki.ua/wp-content/uploads/2018/08/default-user-image.png");
+}
+
+.time{
+    padding: .3rem;
+    background: #efefef;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+
+.time-badge{
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+.conflict-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}

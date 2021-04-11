@@ -1,0 +1,14 @@
+
+<div class="modal-header">
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">×</span>
+  </button>
+  <h4 class="modal-title w-100" id="myModalLabel">{{title}}</h4>
+</div>
+<div class="modal-body">
+  <ng-container [ngTemplateOutlet]="content"></ng-container>
+</div>
+<div class="modal-footer" *ngIf="confirmMode">
+  <button type="button" mdbBtn color="dark" size="sm" class="waves-light" aria-label="Close" (click)="modalRef.hide()" mdbWavesEffect>Отмена</button>
+  <button type="button" mdbBtn color="primary" size="sm" (click)="onOkClick()" class="relative waves-light" mdbWavesEffect>Ок</button>
+</div>

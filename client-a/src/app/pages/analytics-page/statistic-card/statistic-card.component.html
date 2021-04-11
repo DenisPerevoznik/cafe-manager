@@ -1,0 +1,25 @@
+
+  <div [class]="reversColor ? 'statistic-card reverse' : 'statistic-card'">
+
+    <div class="statistic-card-header">
+        <h6 class="statistic-card-title">{{title}}</h6>
+        <div class="statistic-card-icon">
+            <span class="material-icons">{{iconName}}</span>
+        </div>
+    </div>
+
+    <div class="statistic-card-content">
+        <h3>{{isDate ? (value | date:'dd.MM.yyyy') : value}}</h3>
+    </div>
+
+    <div class="statistic-card-footer">
+      <h6 *ngIf="!!percentage">
+        <span [ngStyle]="{color: percentage < 0 ? '#f44336' : '#4caf50', background: percentage < 0 ? '#f443361a' : '#4caf501a'}">
+          {{percentage < 0 ? percentage : '+' + percentage}}%
+        </span>
+        С прошлого дня
+      </h6>
+    </div>
+    <button *ngIf="showButton" mdbBtn size="sm" color="primary" class="statistic-card-btn">
+      <span class="material-icons-outlined mr-2" style="font-size: 16px" *ngIf="btnIcon">{{btnIcon}}</span> {{btnText}}</button>
+  </div>

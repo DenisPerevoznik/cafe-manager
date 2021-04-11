@@ -17,6 +17,34 @@ router.get('/:companyId', auth, (req, res) => {
     });
 });
 
+router.get('/get/:id', auth, (req, res) => {
+  const { id } = req.params;
+
+  WorkShift.findByPk(id)
+    .then(async (shift) => {
+      res.json({ shift: await pasteDataToShift(shift) });
+    })
+    .catch((error) => {
+      res.status(400).json({ message: error.message });
+    });
+});
+
+router.post('/get-by-date', auth, (req, res) => {
+
+  const {date, companyId} = req.body;
+
+  WorkShift.findAll({where: {CompanyId: companyId}})
+        .then((workShifts) =>
+          workShifts.filter((w) => w.date.startsWith(date))
+        )
+        .then(async (filteredShifts) => {
+          res.json(await generateResponseData(filteredShifts));
+        })
+        .catch(error => {
+        res.status(400).json({ message: config.get('unknownErrorMessage') });
+    })
+});
+
 router.post('/remove', auth, async (req, res) => {
   try {
     const { removeIds } = req.body;
@@ -24,7 +52,7 @@ router.post('/remove', auth, async (req, res) => {
     for (const id of removeIds) {
       await WorkShift.destroy({ where: { id } });
     }
-    res.json({ message: 'Выбранные рабочие смены удалены' });
+    res.json({ message: 'Успешно удалено' });
   } catch (error) {
     res.status(400).json({ message: config.get('unknownErrorMessage') });
   }
@@ -49,18 +77,21 @@ async function getSales(shift) {
 async function generateResponseData(shifts) {
   const responseData = [];
   for (const shift of shifts) {
-    const emp = await shift.getEmployee();
-
-    responseData.push({
-      ...shift.dataValues,
-      date: getDate(shift.date).stringFullDate,
-      employeeName: emp.name,
-      openingTime: shift.openingTime.substr(0, 5),
-      closingTime: shift.closingTime ? shift.closingTime.substr(0, 5) : null,
-      sales: await getSales(shift),
-    });
+    responseData.push(await pasteDataToShift(shift));
   }
   return responseData.reverse();
+}
+
+async function pasteDataToShift(shift){
+  const emp = await shift.getEmployee();
+  return {
+    ...shift.dataValues,
+    date: getDate(shift.date),
+    employeeName: emp.name,
+    openingTime: shift.openingTime.substr(0, 5),
+    closingTime: shift.closingTime ? shift.closingTime.substr(0, 5) : null,
+    sales: await getSales(shift),
+  }
 }
 
 module.exports = router;

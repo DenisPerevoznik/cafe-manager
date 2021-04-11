@@ -1,0 +1,25 @@
+@import "../../../../styles/variables";
+
+.navbar-brand {
+    font-weight: 600;
+  }
+  
+  .header {
+    position: fixed;
+    width: 100%;
+    background: #24292e;
+    z-index: 3;
+    top: 0;
+    height: $header-height;
+  }
+
+  .logo{
+    font-size: 26px;
+    margin-right: .5rem;
+    color: white;
+  }
+
+  .brand-container{
+    display: flex;
+    align-items: center;
+  }

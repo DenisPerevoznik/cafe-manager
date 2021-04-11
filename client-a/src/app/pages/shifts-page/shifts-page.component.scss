@@ -1,0 +1,44 @@
+
+.card-shift-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.shift-hr{
+    margin-top: .5rem;
+}
+
+.shift-element{
+
+    padding: .3rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.3s ease;
+
+    .title{
+        font-weight: 500;
+    }
+    .value{
+        font-weight: 400;
+    }
+
+    &:hover{
+        background: #ebebeb;
+        cursor: pointer;
+    }
+}
+
+.shift-footer{
+    margin-top: .3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remove-btn{
+    color: #ff413c;
+    font-size: 18px;
+    margin-right: .5rem;
+    cursor: pointer;
+}

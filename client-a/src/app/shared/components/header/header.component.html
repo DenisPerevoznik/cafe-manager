@@ -1,0 +1,30 @@
+<mdb-navbar
+    SideClass="navbar navbar-expand-lg navbar-dark lighten-1"
+    [containerInside]="false"
+    class="header">
+    <mdb-navbar-brand *ngIf="showSidebarToggle" class="ml-4 mr-2 ng-sidebar__trigger" 
+        (click)="sidebarToggle()">
+    <i class="fas fa-ellipsis-h"></i>
+    </mdb-navbar-brand>
+    <mdb-navbar-brand>
+        <div class="brand-container">
+            <span class="material-icons logo">view_in_ar</span>
+            <strong class="navbar-brand">Sleam</strong>
+        </div>
+    </mdb-navbar-brand>
+
+    <links>
+    <ul class="navbar-nav ml-auto nav-flex-icons">
+        <li class="nav-item active mr-3" *ngIf="showHomeButton">
+        <a [routerLink]="['/companies']" routerLinkActive="router-link-active"  class="nav-link waves-light" mdbWavesEffect
+            ><i class="fas fa-home"></i
+            ><span class="sr-only">(current)</span></a
+        >
+        </li>
+        <li class="nav-item">
+        <a (click)="onLogoutClick()" class="nav-link waves-light" mdbWavesEffect>
+            Выйти <i class="fas fa-sign-out-alt"></i><span class="sr-only">(current)</span></a>
+        </li>
+    </ul>
+    </links>
+</mdb-navbar>

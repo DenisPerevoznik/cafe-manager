@@ -1,0 +1,168 @@
+
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-12">
+      <h3 class="page-title">Аналитика</h3>
+      <h6 class="page-title-second-text">
+        С возвращением, {{currentUser.name}} 👋
+      </h6>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-md-3 col-lg-3 col-sm-12">
+      <app-statistic-card [iconName]="'event'" [reversColor]="true"
+        [value]="currentDate" [isDate]="true" [title]="'Сегодня'"></app-statistic-card>
+    </div>
+
+    <div class="col-md-3 col-lg-3 col-sm-12">
+      <app-statistic-card [iconName]="'monetization_on'" [percentage]="26"
+        [value]="'₴ ' + currentStatistic.revenue" [title]="'Выручка'"></app-statistic-card>
+    </div>
+
+    <div class="col-md-3 col-lg-3 col-sm-12">
+      <app-statistic-card [iconName]="'account_balance_wallet'" [percentage]="-14"
+        [value]="'₴ ' + currentStatistic.profit" [title]="'Марж. прибыль'"></app-statistic-card>
+    </div>
+
+    <div class="col-md-3 col-lg-3 col-sm-12">
+      <app-statistic-card [iconName]="'receipt_long'" [percentage]="10"
+        [value]="currentStatistic.receipts + ' шт.'" [title]="'Чеки'"></app-statistic-card>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="form-inline">
+        <h4 class="page-sub-title">Месяц </h4>
+        <input type="month" [value]="currentDailyDate | date:'yyyy-MM'" class="form-control" (change)="onDailyDateChange($event)">
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-md-8 col-lg-8 col-sm-12">
+      <div class="card shadow">
+        <span class="chart-title">Ежедневный отчет</span>
+        <app-daily-chart [dataSource]="dailyData$ | async"></app-daily-chart>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-4 col-sm-12">
+      <div class="card shadow">
+        <span class="chart-title">Финансы</span>
+        <app-finance-chart></app-finance-chart>
+        <table mdbTable hover="true" [small]="true">
+          <thead>
+            <tr>
+              <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCol *ngFor="let el of elements">
+              <td>{{el.first}}</td>
+              <td>{{el.last}}</td>
+              <td class="finance-chart-value">{{el.handle}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-12">
+      <h4 class="page-sub-title">Ежемесячный отчет </h4>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-12">
+      <div class="row">
+        <div class="col-12">
+          <div class="card monthly-card shadow">
+            <div class="monthly-card-icon" [ngStyle]="{color: '#11ca28', 'border-color': '#11ca28'}">
+              <span class="material-icons">attach_money</span>
+            </div>
+            <div class="monthly-card-content">
+              <span>Description</span>
+              <h5>3090</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mt-3">
+          <div class="card monthly-card shadow">
+            <div class="monthly-card-icon" [ngStyle]="{color: '#11a8ca', 'border-color': '#11a8ca'}">
+              <span class="material-icons">timeline</span>
+            </div>
+            <div class="monthly-card-content">
+              <span>Description</span>
+              <h5>221</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mt-3">
+          <div class="card monthly-card shadow">
+            <div class="monthly-card-icon" [ngStyle]="{color: '#ffbc24', 'border-color': '#ffbc24'}">
+              <span class="material-icons">how_to_reg</span>
+            </div>
+            <div class="monthly-card-content">
+              <span>Description</span>
+              <h5>500</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="card shadow">
+        <select class="form-control select-year" (change)="onMonthlyYearChange($event)">
+          <option value="2020">2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+          <option value="2030">2030</option>
+        </select>
+        <app-monthly-chart [dataSource]="monthlyData$ | async"></app-monthly-chart>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row mt-2">
+    <div class="col-12">
+      <h4 class="page-sub-title">Популярные товары </h4>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div class="card shadow p-4">
+        <table mdbTable hover="true">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Продукт</th>
+              <th scope="col">Кол-во заказов</th>
+              <th scope="col">Выручка</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr mdbTableCol *ngFor="let el of [1,2,3,4,5,6]; let i = index">
+              <th scope="row">{{el}}</th>
+              <td>Product {{el}}</td>
+              <td>{{(el + 25) * 2}} шт.</td>
+              <td>$ {{el + 500 * 2}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div> -->
+</div>

@@ -1,0 +1,81 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Рабочие смены</h3>
+        </div>
+        <div class="col-3">
+            <input type="month" #monthpicker class="form-control" style="width: 18.5rem" (change)="getByMonth($event)">
+        </div>
+        <div class="col-9">
+            <button class="btn btn-sm btn-primary" (click)="getAllShifts()">За все время</button>
+        </div>
+    </div>
+
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="article" [show]="!workShiftsData.length && !loader"></app-no-data>
+
+    <ng-container *ngIf="!loader">
+        <div class="row mt-3">
+            <div class="col-lg-3 col-md-4 col-sm-12" *ngFor="let shift of workShiftsData">
+                <div class="card shadow p-2">
+                    <div class="card-shift-header">
+                        <h5>{{shift.date.stringFullDate}}</h5>
+                        <mdb-badge color="indigo" style="height: fit-content" *ngIf="!shift.status">
+                            <div class="badge-content">
+                                <span class="material-icons mr-1" style="font-size: 18px">alarm_on</span>
+                                <span>Закрыта</span>
+                            </div>
+                        </mdb-badge>
+                        <mdb-badge success="true" style="height: fit-content" *ngIf="shift.status">
+                            <div class="badge-content">
+                                <span class="material-icons mr-1" style="font-size: 18px">alarm</span>
+                                <span>Открыта</span>
+                            </div>
+                        </mdb-badge>
+                    </div>
+                    <hr class="shift-hr">
+                    <ng-container *ngIf="shift.status; else closedShift">
+                        <div class="shift-element">
+                            <span class="title">Начало смены: </span> <span class="value">{{shift.openingTime}}</span>
+                        </div>
+                        <div class="shift-element">
+                            <span class="title">Касса в начале: </span> <span class="value">₴ {{shift.openingBalance}}</span>
+                        </div>
+                        <div class="shift-element">
+                            <span class="title">Касса: </span> <span class="value">₴ {{shift.revenue}}</span>
+                        </div>
+                        <div class="shift-element">
+                            <span class="title">На смене: </span> <span class="value">{{shift.employeeName}}</span>
+                        </div>
+                    </ng-container>
+    
+                    <ng-template #closedShift>
+                        <div class="shift-element">
+                            <span class="title">Время работы: </span> <span class="value">{{shift.openingTime}} - {{shift.closingTime}}</span>
+                        </div>
+                        <div class="shift-element">
+                            <span class="title">Касса в начале: </span> <span class="value">₴ {{shift.openingBalance}}</span>
+                        </div>
+                        <div class="shift-element">
+                            <span class="title">Остаток на размен: </span> <span class="value">₴ {{shift.closingBalance}}</span>
+                        </div>
+                        <div class="shift-element">
+                            <span class="title">Был(а) на смене: </span> <span class="value">{{shift.employeeName}}</span>
+                        </div>
+                    </ng-template>
+                
+                    <div class="shift-footer">
+                        <button type="button" mdbBtn color="dark" size="sm" 
+                            [routerLink]="['/dashboard/shifts', shift.id]" mdbWavesEffect class="ml-2">
+                            Просмотр</button>
+                        <i class="far fa-trash-alt remove-btn" (click)="removeShiftClick(shift.id)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #confirmRemoveModal>
+    <p>Вы уверены что хотите удалить эту смену ? После удаления вся статистика будет утеряна</p>
+</ng-template>

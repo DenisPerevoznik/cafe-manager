@@ -1,0 +1,111 @@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Расходы вне смены</h3>
+        </div>
+
+        <div class="col-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+            (click)="onCreateClick()">Создать запись</button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="price_check" title="Расходов нету" [show]="!loader && !expenses.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && expenses.length">
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2">
+                    <table mdbTable bordered="true" striped="true">
+                        <thead>
+                          <tr>
+                            <th scope="col">Потрачено</th>
+                            <th scope="col">Описание</th>
+                            <th scope="col">Списано с</th>
+                            <th scope="col">Дата</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr mdbTableCol *ngFor="let exp of expenses">
+                            <td><mdb-badge color="pink">₴ -{{exp.expenseAmount}}</mdb-badge></td>
+                            <td>{{exp.description}}</td>
+                            <td>{{exp.accountTitle}}</td>
+                            <td>{{exp.createdAt}}</td>
+                            <td>
+                                <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(exp)">Удалить</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #createExpModal>
+    <div class="container-fluid">
+        <form [formGroup]="createForm" (ngSubmit)="createExpenseSubmit()">
+            <div class="row">
+                <div class="col-12">
+                    <label for="expDescription">На что расходовалась сумма</label>
+                    <textarea formControlName="description" id="expDescription" class="form-control" rows="3" placeholder="Аренда"></textarea>
+                    <small class="invalid" *ngIf="createForm.get('description').invalid">Это поле обязательно к заполнению</small>
+                </div>
+                <div class="col-12 mt-2">
+                    <label for="expSum">Сумма расхода</label>
+                    <input type="number" formControlName="sum" placeholder="0" id="expSum" class="form-control">
+                    <small class="invalid" *ngIf="createForm.get('sum').invalid">Укажите правильно сумму расхода</small>
+                </div>
+                <div class="col-12 mt-2">
+                    <label for="accountSelect">Счет для списания средств</label>
+                    <select id="accountSelect" class="form-control" formControlName="account">
+                        <option [ngValue]="null">Выберите счет</option>
+                        <option *ngFor="let acc of accounts" [value]="acc.id">{{acc.title}}</option>
+                    </select>
+                    <small class="invalid" *ngIf="createForm.get('account').invalid">Выберите счет</small>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="success" type="submit" *ngIf="!modalLoader"
+                    [disabled]="createForm.invalid">Создать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeExpModal>
+
+    <div class="container-fluid">
+        <ng-container *ngIf="selectedExpenseForRemove">
+            <div class="row">
+                <div class="col-12">
+                    <p>Вы уверены, что хотите удалить выбранную запись ?</p>
+                </div>
+                <div class="col-12">
+                    <mdb-checkbox [(ngModel)]="returnSumToAcc" [default]="true" *ngIf="!!accountOfExpense">
+                        Хотите ли вы вернуть сумму в {{accountOfExpense.title}}</mdb-checkbox>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="danger" type="submit" (click)="removeExpense()"
+                     *ngIf="!modalLoader">Подтвердить удаление</button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>

@@ -1,0 +1,304 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import 'material-icons/iconfont/material-icons.scss';
+@import "./styles/scroll.scss";
+@import "./styles/variables";
+
+body {
+  background-color: #f7f9fc !important;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.rounded-btn {
+  border-radius: 10rem !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.page-sub-title{
+  margin: 0 15px 10px;
+  font-weight: 400;
+  font-size: 1.3rem;
+}
+
+.page-title {
+  margin: 0 15px 10px;
+  font-weight: 600;
+  font-size: 1.5rem;
+
+  &-second-text{
+    font-size: 1rem;
+    font-weight: 400;
+    margin-left: 15px;
+  }
+}
+
+.new-company-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 15rem;
+  height: 15rem;
+  border: 2px dashed gray;
+  transition: 0.3s ease;
+
+  > i {
+    font-size: 60px;
+  }
+
+  &:hover {
+    opacity: 0.5;
+    cursor: pointer;
+  }
+}
+
+.dashboard-field {
+  margin-left: $sidebar-width;
+  margin-top: $header-height + 20;
+
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 1360px){
+      margin-left: 0;
+    }
+}
+
+.with-header {
+  margin-top: $header-height + 20;
+}
+
+.shift-card {
+  p {
+    margin-bottom: 0.7rem;
+  }
+
+  hr {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+}
+
+.loader-panel {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: $overlay-color;
+  z-index: 10;
+}
+
+.card-col-workshift {
+  @media (min-width: 576px) {
+    column-count: 4 !important;
+  }
+}
+
+.table-resp {
+  overflow-x: auto;
+}
+
+table td {
+  font-size: 16px !important;
+}
+
+.toast-indicator{
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  margin-right: .5rem;
+}
+
+.toast-success{
+  background: #00f212;
+  box-shadow: 1px 1px 9px 0px #1bff00;
+}
+
+.toast-error{
+  background: #ff2323;
+  box-shadow: 1px 1px 9px 0px #ff0000;
+}
+
+.toast-warn{
+  background: #fb8c00;
+  box-shadow: 1px 1px 9px 0px #ffc800;
+}
+
+.toast-alert{
+  background: #607d8b;
+  box-shadow: 1px 1px 9px 0px #607d8b;
+}
+
+.toast-info{
+  background: #03a9f4;
+  box-shadow: 1px 1px 9px 0px #03a9f4;
+}
+
+.toast-body{
+  color: black;
+}
+
+.simple-notification{
+  padding: 0 !important;
+}
+
+.simple-notification-wrapper{
+  width: 360px !important;
+}
+
+.simple-notification.has-icon .sn-html{
+  padding: 0 !important;
+}
+
+.ng-sidebar {
+  @include scroll;
+  // background-color: #3b7096;
+  position: fixed;
+    top: $header-height !important;
+    left: 0;
+    height: 100%;
+    width: $sidebar-width;
+    background: #1b2430;
+    transition: all 0.3s ease-in;
+    color: white;
+    z-index: 3;
+    overflow-y: auto;
+
+  ul {
+    list-style: none;
+    font-size: 17px;
+    padding: 0;
+    padding-top: 10px;
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    li {
+      padding: 10px 20px;
+      transition: 0.3s ease;
+      font-weight: 300;
+
+      & > i {
+        margin-right: 10px;
+        color: #eeeeeead;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background-color: #384452;
+        margin-left: 3px;
+      }
+    }
+  }
+
+  &__company-name {
+    width: 100%;
+    height: 55px;
+    background-color: #232f3e;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__trigger {
+    display: none;
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 1360px){
+
+      display: block;
+      font-size: 23px;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}
+
+.shadow{
+  box-shadow: 1px 1px 5px -3px black !important;
+}
+
+.badge-content{
+  display: flex;
+  align-items: center;
+}
+
+/* LOADER */
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #1b2430;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+.invalid{
+  color: #ec1c50;
+}
+
+/* LOADER */

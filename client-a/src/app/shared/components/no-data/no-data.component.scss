@@ -1,0 +1,12 @@
+.no-data{
+    display: flex;
+    margin-top: 8rem;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #999999;
+  
+    span{
+      font-size: 6rem;
+    }
+  }

@@ -1,0 +1,138 @@
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-sm-12">
+        <div class="row">
+            <div class="col-12">
+              <h3 class="page-title">Просмотр смены</h3>
+            </div>
+            <div class="col-12 ml-3" *ngIf="selectedShift">
+              <mdb-badge color="indigo" style="height: fit-content" *ngIf="!selectedShift.status">
+                  <div class="badge-content">
+                      <span class="material-icons mr-1" style="font-size: 18px">alarm_on</span>
+                      <span>Закрыта</span>
+                  </div>
+              </mdb-badge>
+              <mdb-badge success="true" style="height: fit-content" *ngIf="selectedShift.status">
+                  <div class="badge-content">
+                      <span class="material-icons mr-1" style="font-size: 18px">alarm</span>
+                      <span>Открыта</span>
+                  </div>
+              </mdb-badge>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-12 d-flex align-items-center">
+          <span class="mr-2">Просматриваемая дата </span>
+          <input type="date" class="form-control" (change)="onDateChange($event)" style="width: 14rem" id="date-field" 
+            [attr.data-prev]="'null'" #datepicker>
+          <button type="button" mdbBtn color="primary" size="sm" (click)="moreShiftsClick()"
+            mdbWavesEffect class="ml-2" *ngIf="workShiftsByDate.length > 1">
+            Другие смены за эту дату</button>
+      </div>
+    </div>
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data [show]="!selectedShift && !loader" icon="event" title="Нету смен за выбранное число"></app-no-data>
+
+    <ng-container *ngIf="selectedShift && !loader">
+      <div class="row">
+        <div class="col-sm-12 col-md-3">
+          <div class="card shadow d-flex align-items-center flex-column p-3">
+              <div class="user-photo"></div>
+              <h6>{{selectedShift.employeeName}}</h6>
+              <mdb-badge primary="true" class="mt-1">
+                  <div class="badge-content">
+                      <span class="material-icons time-badge">query_builder</span> Время работы
+                  </div>
+              </mdb-badge>
+              <div class="time">
+                  <span>{{selectedShift.openingTime}} {{!selectedShift.status ? ' - ' + selectedShift.closingTime : ''}}</span>
+              </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-9">
+            <div class="row">
+                <div class="col-4">
+                    <app-statistic-card [title]="'Выручка'" [value]="'₴' + selectedShift.revenue" 
+                        [iconName]="'attach_money'"></app-statistic-card>
+                </div>
+                <div class="col-4">
+                    <app-statistic-card [title]="'Касса в начале'" [value]="'₴' + selectedShift.openingBalance" 
+                        [iconName]="'table_view'"></app-statistic-card>
+                </div>
+                <div class="col-4">
+                    <app-statistic-card [title]="'Инкасация'" [value]="'₴' + selectedShift.collection" 
+                        [iconName]="'request_quote'"></app-statistic-card>
+                </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-4">
+                  <app-statistic-card [title]="'Чеки'" [value]="selectedShift.receipts + ' шт.'"
+                      [iconName]="'receipt_long'"></app-statistic-card>
+              </div>
+              <div class="col-4">
+                  <app-statistic-card [title]="'Остаток на размен'" [value]="'₴' + selectedShift.closingBalance"
+                      [iconName]="'payments'"></app-statistic-card>
+              </div>
+              <div class="col-4">
+                  <app-statistic-card [title]="'Сумма расходов'" [value]="'₴ 12'" btnText="Подробнее"
+                      [iconName]="'money_off'" [showButton]="true"></app-statistic-card>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <div class="card shadow p-4">
+          <div class="d-flex">
+            <span class="material-icons-outlined mr-2">assessment</span> 
+            <h5>Продажи на смене</h5>
+          </div>
+          <table mdbTable hover="true">
+            <thead>
+              <tr>
+                <th scope="col">Продукт</th>
+                <th scope="col">Цена за ед.</th>
+                <th scope="col">Кол-во заказов</th>
+                <th scope="col">Выручка</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr mdbTableCol *ngFor="let sale of selectedShift.sales">
+                <th scope="row">{{sale.productName}}</th>
+                <td>₴ {{sale.unitPrice}}</td>
+                <td>{{sale.numberOfSales}} шт.</td>
+                <td>₴ {{sale.revenue}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-1"></div>
+    </div>
+    </ng-container>
+    
+</div>
+
+<ng-template #conflictModalContent>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h6>По указанной дате "{{selectedDate | date:'dd.MM.yyyy'}}", найдено несколько рабочих смен. Выберите одну из них для загрузки</h6>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12" *ngFor="let shift of workShiftsByDate">
+        <div class="card conflict-card mt-2">
+          <span>Время работы: {{shift.status ? shift.openingTime : shift.openingTime + ' - ' + shift.closingTime}}</span>
+          <span class="text-indigo" style="color: #3f51b5" *ngIf="!shift.status">Закрыта</span>
+          <span class="text-success" *ngIf="shift.status">Открыта</span>
+          <button class="btn btn-sm btn-primary" (click)="selectShiftFromConflict(shift)">Выбрать</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

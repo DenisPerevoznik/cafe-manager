@@ -1,0 +1,55 @@
+
+.month-picker-title{
+    font-weight: 400;
+    font-size: 23px;
+}
+
+.chart-title{
+    font-size: 1.0625rem;
+    margin: 15px 20px;
+}
+
+.finance-chart-value{
+    color: rgb(102, 187, 106);
+    font-weight: 500;
+}
+
+.monthly-card{
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+
+    &-icon{
+        border-radius: 50%;
+        border: 2px solid black;
+        width: 4rem;
+        height: 4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 1rem;
+
+        span{
+            font-size: 30px;
+        }
+    }
+
+    &-content{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        span{
+            color: gray;
+        }
+    }
+}
+
+.select-year{
+    border-radius: 0;
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    width: 30%;
+}
