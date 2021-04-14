@@ -78,3 +78,13 @@ export interface Account{
   title: string;
   updatedAt?: string;
 }
+
+export interface Category{
+  CompanyId: number;
+  id: string | number;
+  title: string;
+  published: boolean;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+}

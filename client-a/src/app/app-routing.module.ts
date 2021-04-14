@@ -5,6 +5,7 @@ import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { AccountsPageComponent } from './pages/accounts-page/accounts-page.component';
 import { AnalyticsPageComponent } from './pages/analytics-page/analytics-page.component';
+import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
 import { ShiftSinglePageComponent } from './pages/shifts-page/shift-single-page/shift-single-page.component';
@@ -28,6 +29,7 @@ const routes: Routes = [
       { path: 'shifts/:id', component: ShiftSinglePageComponent },
       { path: 'expenses', component: ExpensesPageComponent },
       { path: 'accounts', component: AccountsPageComponent },
+      { path: 'categories', component: CategoriesPageComponent },
       { path: '**', redirectTo: '/companies' }
     ],
   },

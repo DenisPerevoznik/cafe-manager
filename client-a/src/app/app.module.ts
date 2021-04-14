@@ -23,6 +23,7 @@ import { ShiftsPageComponent } from './pages/shifts-page/shifts-page.component';
 import { ShiftSinglePageComponent } from './pages/shifts-page/shift-single-page/shift-single-page.component';
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
 import { AccountsPageComponent } from './pages/accounts-page/accounts-page.component';
+import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AccountsPageComponent } from './pages/accounts-page/accounts-page.compo
     ShiftSinglePageComponent,
     ExpensesPageComponent,
     AccountsPageComponent,
+    CategoriesPageComponent,
   ],
   imports: [
     BrowserModule,

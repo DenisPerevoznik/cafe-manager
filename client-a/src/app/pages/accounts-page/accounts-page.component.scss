@@ -1,0 +1,38 @@
+
+.gear-icon{
+
+    color: rgb(54, 54, 54);
+    font-size: 23px;
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    cursor: help;
+}
+
+.terminal-icon{
+    font-size: 30px;
+    color: gray;
+    cursor: help;
+}
+
+.rot {
+    animation: 1s linear 0s normal none infinite running rot;
+    -webkit-animation: 5s linear 0s normal none infinite running rot;
+    width: 100px;
+  }
+  @keyframes rot {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes rot {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

@@ -23,7 +23,6 @@
                         <thead>
                           <tr>
                             <th scope="col" class="th-icon">
-                                <span class="material-icons-outlined">add</span>
                                 <span class="material-icons-outlined">paid</span>
                             </th>
                             <th scope="col">Название</th>
@@ -35,8 +34,16 @@
                         </thead>
                         <tbody>
                           <tr mdbTableCol *ngFor="let acc of accounts">
-                            <td style="width: 15%">
-                                <button mdbBtn size="sm" color="primary" (click)="openUpdateBalanceModal(acc)">Пополнить</button>
+                            <td style="width: 15%" class="position-relative">
+                                <button mdbBtn size="sm" color="primary" (click)="openUpdateBalanceModal(acc)"
+                                    *ngIf="mainAccountId !== acc.id">Пополнить</button>
+
+                                <ng-container *ngIf="mainAccountId === acc.id">
+                                    <div title="Терминал заведения использует этот счет в качестве кассы">
+                                        <span class="material-icons-outlined gear-icon rot">settings</span>
+                                        <span class="material-icons-outlined terminal-icon">view_sidebar</span>
+                                    </div>
+                                </ng-container>
                             </td>
                             <td>{{acc.title}}</td>
                             <td>
@@ -44,7 +51,8 @@
                                 <mdb-badge success="true" style="font-size: 15px" *ngIf="acc.balance >= 0">₴ {{acc.balance}}</mdb-badge>
                             </td>
                             <td style="width: 18%">
-                                <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(acc)">Удалить</button>
+                                <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(acc)"
+                                    [disabled]="mainAccountId === acc.id">Удалить</button>
                             </td>
                           </tr>
                         </tbody>

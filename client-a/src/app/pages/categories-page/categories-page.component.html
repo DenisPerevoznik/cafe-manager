@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Категории товаров</h3>
+        </div>
+
+        <div class="col-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+            (click)="onCreateCategoryClick()">Создать категорию</button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="all_inbox" title="Список категорий пуст" [show]="!loader && !categories.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && categories.length">
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2">
+                    <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">color_lens</span>
+                            </th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">handyman</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr mdbTableCol *ngFor="let category of categories">
+                            <td style="width: 10%">
+                                <div class="color-point" [ngStyle]="{background: category.color}"></div>
+                            </td>
+                            <td>{{category.title}}</td>
+                            <td>
+                                <mdb-badge color="pink" style="font-size: 15px" *ngIf="!category.published">Скрыто</mdb-badge>
+                                <mdb-badge success="true" style="font-size: 15px" *ngIf="category.published">Доступно</mdb-badge>
+                            </td>
+                            <td style="width: 30%">
+                                <button mdbBtn size="sm" color="primary">Изменить</button>
+                                <button mdbBtn size="sm" color="danger">Удалить</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

@@ -27,6 +27,7 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
   topUpBalance = 0;
   modalLoader = false;
   createForm: FormGroup;
+  mainAccountId = 0;
   formSubmitted = false;
 
   constructor(private company: CompanyService, private toastService: ToastService,
@@ -43,6 +44,7 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
       title: new FormControl(null, [Validators.required]),
       balance: new FormControl(0)
     });
+    this.mainAccountId = this.company.selectedCompany.mainAccount;
     this.getAccounts();
   }
 
