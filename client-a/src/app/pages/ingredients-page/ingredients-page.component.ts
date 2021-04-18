@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
-import { Ingredient, IngredientUnitEnum } from '@app/shared/interfaces';
+import { Ingredient } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { MDBModalService } from 'angular-bootstrap-md';
@@ -20,7 +20,6 @@ export class IngredientsPageComponent implements OnInit {
   loader;
   submitted;
   modalLoader;
-  ingredientUsing = false;
   ingredients: Ingredient[] = [];
   selectedIngredient: Ingredient;
   unsubscribe: Subject<any> = new Subject();
@@ -51,6 +50,8 @@ export class IngredientsPageComponent implements OnInit {
   }
 
   onCreateIngredientClick(){
+    this.isEdit = false;
+    this.createForm.reset();
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,

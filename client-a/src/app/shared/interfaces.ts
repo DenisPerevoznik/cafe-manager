@@ -106,3 +106,18 @@ export enum IngredientUnitEnum {
   Liter = 'л.',
   Piece = 'шт.'
 }
+
+export interface Product {
+  id?: number;
+  CompanyId?: number;
+  title: string;
+  price: number;
+  published: boolean;
+  costPrice: number;
+  isPurchased: boolean;
+  type?: string;
+  ingredients?: Ingredient[],
+  createdAt?: string;
+  updatedAt?: string;
+  category?: Category;
+}

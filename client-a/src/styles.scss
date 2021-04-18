@@ -150,6 +150,17 @@ table td {
   color: black;
 }
 
+.btn-content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  span.icon{
+    font-size: 15px;
+    margin-right: 5px;
+  }
+}
+
 .simple-notification{
   padding: 0 !important;
 }

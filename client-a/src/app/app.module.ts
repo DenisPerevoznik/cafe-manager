@@ -25,6 +25,8 @@ import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.compo
 import { AccountsPageComponent } from './pages/accounts-page/accounts-page.component';
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { IngredientsPageComponent } from './pages/ingredients-page/ingredients-page.component';
+import { ProductsPageComponent } from './pages/products-page/products-page.component';
+import { CreateProductPageComponent } from './pages/products-page/create-product-page/create-product-page.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { IngredientsPageComponent } from './pages/ingredients-page/ingredients-p
     AccountsPageComponent,
     CategoriesPageComponent,
     IngredientsPageComponent,
+    ProductsPageComponent,
+    CreateProductPageComponent,
   ],
   imports: [
     BrowserModule,

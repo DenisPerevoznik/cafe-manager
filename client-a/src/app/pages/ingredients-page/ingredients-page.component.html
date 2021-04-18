@@ -6,7 +6,11 @@
 
         <div class="col-12">
             <button mdbBtn size="sm" color="success" [disabled]="loader"
-            (click)="onCreateIngredientClick()">Добавить новый</button>
+            (click)="onCreateIngredientClick()">
+            <div class="btn-content">
+                <span class="material-icons-outlined icon">add</span> Добавить новый
+            </div>
+        </button>
         </div>
     </div>
 
@@ -37,8 +41,16 @@
                             <td>{{ing.unit}}</td>
                             <td>{{ing.quantity}} {{ing.unit}}</td>
                             <td style="width: 30%">
-                                <button mdbBtn size="sm" color="primary" (click)="editClick(ing)"><i class="fas fa-edit"></i></button>
-                                <button mdbBtn size="sm" color="danger" (click)="removeClick(ing)"><i class="fas fa-trash"></i></button>
+                                <button mdbBtn size="sm" color="indigo" (click)="editClick(ing)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">edit</span> Изменить
+                                    </div>
+                                </button>
+                                <button mdbBtn size="sm" color="danger" (click)="removeClick(ing)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">delete</span> Удалить
+                                    </div>
+                                </button>
                             </td>
                           </tr>
                         </tbody>

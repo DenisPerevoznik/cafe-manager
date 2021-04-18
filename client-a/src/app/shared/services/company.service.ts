@@ -5,7 +5,7 @@ import { AppState } from '@app/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { first, map, mergeMap } from 'rxjs/operators';
-import { Account, Category, Company, Expense, Ingredient, WorkShift } from '../interfaces';
+import { Account, Category, Company, Expense, Ingredient, Product, WorkShift } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +143,30 @@ export class CompanyService {
   
     removeIngredient(id): Observable<string>{
       return this.http.delete<any>(`/api/ingredients/remove/${id}`)
+      .pipe(map(resp => resp.message));;
+    }
+
+    // PRODUCTS:
+    getProducts(): Observable<Product[]>{
+      return this.http.get<Product[]>(`/api/products/${this.selectedCompany.id}`);
+    }
+  
+    createProduct(product: Product): Observable<string>{
+      return this.http.post<{product: Product, message: string}>('/api/products/create', product)
+      .pipe(map(resp => resp.message));
+    }
+  
+    getProductById(id: string | number): Observable<Product>{
+      return this.http.get<Product>(`/api/products/get/${id}`);
+    }
+  
+    updateProduct(product: Product, productId: string | number): Observable<string>{
+      return this.http.put<any>(`/api/products/update/${productId}`, product)
+      .pipe(map(resp => resp.message));
+    }
+  
+    removeProduct(id): Observable<string>{
+      return this.http.delete<any>(`/api/products/remove/${id}`)
       .pipe(map(resp => resp.message));;
     }
 }
