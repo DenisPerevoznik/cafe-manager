@@ -1,0 +1,142 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Ингредиенты</h3>
+        </div>
+
+        <div class="col-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+            (click)="onCreateIngredientClick()">Добавить новый</button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="restaurant_menu" title="Список ингредиентов пуст" [show]="!loader && !ingredients.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && ingredients.length">
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2">
+                    <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col">Наименование</th>
+                            <th scope="col">Цена за ед.</th>
+                            <th scope="col">Фасовка</th>
+                            <th scope="col">Остаток</th>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">handyman</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr mdbTableCol *ngFor="let ing of ingredients">
+                            <td>{{ing.title}}</td>
+                            <td>₴ {{ing.price}}</td>
+                            <td>{{ing.unit}}</td>
+                            <td>{{ing.quantity}} {{ing.unit}}</td>
+                            <td style="width: 30%">
+                                <button mdbBtn size="sm" color="primary" (click)="editClick(ing)"><i class="fas fa-edit"></i></button>
+                                <button mdbBtn size="sm" color="danger" (click)="removeClick(ing)"><i class="fas fa-trash"></i></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #createModal>
+
+    <div class="container-fluid">
+        <form [formGroup]="createForm" (ngSubmit)="createSubmit()">
+            <ng-container *ngIf="!modalLoader">
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <label for="title">Название</label>
+                        <input type="text" formControlName="title" placeholder="Введите название" id="title" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('title').invalid && submitted">Заполните это поле</small>
+                    </div>
+                    <div class="col-12 mt-2" *ngIf="!isEdit || (isEdit && !selectedIngredient.isUsing)">
+                        <label for="">Выберите единицу измерения</label>
+                        <br>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" name="unit" value="шт." class="custom-control-input" id="count" formControlName="unit" mdbInput>
+                            <label class="custom-control-label" for="count">Штуки</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" name="unit" value="кг." class="custom-control-input" id="kg" formControlName="unit" mdbInput>
+                            <label class="custom-control-label" for="kg">Килограммы</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" name="unit" value="л." class="custom-control-input" id="l" formControlName="unit" mdbInput>
+                            <label class="custom-control-label" for="l">Литры</label>
+                        </div>
+                        <br>
+                        <small class="invalid" *ngIf="createForm.get('unit').invalid && submitted">Выберите ед. измерения</small>
+                    </div>
+
+                    <div class="col-12 mt-3" *ngIf="isEdit && selectedIngredient.isUsing">
+                        <div class="alert alert-warning" role="alert" style="font-size: 13px">
+                            Вы не можете изменить фасовку, так как этот ингредиент уже используется в поставках или продуктах
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="success" type="submit"
+                     [disabled]="modalLoader" *ngIf="!isEdit">Создать</button>
+
+                    <button mdbBtn size="sm" color="primary" type="button" (click)="saveIngredientChanges()"
+                     [disabled]="modalLoader" *ngIf="isEdit">Сохранить изменения</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeModal>
+    <div class="container-fluid">
+
+        <ng-container *ngIf="!selectedIngredient.isUsing; else lockRemove">
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        Вы уверены, что хотите удалить выбранный ингредиент ?
+                    </p>
+                </div>
+            </div>
+    
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="danger" (click)="removeIngredient()"
+                     [disabled]="modalLoader">Подтвердить удаление</button>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #lockRemove>
+            <div class="row">
+                <div class="col-12">
+                    <p>Вы не можете удалить этот ингредиент, так как он используется в составе продаваемых товаров</p>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <button mdbBtn size="sm" color="primary" (click)="hideModal()">Понятно</button>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</ng-template>

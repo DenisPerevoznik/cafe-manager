@@ -34,16 +34,18 @@
                         <tbody>
                           <tr mdbTableCol *ngFor="let category of categories">
                             <td style="width: 10%">
-                                <div class="color-point" [ngStyle]="{background: category.color}"></div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="color-point shadow" [ngStyle]="{background: category.color}"></div>
+                                </div>
                             </td>
                             <td>{{category.title}}</td>
                             <td>
-                                <mdb-badge color="pink" style="font-size: 15px" *ngIf="!category.published">Скрыто</mdb-badge>
-                                <mdb-badge success="true" style="font-size: 15px" *ngIf="category.published">Доступно</mdb-badge>
+                                <mdb-badge color="pink" *ngIf="!category.published">Скрыто</mdb-badge>
+                                <mdb-badge success="true" *ngIf="category.published">Доступно</mdb-badge>
                             </td>
                             <td style="width: 30%">
-                                <button mdbBtn size="sm" color="primary">Изменить</button>
-                                <button mdbBtn size="sm" color="danger">Удалить</button>
+                                <button mdbBtn size="sm" color="primary" (click)="editClick(category)">Изменить</button>
+                                <button mdbBtn size="sm" color="danger" (click)="removeClick(category.id)">Удалить</button>
                             </td>
                           </tr>
                         </tbody>
@@ -53,3 +55,72 @@
         </div>
     </ng-container>
 </div>
+
+<ng-template #createModal>
+
+    <div class="container-fluid">
+        <form [formGroup]="createForm" (ngSubmit)="createSubmit()">
+            <ng-container *ngIf="!modalLoader">
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <label for="title">Название</label>
+                        <input type="text" formControlName="title" placeholder="Введите название" id="title" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('title').invalid && submitted">Заполните это поле</small>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" name="published" value="1" class="custom-control-input" id="statusTrue" formControlName="published" mdbInput>
+                            <label class="custom-control-label" for="statusTrue">Доступно</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" name="published" value="0" class="custom-control-input" id="statusFalse" formControlName="published" mdbInput>
+                            <label class="custom-control-label" for="statusFalse">Скрыто</label>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <label for="color">Цвет категории</label>
+                        <app-color-picker [attr.id]="'color'" [colors]="colors" [selectedColor]="createForm.value.color" 
+                            (colorChanged)="categoryColorChange($event)"></app-color-picker>
+                        <small class="invalid" *ngIf="createForm.get('color').invalid && submitted">Выберите цвет категории</small>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="success" type="submit"
+                     [disabled]="modalLoader" *ngIf="!isEdit">Создать</button>
+
+                    <button mdbBtn size="sm" color="primary" type="button" (click)="saveCategoryChanges()"
+                     [disabled]="modalLoader" *ngIf="isEdit">Сохранить изменения</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeModal>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    Вы уверены, что хотите удалить выбранную категорию ?
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button mdbBtn size="sm" color="danger" (click)="removeCategory()"
+                 [disabled]="modalLoader" [disabled]="modalLoader">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

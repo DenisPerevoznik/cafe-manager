@@ -5,7 +5,7 @@ import { AppState } from '@app/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { first, map, mergeMap } from 'rxjs/operators';
-import { Account, Company, Expense, WorkShift } from '../interfaces';
+import { Account, Category, Company, Expense, Ingredient, WorkShift } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -95,4 +95,54 @@ export class CompanyService {
     return this.http.put<any>('/api/accounts/update-balance', {balance: readyBalance, accountId: account.id})
     .pipe(map(resp => resp.message));
   }
+
+  // CATEGORIES:
+  getCategories(): Observable<Category[]>{
+    return this.http.get<Category[]>(`/api/categories/${this.selectedCompany.id}`);
+  }
+
+  createCategory(category: Category): Observable<string>{
+    return this.http.post<{category: Category, message: string}>('/api/categories/create', category)
+    .pipe(map(resp => resp.message));
+  }
+
+  getCategoryById(id: string | number): Observable<Category>{
+    return this.http.get<Category>(`/api/categories/get/${id}`);
+  }
+
+  updateCategory(category: Category, categoryId: string | number): Observable<string>{
+    return this.http.put<any>(`/api/categories/update/${categoryId}`, category)
+    .pipe(map(resp => resp.message));
+  }
+
+  removeCategory(id): Observable<string>{
+    return this.http.delete<any>(`/api/categories/remove/${id}`)
+    .pipe(map(resp => resp.message));;
+  }
+
+    // INGREDIENTS:
+    getIngredients(): Observable<Ingredient[]>{
+      return this.http.get<Ingredient[]>(`/api/ingredients/${this.selectedCompany.id}`);
+    }
+  
+    createIngredient(ingredient: Ingredient): Observable<string>{
+      ingredient.price = 0;
+      ingredient.quantity = 0;
+      return this.http.post<{ingredient: Ingredient, message: string}>('/api/ingredients/create', ingredient)
+      .pipe(map(resp => resp.message));
+    }
+  
+    getIngredientById(id: string | number): Observable<Ingredient>{
+      return this.http.get<Ingredient>(`/api/ingredients/get/${id}`);
+    }
+  
+    updateIngredient(ingredient: Ingredient, ingredientId: string | number): Observable<string>{
+      return this.http.put<any>(`/api/ingredients/update/${ingredientId}`, ingredient)
+      .pipe(map(resp => resp.message));
+    }
+  
+    removeIngredient(id): Observable<string>{
+      return this.http.delete<any>(`/api/ingredients/remove/${id}`)
+      .pipe(map(resp => resp.message));;
+    }
 }

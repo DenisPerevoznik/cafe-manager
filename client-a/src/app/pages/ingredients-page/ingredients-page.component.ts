@@ -1,31 +1,31 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
-import { Category } from '@app/shared/interfaces';
+import { Ingredient, IngredientUnitEnum } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { MDBModalService } from 'angular-bootstrap-md';
 import { Subject } from 'rxjs';
-import { finalize, take, takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-categories-page',
-  templateUrl: './categories-page.component.html',
-  styleUrls: ['./categories-page.component.scss']
+  selector: 'app-ingredients-page',
+  templateUrl: './ingredients-page.component.html',
+  styleUrls: ['./ingredients-page.component.scss']
 })
-export class CategoriesPageComponent implements OnInit, OnDestroy {
+export class IngredientsPageComponent implements OnInit {
 
   @ViewChild('createModal') createModal;
   @ViewChild('removeModal') removeModal;
   loader;
   submitted;
   modalLoader;
-  categories: Category[] = [];
-  selectedCategoryId: string | number = 0;
+  ingredientUsing = false;
+  ingredients: Ingredient[] = [];
+  selectedIngredient: Ingredient;
   unsubscribe: Subject<any> = new Subject();
   isEdit: boolean = false;
   createForm: FormGroup;
-  colors = ['#f44336', '#e91e63', '#673ab7', '#2196f3', '#009688', '#4caf50', '#ff5722', '#607d8b'];
   constructor(private company: CompanyService, private toasts: ToastService,
     private modalService: MDBModalService) { }
 
@@ -38,87 +38,81 @@ export class CategoriesPageComponent implements OnInit, OnDestroy {
 
     this.createForm = new FormGroup({
       title: new FormControl(null, [Validators.required]),
-      published: new FormControl('1'),
-      color: new FormControl(null, [Validators.required])
+      unit: new FormControl(null, [Validators.required]),
     });
-    this.getCategories();
+    this.getIngredients();
   }
 
-  getCategories(){
+  getIngredients(){
     this.loader = true;
-    this.company.getCategories()
+    this.company.getIngredients()
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    .subscribe(categories => {this.categories = categories})
+    .subscribe(ingredients => {this.ingredients = ingredients})
   }
 
-  onCreateCategoryClick(){
+  onCreateIngredientClick(){
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,
-        title: "Новая категория"
+        title: "Добавление ингредиента"
       }
     });
   }
 
-  categoryColorChange(color){
-    this.createForm.get('color').patchValue(color);
-  }
-
-  removeClick(id){
-    this.selectedCategoryId = id;
+  removeClick(ingredient){
+    this.selectedIngredient = ingredient;
     this.modalService.show(ModalComponent, {
       data: {
-        title: `Удаление категории (${this.categories.find(c => c.id === id).title})`,
+        title: `Удаление ингредиента (${ingredient.title})`,
         content: this.removeModal
       }
     });
   }
 
-  removeCategory(){
+  removeIngredient(){
     this.modalLoader = true;
-    this.company.removeCategory(this.selectedCategoryId)
+    this.company.removeIngredient(this.selectedIngredient.id)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
     .subscribe(message => {
 
       this.modalService.hide(1);
-      this.getCategories();
+      this.getIngredients();
       this.toasts.show('info', message);
     }, resp => {
       this.toasts.show('error', resp.error.message);
     });
   }
 
-  editClick(category: Category){
-    this.selectedCategoryId = category.id;
-    this.createForm.patchValue({...category, published: category.published ? '1' : '0'});
+  editClick(ingredient: Ingredient){
+    this.selectedIngredient = ingredient;
+    this.createForm.patchValue(ingredient);
     this.isEdit = true;
     
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,
-        title: "Изменение категории"
+        title: "Изменение ингредиента"
       }
     });
   }
 
-  saveCategoryChanges(){
+  saveIngredientChanges(){
     this.submitted = true;
     if(this.createForm.invalid) return;
 
     this.modalLoader = true;
-    const category: Category = {
-      color: this.createForm.value.color,
-      published: this.createForm.value.published,
-      title: this.createForm.value.title
+    const ingredient: Ingredient = {
+      unit: this.createForm.value.unit,
+      title: this.createForm.value.title,
     };
-    this.company.updateCategory(category, this.selectedCategoryId)
+    this.company.updateIngredient(ingredient, this.selectedIngredient.id)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; this.submitted = false}))
     .subscribe(message => {
 
       this.createForm.reset();
       this.modalService.hide(1);
       this.toasts.show('info', message);
-      this.getCategories();
+      this.getIngredients();
     }, resp => {
       this.toasts.show('error', resp.error.message);
     });
@@ -129,21 +123,24 @@ export class CategoriesPageComponent implements OnInit, OnDestroy {
     if(this.createForm.invalid) return;
 
     this.modalLoader = true;
-    const category: Category = {
-      color: this.createForm.value.color,
-      published: this.createForm.value.published,
+    const ingredient: Ingredient = {
+      unit: this.createForm.value.unit,
       title: this.createForm.value.title
     };
-    this.company.createCategory(category)
+    this.company.createIngredient(ingredient)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; this.submitted = false}))
     .subscribe(message => {
 
       this.createForm.reset();
       this.modalService.hide(1);
       this.toasts.show('success', message);
-      this.getCategories();
+      this.getIngredients();
     }, resp => {
       this.toasts.show('error', resp.error.message);
     });
+  }
+
+  hideModal(){
+    this.modalService.hide(1);
   }
 }

@@ -11,6 +11,7 @@ import { PageLoaderComponent } from './components/page-loader/page-loader.compon
 import { ModalComponent } from './components/modal/modal.component';
 import { NoDataComponent } from './components/no-data/no-data.component';
 import { CheckAccountPipe } from './pipes/check-account.pipe';
+import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { CheckAccountPipe } from './pipes/check-account.pipe';
     MDBBootstrapModule.forRoot(),
   ],
   providers: [ToastService, MDBModalService],
-  declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent, CheckAccountPipe],
+  declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent, CheckAccountPipe, ColorPickerComponent],
   exports: [
     HttpClientModule,
     CommonModule,
@@ -33,7 +34,8 @@ import { CheckAccountPipe } from './pipes/check-account.pipe';
     PageLoaderComponent,
     CheckAccountPipe,
     NoDataComponent,
-    ModalComponent
+    ModalComponent,
+    ColorPickerComponent
   ],
 })
 export class SharedModule {}

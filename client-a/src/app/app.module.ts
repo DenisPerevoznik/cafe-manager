@@ -24,6 +24,7 @@ import { ShiftSinglePageComponent } from './pages/shifts-page/shift-single-page/
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
 import { AccountsPageComponent } from './pages/accounts-page/accounts-page.component';
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
+import { IngredientsPageComponent } from './pages/ingredients-page/ingredients-page.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { CategoriesPageComponent } from './pages/categories-page/categories-page
     ExpensesPageComponent,
     AccountsPageComponent,
     CategoriesPageComponent,
+    IngredientsPageComponent,
   ],
   imports: [
     BrowserModule,

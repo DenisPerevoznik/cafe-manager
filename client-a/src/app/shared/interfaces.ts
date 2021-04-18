@@ -80,11 +80,29 @@ export interface Account{
 }
 
 export interface Category{
-  CompanyId: number;
-  id: string | number;
+  CompanyId?: number;
+  id?: string | number;
   title: string;
   published: boolean;
   color: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Ingredient {
+  id?: number;
+  title: string;
+  price?: number;
+  unit: IngredientUnitEnum;
+  isUsing?: boolean;
+  quantity?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  CompanyId?: number;
+}
+
+export enum IngredientUnitEnum {
+  Kilogram = 'кг.',
+  Liter = 'л.',
+  Piece = 'шт.'
 }

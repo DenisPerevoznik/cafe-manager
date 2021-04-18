@@ -1,0 +1,26 @@
+
+.color-point{
+    border: 2px solid white;
+    width: 35px;
+    height: 35px;
+    margin-left: .2rem;
+    border-radius: 50%;
+    transition: 0.4s ease;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+
+    &:hover{
+        cursor: pointer;
+        opacity: 0.5;
+    }
+}
+
+.color-container{
+    display: flex;
+    padding: 10px;
+    flex-wrap: wrap;
+    border-radius: 5px;
+}

@@ -1,9 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const Delivery = require('./Delivery');
-const Expense = require('./Expense');
 
-const Account = db.define('Account', {
+const Ingredient = db.define('Ingredient', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -13,19 +11,22 @@ const Account = db.define('Account', {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
-  balance: {
+  price: {
+    type: DataTypes.DECIMAL(10, 2),
+    defautlValue: 0,
+    allowNull: false,
+  },
+  unit: {
+    type: DataTypes.ENUM(['шт.', 'кг.', 'л.']),
+    allowNull: false,
+    defaultValue: 'шт.',
+  },
+  quantity: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
     defaultValue: 0,
   },
 });
 
-Account.hasMany(Expense);
-Expense.belongsTo(Account);
-
-Account.hasMany(Delivery);
-Delivery.belongsTo(Account);
-
-module.exports = Account;
+module.exports = Ingredient;

@@ -9,6 +9,9 @@ router.get('/', auth, (req, res) => {
 
   User.findByPk(userId)
     .then(async (user) => {
+      if(!user){
+        return res.status(401).json({message: "Повторите вход в аккаунт"});
+      }
       const companies = (await user.getCompanies()) || [];
       return res.json({ companies });
     })

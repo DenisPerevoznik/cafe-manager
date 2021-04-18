@@ -8,6 +8,7 @@ import { AnalyticsPageComponent } from './pages/analytics-page/analytics-page.co
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
+import { IngredientsPageComponent } from './pages/ingredients-page/ingredients-page.component';
 import { ShiftSinglePageComponent } from './pages/shifts-page/shift-single-page/shift-single-page.component';
 import { ShiftsPageComponent } from './pages/shifts-page/shifts-page.component';
 
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path: 'expenses', component: ExpensesPageComponent },
       { path: 'accounts', component: AccountsPageComponent },
       { path: 'categories', component: CategoriesPageComponent },
+      { path: 'ingredients', component: IngredientsPageComponent },
       { path: '**', redirectTo: '/companies' }
     ],
   },

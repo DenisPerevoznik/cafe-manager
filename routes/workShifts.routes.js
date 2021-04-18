@@ -63,12 +63,14 @@ async function getSales(shift) {
   const reports = await shift.getReports();
   for (const report of reports) {
     const product = await report.getProduct();
-    sales.push({
-      productName: product.title,
-      unitPrice: product.price,
-      numberOfSales: report.quantity,
-      revenue: report.total,
-    });
+    if(!!product){
+      sales.push({
+        productName: product.title,
+        unitPrice: product.price,
+        numberOfSales: report.quantity,
+        revenue: report.total,
+      });
+    }
   }
 
   return sales;

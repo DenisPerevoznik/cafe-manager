@@ -24,6 +24,7 @@ router.post(
 
       const { name, surname, email, password } = req.body;
 
+      
       const user = await User.findOne({ where: { email } });
       if (user) {
         return res
@@ -78,7 +79,7 @@ router.post(
         }
       }
 
-      res.status(400).json({ message: 'Не верная почта или пароль' });
+      res.status(400).json({ message: 'Не верный email или пароль' });
     } catch (error) {
       res.status(400).json({ message: config.get('unknownErrorMessage') });
     }

@@ -1,0 +1,6 @@
+
+<div class="color-container">
+    <div class="color-point shadow" *ngFor="let color of colors" [ngStyle]="{background: color}" (click)="onChangeColor(color)">
+        <span *ngIf="selectedColor === color" class="material-icons-outlined">done</span>
+    </div>
+</div>
