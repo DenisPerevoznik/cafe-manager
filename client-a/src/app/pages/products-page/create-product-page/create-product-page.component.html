@@ -13,18 +13,21 @@
         </div>
     </div>
     <hr>
-    <form>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <form [formGroup]="createForm" (ngSubmit)="onSubmit()" *ngIf="!loader">
         <div class="row">
             <div [ngClass]="{'col-md-6': isPurchased}" [class]="(isPurchased ? 'col-md-6' : 'col-md-8') + ' col-sm-12'">
                 <div class="card shadow p-3 ml-2 mb-4" [ngClass]="{'form50': !isPurchased}">
                     <label>Название</label>
-                    <input type="text" class="form-control" placeholder="Введите название">
+                    <input type="text" class="form-control f50" formControlName="title" placeholder="Введите название">
+                    <small class="invalid" *ngIf="submitted && createForm.get('title').invalid">Это поле нужно заполнить</small>
 
                     <label class="mt-3">Категория</label>
-                    <select name="" class="form-control">
+                    <select class="form-control f50" formControlName="category">
                         <option [ngValue]="null">Выберите категорию</option>
                         <option [value]="category.id" *ngFor="let category of categories">{{category.title}}</option>
                     </select>
+                    <small class="invalid" *ngIf="submitted && createForm.get('category').invalid">Выберите категорию</small>
 
                     <div class="ingredients-container mt-3 p-3" *ngIf="!isPurchased">
                         
@@ -43,45 +46,56 @@
                               <tr *ngIf="!ingredientsRows.length">
                                   <td colspan="5" style="text-align: center"><span>Добавьте ингредиент</span></td>
                               </tr>
-                              <tr mdbTableCol *ngFor="let item of ingredientsRows">
+                              <tr mdbTableCol *ngFor="let item of ingredientsRows; let i = index">
                                 <td>
-                                    <select name="" class="form-control">
+                                    <select class="form-control" [ngModelOptions]="{standalone: true}" 
+                                        [(ngModel)]="item.ingredientId" (change)="selectIngredient($event, i)">
                                         <option [ngValue]="null">Выберите ингредиент</option>
+                                        <option *ngFor="let ing of ingredients | ingredientsFilter:selectedIngredients:item.ingredientId" 
+                                            [value]="ing.id">{{ing.title}}</option>
                                     </select>
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <input type="number" class="form-control" placeholder="Введите значение">
+                                        <input type="number" min="0" class="form-control" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.specificConsumption" placeholder="Введите значение">
                                         <span class="ml-2">мл.</span>
                                     </div>
                                 </td>
                                 <td style="text-align: center">₴ {{item.unitPrice}}</td>
                                 <td style="text-align: center">₴ {{item.costPrice}}</td>
-                                <td><span class="material-icons-outlined remove-ing" title="Удалить ингредиент">cancel_presentation</span></td>
+                                <td><span class="material-icons-outlined remove-ing" (click)="removeIngredient(i)"
+                                    title="Убрать ингредиент">cancel_presentation</span></td>
                               </tr>
                             </tbody>
                         </table>
-                        <div class="d-flex justify-content-between">
-                            <button mdbBtn size="sm" color="deep-orange">
-                                <div class="btn-content">
-                                    <span class="material-icons-outlined icon">add</span> Добавить
-                                </div>
-                            </button>
-    
-                            <div *ngIf="ingredientsRows.length">
-                                <label class="mt-2"><b>Сумма себестоимости:</b></label>
-                                <span class="ml-2">₴ 50</span>
+                        <small class="invalid" *ngIf="submitted && !ingredientsIsValid">Некоторые поля заполнены не верно</small>
+                        <small class="invalid" *ngIf="submitted && !ingredientsRows.length">Список ингредиентов не может быть пустым</small>
+                    </div>
+                    {{selectedIngredients | json}}
+                    <div class="d-flex justify-content-between">
+                        <button mdbBtn size="sm" color="deep-orange" type="button" (click)="addIngredient()">
+                            <div class="btn-content">
+                                <span class="material-icons-outlined icon">add</span> Добавить
                             </div>
+                        </button>
+
+                        <div *ngIf="ingredientsRows.length">
+                            <label class="mt-2"><b>Сумма себестоимости:</b></label>
+                            <span class="ml-2">₴ {{costPrice}}</span>
                         </div>
                     </div>
 
                     <ng-container *ngIf="isPurchased">
                         <label class="mt-3">Себестоимость товара</label>
-                        <input type="number" min="0" step=".1" class="form-control" placeholder="Введите сумму">
+                        <input type="number" min="0" step=".1" [ngModelOptions]="{standalone: true}" 
+                            [(ngModel)]="costPrice" class="form-control f50" placeholder="Введите сумму">
+                        <small class="invalid" *ngIf="costPrice < 0 && submitted">Значение должно быть больше 0</small>
                     </ng-container>
 
                     <label class="mt-3">Итоговая стоимость</label>
-                    <input type="number" min="0" step=".1" class="form-control" placeholder="Введите сумму">
+                    <input type="number" min="0" step=".1" formControlName="price" class="form-control f50" placeholder="Введите сумму">
+                    <small class="invalid" *ngIf="submitted && createForm.get('price').invalid">Введите сумму</small>
 
                     <label class="mt-3">Видимость продукта</label>
                     <div>

@@ -27,6 +27,7 @@ import { CategoriesPageComponent } from './pages/categories-page/categories-page
 import { IngredientsPageComponent } from './pages/ingredients-page/ingredients-page.component';
 import { ProductsPageComponent } from './pages/products-page/products-page.component';
 import { CreateProductPageComponent } from './pages/products-page/create-product-page/create-product-page.component';
+import { IngredientsFilterPipe } from './pages/products-page/create-product-page/ingredients-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { CreateProductPageComponent } from './pages/products-page/create-product
     IngredientsPageComponent,
     ProductsPageComponent,
     CreateProductPageComponent,
+    IngredientsFilterPipe,
   ],
   imports: [
     BrowserModule,

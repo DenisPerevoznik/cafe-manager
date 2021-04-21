@@ -120,4 +120,5 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   category?: Category;
+  CategoryId?: number;
 }
