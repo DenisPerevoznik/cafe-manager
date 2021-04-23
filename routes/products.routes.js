@@ -1,12 +1,13 @@
 const { Router } = require('express');
 const router = Router();
-const { validationResult, check } = require('express-validator');
+const { validationResult, check, body } = require('express-validator');
 const auth = require('../middleware/auth.middleware');
 const Product = require('../models/Product');
 const Company = require('../models/Company');
 const DeliveryProducts = require('../models/Company');
 const ProductProducts = require('../models/Company');
 const config = require('config');
+const Ingredient = require('../models/Ingredient');
 
 router.get('/:companyId', auth, (req, res) => {
     const companyId = req.params.companyId;
@@ -36,10 +37,9 @@ router.get('/:companyId', auth, (req, res) => {
     '/create',
     [
       auth,
-      check('title', 'Название обязательно к заполнению').not().isEmpty().isString(),
-      check('unit', 'Единица измерения указана не верно').isString().custom(unit => {
-        return unit === 'кг.' || unit === 'шт.' || unit === 'л.'
-      })
+      check('product.title', 'Название обязательно к заполнению').not().isEmpty().isString(),
+      check('product.price', 'Вы не указалаи цену').isFloat(),
+      check('CompanyId', 'CompanyId = null').not().isEmpty
     ],
     (req, res) => {
       const errors = validationResult(req);
@@ -47,10 +47,31 @@ router.get('/:companyId', auth, (req, res) => {
         return res.status(400).json({ message: errors.array()[0].msg });
       }
   
+      const product = req.body.product;
+      const ingredients = req.body.ingredients;
+
       Company.findByPk(req.body.companyId)
         .then((company) => {
-          company.createProduct({ ...req.body }).then((product) => {
-            res.json({ product, message: 'Новый ингредиент добавлен' });
+          company.createProduct(product).then(async (product) => {
+            
+            if(!product.isPurchased){
+
+                try {
+                    for (const ing of ingredients) {
+                        const ingredientModel = await Ingredient.findByPk(ing.id);
+                        await product.addIngredient(ingredientModel, {through: {
+                            usingInOne: ing.usingInOne,
+                            CompanyId: req.body.CompanyId
+                        }});
+                    }
+
+                    return res.json({message: "Тех карта успешно создана"});
+                } catch (error) {
+                    return res.status(400)
+                        .json({ message: 'Ошибка при создании: ' + error.message });
+                }
+            }
+            res.json({ product, message: 'Продукт успешно добавлен' });
           });
         })
         .catch((err) => {

@@ -1,14 +1,15 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Category, Ingredient, Product } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
+import { ToastService } from '@app/shared/services/toast.service';
 import { forkJoin, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 
 interface IngredientRowModel {
   ingredientId: number;
-  specificConsumption: number;
+  usingInOne: number;
   unitPrice: number;
   costPrice: number;
 }
@@ -33,7 +34,8 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
   isEdit = false;
   createForm: FormGroup;
   ingredientsRows: IngredientRowModel[] = [];
-  constructor(private route: ActivatedRoute, private company: CompanyService) { }
+  constructor(private route: ActivatedRoute, private company: CompanyService,
+    private router: Router, private toats: ToastService) { }
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
@@ -64,7 +66,6 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     .subscribe(params => {
       if(params.id){ // isEdit
         this.isEdit = true;
-        
         this.getProduct(params.id);
       }
       else{
@@ -99,23 +100,14 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
   }
 
   removeIngredient(index){
-    this.removeSelectedIngredient(index);
     this.ingredientsRows.splice(index, 1);
+    this.updateSelectedIngredient();
   }
 
-  removeSelectedIngredient(index){
-    const selectedId = this.ingredientsRows[index].ingredientId;
-    if(selectedId !== null){
-      const foundIndex = this.selectedIngredients.findIndex(id => id === selectedId);
-      this.selectedIngredients.splice(foundIndex, 1);
-      this.ingredients = [...this.ingredients];
-    }
-  }
-  
-  selectIngredient(event, index){
-    //this.removeSelectedIngredient(index); // вместо этого, нужно обойти ровс и проверить что используется, а затем обновить selectedIng
-    const selectedId = event.target.value;
-    this.selectedIngredients.push(selectedId);
+  updateSelectedIngredient(){
+    this.selectedIngredients = this.ingredientsRows
+    .filter(row => row.ingredientId)
+    .map(row => row.ingredientId);
     this.ingredients = [...this.ingredients];
   }
 
@@ -123,7 +115,7 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     this.ingredientsRows.push({
       costPrice: 0,
       ingredientId: null,
-      specificConsumption: 0,
+      usingInOne: 0,
       unitPrice: 0
     });
   }
@@ -131,7 +123,7 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
   get ingredientsIsValid(): boolean{
 
     for (const ingRow of this.ingredientsRows) {
-      if(!ingRow.ingredientId || !ingRow.specificConsumption)
+      if(!ingRow.ingredientId || !ingRow.usingInOne)
         return false;
     }
 
@@ -144,7 +136,23 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
       && (!this.ingredientsIsValid || !this.ingredientsRows.length))){
       return;
     }
+    
+    const product: Product = {
+      costPrice: this.createForm.value.costPrice,
+      isPurchased: this.isPurchased,
+      price: this.createForm.value.price,
+      published: this.createForm.value.published,
+      title: this.createForm.value.title,
+      CategoryId: this.createForm.value.category
+    };
 
-    console.log('YES');
+    const ingredients = this.ingredientsRows.map(it => ({id: it.ingredientId, usingInOne: it.usingInOne}));
+    this.company.createProduct(product, ingredients)
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .subscribe(message => {
+      
+      this.router.navigate(['products']);
+      this.toats.show('success', message);
+    }, resp => {this.toats.show('error', resp.error.message)});
   }
 }

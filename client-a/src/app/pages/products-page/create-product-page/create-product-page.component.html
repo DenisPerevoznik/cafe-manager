@@ -49,7 +49,7 @@
                               <tr mdbTableCol *ngFor="let item of ingredientsRows; let i = index">
                                 <td>
                                     <select class="form-control" [ngModelOptions]="{standalone: true}" 
-                                        [(ngModel)]="item.ingredientId" (change)="selectIngredient($event, i)">
+                                        [(ngModel)]="item.ingredientId" (change)="updateSelectedIngredient()">
                                         <option [ngValue]="null">Выберите ингредиент</option>
                                         <option *ngFor="let ing of ingredients | ingredientsFilter:selectedIngredients:item.ingredientId" 
                                             [value]="ing.id">{{ing.title}}</option>
@@ -58,7 +58,7 @@
                                 <td>
                                     <div class="d-flex">
                                         <input type="number" min="0" class="form-control" [ngModelOptions]="{standalone: true}"
-                                            [(ngModel)]="item.specificConsumption" placeholder="Введите значение">
+                                            [(ngModel)]="item.usingInOne" placeholder="Введите значение">
                                         <span class="ml-2">мл.</span>
                                     </div>
                                 </td>
@@ -72,7 +72,6 @@
                         <small class="invalid" *ngIf="submitted && !ingredientsIsValid">Некоторые поля заполнены не верно</small>
                         <small class="invalid" *ngIf="submitted && !ingredientsRows.length">Список ингредиентов не может быть пустым</small>
                     </div>
-                    {{selectedIngredients | json}}
                     <div class="d-flex justify-content-between">
                         <button mdbBtn size="sm" color="deep-orange" type="button" (click)="addIngredient()">
                             <div class="btn-content">

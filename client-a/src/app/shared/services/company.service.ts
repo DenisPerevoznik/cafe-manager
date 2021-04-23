@@ -151,8 +151,8 @@ export class CompanyService {
       return this.http.get<Product[]>(`/api/products/${this.selectedCompany.id}`);
     }
   
-    createProduct(product: Product): Observable<string>{
-      return this.http.post<{product: Product, message: string}>('/api/products/create', product)
+    createProduct(product: Product, ingredients: {id: number, usingInOne: number}[]): Observable<string>{
+      return this.http.post<{product: Product, message: string}>('/api/products/create', {product, ingredients})
       .pipe(map(resp => resp.message));
     }
   
