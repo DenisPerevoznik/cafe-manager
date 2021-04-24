@@ -160,8 +160,8 @@ export class CompanyService {
       return this.http.get<Product>(`/api/products/get/${id}`);
     }
   
-    updateProduct(product: Product, productId: string | number): Observable<string>{
-      return this.http.put<any>(`/api/products/update/${productId}`, product)
+    updateProduct(product: Product, productId: number, ingredients: {id: number, usingInOne: number}[]): Observable<string>{
+      return this.http.put<any>(`/api/products/update/${productId}`, {product, ingredients})
       .pipe(map(resp => resp.message));
     }
   

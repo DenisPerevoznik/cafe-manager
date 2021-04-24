@@ -97,6 +97,7 @@ export interface Ingredient {
   isUsing?: boolean;
   quantity?: number;
   createdAt?: string;
+  usingInOne?: number;
   updatedAt?: string;
   CompanyId?: number;
 }

@@ -26,7 +26,7 @@ router.get('/:companyId', auth, (req, res) => {
     const id = req.params.id;
     Product.findByPk(id)
     .then(async (product) => {
-      res.json({...product, isUsing: await getResponseProducts(product)});
+      res.json(await getResponseProducts(product));
     })
     .catch((error) => {
       res.status(400).json({ message: error.message });
@@ -39,7 +39,7 @@ router.get('/:companyId', auth, (req, res) => {
       auth,
       check('product.title', 'Название обязательно к заполнению').not().isEmpty().isString(),
       check('product.price', 'Вы не указалаи цену').isFloat(),
-      check('CompanyId', 'CompanyId = null').not().isEmpty
+      check('companyId', 'companyId = null').not().isEmpty()
     ],
     (req, res) => {
       const errors = validationResult(req);
@@ -57,13 +57,7 @@ router.get('/:companyId', auth, (req, res) => {
             if(!product.isPurchased){
 
                 try {
-                    for (const ing of ingredients) {
-                        const ingredientModel = await Ingredient.findByPk(ing.id);
-                        await product.addIngredient(ingredientModel, {through: {
-                            usingInOne: ing.usingInOne,
-                            CompanyId: req.body.CompanyId
-                        }});
-                    }
+                    await attachIngredients(product, ingredients, req.body.companyId);
 
                     return res.json({message: "Тех карта успешно создана"});
                 } catch (error) {
@@ -82,12 +76,28 @@ router.get('/:companyId', auth, (req, res) => {
     }
   );
 
+  async function attachIngredients(product, reqIngredients, CompanyId){
+    for (const ing of reqIngredients) {
+      const ingredientModel = await Ingredient.findByPk(ing.id);
+      await product.addIngredient(ingredientModel, {through: {
+          usingInOne: ing.usingInOne,
+          CompanyId
+      }});
+    }
+  }
+
+  async function detachIngredients(product){
+    const ingredients = await product.getIngredients();
+    for (const ingredient of ingredients) {
+      await ingredient['product_ingredients'].destroy();
+    }
+  }
+
   router.put('/update/:id', [
       auth,
-      check('title', 'Название обязательно к заполнению').not().isEmpty().isString(),
-      check('unit', 'Единица измерения указана не верно').isString().custom(unit => {
-        return unit === 'кг.' || unit === 'шт.' || unit === 'л.'
-      })],
+      check('product.title', 'Название обязательно к заполнению').not().isEmpty().isString(),
+      check('product.price', 'Вы не указалаи цену').isFloat(),
+      check('companyId', 'companyId = null').not().isEmpty()],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -96,9 +106,15 @@ router.get('/:companyId', auth, (req, res) => {
   
     try {
   
-      const productId = req.params.id;
-      Product.update(req.body, { where: { id: productId } })
-        .then(() => {
+      const id = req.params.id;
+      const reqProduct = req.body.product;
+      const reqIngredients = req.body.ingredients;
+      const product = await Product.findByPk(id);
+
+      Product.update(reqProduct, { where: {id} })
+        .then(async (productResponse) => {
+          await detachIngredients(product);
+          await attachIngredients(product, reqIngredients, req.body.companyId);
           res.json({ message: 'Изменения сохранены' });
         })
         .catch((err) => {
@@ -114,33 +130,57 @@ router.get('/:companyId', auth, (req, res) => {
     }
   });
   
-  router.delete('/remove/:id', auth, (req, res) => {
-
+  router.delete('/remove/:id', auth, async (req, res) => {
     const id = req.params.id;
-      Product.destroy({ where: {id} }).then(() => {
-        res.json({message: `Ингредиент удален`});
-      });
+
+    const product = await Product.findByPk(id);
+    if(!!product){
+      await detachIngredients(product);
     }
-  );
+    Product.destroy({ where: {id} }).then(() => {
+      res.json({message: `Продукт удален`});
+    });
+  }
+);
 
   async function getResponseProducts(products){
 
-    console.log(`products:`.red, products);
     if(products instanceof Array){
         const readyArray = [];
         for (const product of products) {
-            const ingredients = await product.getIngredients();
-            const category = await product.getCategory();
-            readyArray.push({...product.dataValues, ingredients, category});
+          await getReadyProduct(product)
+          .then(newProduct => {
+            readyArray.push(newProduct);
+          });
         }
 
         return readyArray;
     }
-    else{
-        const ingredients = await products.getIngredients();
-        const category = await products.getCategory();
-        return {...products.dataValues, ingredients, category}
-    }
+    let productData;
+    await getReadyProduct(products)
+    .then(newProduct => {
+      productData = newProduct;
+    });
+
+    return productData;
+  }
+
+  async function getReadyProduct(product){
+    return await product.getIngredients()
+    .then(async (ingredients) => {
+      const ingredientsArray = [];
+      for (const ingredient of ingredients) {
+        const usingInOne = parseFloat(await ingredient['product_ingredients'].usingInOne);
+        ingredient.dataValues.price = parseFloat(ingredient.dataValues.price);
+        ingredientsArray.push({...ingredient.dataValues, usingInOne});
+      }
+
+      return ingredientsArray;
+    })
+    .then(async (ingredients) => {
+      const category = await product.getCategory();
+      return {...product.dataValues, ingredients, category};
+    })
   }
 
   module.exports = router;

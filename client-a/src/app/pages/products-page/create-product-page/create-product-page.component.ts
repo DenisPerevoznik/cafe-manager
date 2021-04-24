@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Category, Ingredient, Product } from '@app/shared/interfaces';
+import { Category, Ingredient, IngredientUnitEnum, Product } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -12,6 +12,7 @@ interface IngredientRowModel {
   usingInOne: number;
   unitPrice: number;
   costPrice: number;
+  unit: string;
 }
 
 @Component({
@@ -32,6 +33,7 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
   selectedIngredients: number[] = [];
   product: Product = null;
   isEdit = false;
+  editProductId;
   createForm: FormGroup;
   ingredientsRows: IngredientRowModel[] = [];
   constructor(private route: ActivatedRoute, private company: CompanyService,
@@ -66,10 +68,7 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     .subscribe(params => {
       if(params.id){ // isEdit
         this.isEdit = true;
-        this.getProduct(params.id);
-      }
-      else{
-
+        this.editProductId = params.id;
       }
     });
   }
@@ -81,7 +80,17 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     .subscribe(product => {
       this.product = product;
 
+      this.createForm.patchValue(product);
+      this.createForm.get('category').patchValue(product.CategoryId);
+      this.createForm.get('published').patchValue(product.published ? '1' : '0');
+
+      this.ingredientsRows = this.product.ingredients.map(ing => {
+        const costPrice = (ing.price * ing.usingInOne) / 1000;
+        const unitPrice = ing.price / 1000;
+        return {costPrice, ingredientId: ing.id, unit: this.getUnit(ing.unit), unitPrice, usingInOne: ing.usingInOne};
+      });
       this.selectedIngredients = this.product.ingredients.map(ing => ing.id);
+      this.costPrice = product.costPrice;
     });
   }
 
@@ -96,6 +105,10 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     .subscribe(data => {
       this.categories = data.categories;
       this.ingredients = data.ingredients;
+
+      if(this.isEdit){
+        this.getProduct(this.editProductId);
+      }
     });
   }
 
@@ -116,7 +129,8 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
       costPrice: 0,
       ingredientId: null,
       usingInOne: 0,
-      unitPrice: 0
+      unitPrice: 0,
+      unit: ''
     });
   }
   
@@ -130,6 +144,51 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  onSelectIngredient(rowIngredient: IngredientRowModel){
+
+    const ingredient = this.ingredients.find(ing => ing.id == rowIngredient.ingredientId);
+
+    rowIngredient.unitPrice = ingredient.price / 1000;
+    rowIngredient.unit = this.getUnit(ingredient.unit);
+    this.updateSelectedIngredient();
+    this.updateCostPrice();
+  }
+
+  private getUnit(unit: IngredientUnitEnum): string{
+
+    let result = '';
+    switch (unit) {
+      case IngredientUnitEnum.Kilogram:
+        result = 'г.';
+        break;
+
+      case IngredientUnitEnum.Liter:
+        result = 'мл.';
+        break;
+
+      case IngredientUnitEnum.Piece:
+        result = 'шт.';
+        break;
+    }
+
+    return result;
+  }
+
+  updateCostPrice(){
+    this.costPrice = this.ingredientsRows.reduce((acc, ing) => acc += ing.costPrice, 0);
+  }
+
+  usedInOneChnage(index){
+
+    const row = this.ingredientsRows[index];
+    const value = row.usingInOne;
+    const ingredient = this.ingredients.find(ing => ing.id == row.ingredientId);
+
+    row.unitPrice = ingredient.price / 1000;
+    row.costPrice = (ingredient.price * value) / 1000;
+    this.updateCostPrice();
+  }
+
   onSubmit(){
     this.submitted = true;
     if(this.costPrice < 0 || this.createForm.invalid || (!this.isPurchased 
@@ -137,8 +196,9 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
       return;
     }
     
+    this.loader = true;
     const product: Product = {
-      costPrice: this.createForm.value.costPrice,
+      costPrice: this.costPrice,
       isPurchased: this.isPurchased,
       price: this.createForm.value.price,
       published: this.createForm.value.published,
@@ -147,12 +207,20 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     };
 
     const ingredients = this.ingredientsRows.map(it => ({id: it.ingredientId, usingInOne: it.usingInOne}));
+    
+    if(this.isEdit){
+      this.company.updateProduct(product, this.editProductId, ingredients)
+      .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+      .subscribe(message => {this.successExit(message)}, resp => {this.toats.show('error', resp.error.message)});
+      return;
+    }
     this.company.createProduct(product, ingredients)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    .subscribe(message => {
-      
-      this.router.navigate(['products']);
-      this.toats.show('success', message);
-    }, resp => {this.toats.show('error', resp.error.message)});
+    .subscribe(message => {this.successExit(message)}, resp => {this.toats.show('error', resp.error.message)});
+  }
+
+  private successExit(message){
+    this.router.navigate(['/dashboard/products']);
+    this.toats.show('success', message);
   }
 }
