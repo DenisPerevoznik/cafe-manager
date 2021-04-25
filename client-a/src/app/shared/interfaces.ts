@@ -123,3 +123,14 @@ export interface Product {
   category?: Category;
   CategoryId?: number;
 }
+
+export interface Employee {
+  id?: number;
+  CompanyId?: number;
+  name: string;
+  pinCode: number;
+  phone: string;
+  color?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}

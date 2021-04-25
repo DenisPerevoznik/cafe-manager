@@ -19,6 +19,7 @@ app.use('/api/expenses-outside', require('./routes/expensesOutside.routes'));
 app.use('/api/categories', require('./routes/categories.routes'));
 app.use('/api/products', require('./routes/products.routes'));
 app.use('/api/ingredients', require('./routes/ingredients.routes'));
+app.use('/api/employees', require('./routes/employees.routes'));
 
 db.sync({ alter: false, force: false });
 

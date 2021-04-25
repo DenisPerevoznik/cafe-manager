@@ -5,7 +5,7 @@ import { AppState } from '@app/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { first, map, mergeMap } from 'rxjs/operators';
-import { Account, Category, Company, Expense, Ingredient, Product, WorkShift } from '../interfaces';
+import { Account, Category, Company, Expense, Ingredient, Product, WorkShift, Employee } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -120,53 +120,77 @@ export class CompanyService {
     .pipe(map(resp => resp.message));;
   }
 
-    // INGREDIENTS:
-    getIngredients(): Observable<Ingredient[]>{
-      return this.http.get<Ingredient[]>(`/api/ingredients/${this.selectedCompany.id}`);
-    }
-  
-    createIngredient(ingredient: Ingredient): Observable<string>{
-      ingredient.price = 0;
-      ingredient.quantity = 0;
-      return this.http.post<{ingredient: Ingredient, message: string}>('/api/ingredients/create', ingredient)
-      .pipe(map(resp => resp.message));
-    }
-  
-    getIngredientById(id: string | number): Observable<Ingredient>{
-      return this.http.get<Ingredient>(`/api/ingredients/get/${id}`);
-    }
-  
-    updateIngredient(ingredient: Ingredient, ingredientId: string | number): Observable<string>{
-      return this.http.put<any>(`/api/ingredients/update/${ingredientId}`, ingredient)
-      .pipe(map(resp => resp.message));
-    }
-  
-    removeIngredient(id): Observable<string>{
-      return this.http.delete<any>(`/api/ingredients/remove/${id}`)
-      .pipe(map(resp => resp.message));;
-    }
+  // INGREDIENTS:
+  getIngredients(): Observable<Ingredient[]>{
+    return this.http.get<Ingredient[]>(`/api/ingredients/${this.selectedCompany.id}`);
+  }
 
-    // PRODUCTS:
-    getProducts(): Observable<Product[]>{
-      return this.http.get<Product[]>(`/api/products/${this.selectedCompany.id}`);
-    }
-  
-    createProduct(product: Product, ingredients: {id: number, usingInOne: number}[]): Observable<string>{
-      return this.http.post<{product: Product, message: string}>('/api/products/create', {product, ingredients})
-      .pipe(map(resp => resp.message));
-    }
-  
-    getProductById(id: string | number): Observable<Product>{
-      return this.http.get<Product>(`/api/products/get/${id}`);
-    }
-  
-    updateProduct(product: Product, productId: number, ingredients: {id: number, usingInOne: number}[]): Observable<string>{
-      return this.http.put<any>(`/api/products/update/${productId}`, {product, ingredients})
-      .pipe(map(resp => resp.message));
-    }
-  
-    removeProduct(id): Observable<string>{
-      return this.http.delete<any>(`/api/products/remove/${id}`)
-      .pipe(map(resp => resp.message));;
-    }
+  createIngredient(ingredient: Ingredient): Observable<string>{
+    ingredient.price = 0;
+    ingredient.quantity = 0;
+    return this.http.post<{ingredient: Ingredient, message: string}>('/api/ingredients/create', ingredient)
+    .pipe(map(resp => resp.message));
+  }
+
+  getIngredientById(id: string | number): Observable<Ingredient>{
+    return this.http.get<Ingredient>(`/api/ingredients/get/${id}`);
+  }
+
+  updateIngredient(ingredient: Ingredient, ingredientId: string | number): Observable<string>{
+    return this.http.put<any>(`/api/ingredients/update/${ingredientId}`, ingredient)
+    .pipe(map(resp => resp.message));
+  }
+
+  removeIngredient(id): Observable<string>{
+    return this.http.delete<any>(`/api/ingredients/remove/${id}`)
+    .pipe(map(resp => resp.message));;
+  }
+
+  // PRODUCTS:
+  getProducts(): Observable<Product[]>{
+    return this.http.get<Product[]>(`/api/products/${this.selectedCompany.id}`);
+  }
+
+  createProduct(product: Product, ingredients: {id: number, usingInOne: number}[]): Observable<string>{
+    return this.http.post<{product: Product, message: string}>('/api/products/create', {product, ingredients})
+    .pipe(map(resp => resp.message));
+  }
+
+  getProductById(id: string | number): Observable<Product>{
+    return this.http.get<Product>(`/api/products/get/${id}`);
+  }
+
+  updateProduct(product: Product, productId: number, ingredients: {id: number, usingInOne: number}[]): Observable<string>{
+    return this.http.put<any>(`/api/products/update/${productId}`, {product, ingredients})
+    .pipe(map(resp => resp.message));
+  }
+
+  removeProduct(id): Observable<string>{
+    return this.http.delete<any>(`/api/products/remove/${id}`)
+    .pipe(map(resp => resp.message));;
+  }
+
+  // EMPLOYEES:
+  getEmployees(): Observable<Employee[]>{
+    return this.http.get<Employee[]>(`/api/employees/${this.selectedCompany.id}`);
+  }
+
+  createEmployee(employee: Employee): Observable<string>{
+    return this.http.post<{employee: Employee, message: string}>('/api/employees/create', employee)
+    .pipe(map(resp => resp.message));
+  }
+
+  getEmployeeById(id: string | number): Observable<Employee>{
+    return this.http.get<Employee>(`/api/employees/get/${id}`);
+  }
+
+  updateEmployee(employee: Employee, employeeId: string | number): Observable<string>{
+    return this.http.put<any>(`/api/employees/update/${employeeId}`, employee)
+    .pipe(map(resp => resp.message));
+  }
+
+  removeEmployee(id): Observable<string>{
+    return this.http.delete<any>(`/api/employees/remove/${id}`)
+    .pipe(map(resp => resp.message));;
+  }
 }

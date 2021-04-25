@@ -15,8 +15,17 @@ const Employee = db.define('Employee', {
         allowNull: false
     },
     pinCode: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
+    },
+    color: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: '#ff5151'
+    },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 });
 

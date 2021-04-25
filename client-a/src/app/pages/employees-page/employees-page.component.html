@@ -1,0 +1,132 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Сотрудники</h3>
+        </div>
+
+        <div class="col-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+                (click)="onCreateEmployeeClick()">
+                <div class="btn-content">
+                    <span class="material-icons-outlined icon">person_add</span> Новый сотрудник
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="groups" title="Список сотрудников пуст" [show]="!loader && !employees.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && employees.length">
+        <div class="row mt-2">
+
+            <div class="col-md-4 col-sm-12 mt-4" *ngFor="let emp of employees">
+                <div class="card shadow user-main-container">
+                    <span class="material-icons-outlined card-mark">bookmark</span>
+                    <div class="user-left-part" [ngStyle]="{'background-color': emp.color}">
+                        <div class="user-image"></div>
+                    </div>
+                    <div class="user-right-part">
+                        <div class="user-name mt-2">
+                            <h4>{{emp.name}}</h4>
+                        </div>
+                        <div class="user-data">
+                            <table>
+                                <tr>
+                                    <th>Должность</th>
+                                    <td>Бариста</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Пин-код</th>
+                                    <td class="pin-style">{{emp.pinCode}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th>Телефон</th>
+                                    <td>{{emp.phone}}</td>
+                                  </tr>
+                            </table>
+                        </div>
+                        <div class="user-controls">
+                            <button mdbBtn size="sm" color="indigo" (click)="editClick(emp)">
+                                <div class="btn-content">
+                                    <span class="material-icons-outlined icon">edit</span>
+                                </div>
+                            </button>
+                            <button mdbBtn size="sm" color="danger" (click)="removeClick(emp)">
+                                <div class="btn-content">
+                                    <span class="material-icons-outlined icon">delete</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #createModal>
+
+    <div class="container-fluid">
+        <form [formGroup]="createForm" (ngSubmit)="createSubmit()">
+            <ng-container *ngIf="!modalLoader">
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <label for="name">Имя</label>
+                        <input type="text" formControlName="name" placeholder="Введите имя сотрудника" id="name" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('name').invalid && submitted">Заполните это поле</small>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="phone">Номер телефона</label>
+                        <input type="phone" formControlName="phone" placeholder="+380 __ ___ ____" id="phone" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('phone').invalid && submitted">Заполните это поле</small>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="pinCode">Пин-код для терминала</label>
+                        <input type="text" pattern="^(\d{4}$)" formControlName="pinCode" placeholder="Пин" id="pinCode" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('pinCode').errors 
+                            && createForm.get('pinCode').errors.required && submitted">Заполните это поле</small>
+                        <small class="invalid" *ngIf="createForm.get('pinCode').errors
+                            && createForm.get('pinCode').errors.pattern && submitted">Пин-код должен состоять из 4 цифр</small>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="success" type="submit"
+                     [disabled]="modalLoader" *ngIf="!isEdit">Создать</button>
+
+                    <button mdbBtn size="sm" color="primary" type="button" (click)="saveEmployeeChanges()"
+                     [disabled]="modalLoader" *ngIf="isEdit">Сохранить изменения</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeModal>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    Вы уверены, что хотите удалить сотрудника ?
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button mdbBtn size="sm" color="danger" (click)="removeEmployee()"
+                 [disabled]="modalLoader">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

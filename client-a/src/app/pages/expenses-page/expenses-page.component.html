@@ -38,7 +38,11 @@
                             <td>{{exp.AccountId | checkAccount:accounts}}</td>
                             <td>{{exp.createdAt}}</td>
                             <td>
-                                <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(exp)">Удалить</button>
+                                <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(exp)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">delete</span> Удалить
+                                    </div>
+                                </button>
                             </td>
                           </tr>
                         </tbody>

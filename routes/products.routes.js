@@ -4,8 +4,6 @@ const { validationResult, check, body } = require('express-validator');
 const auth = require('../middleware/auth.middleware');
 const Product = require('../models/Product');
 const Company = require('../models/Company');
-const DeliveryProducts = require('../models/Company');
-const ProductProducts = require('../models/Company');
 const config = require('config');
 const Ingredient = require('../models/Ingredient');
 

@@ -51,6 +51,8 @@ export class ProductsPageComponent implements OnInit {
     });
   }
 
+  getProductInfoClick(product: Product){}
+
   removeProduct(){
     this.modalLoader = true;
     this.company.removeProduct(this.selectedProduct.id)

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
-import { Ingredient } from '@app/shared/interfaces';
+import { Employee } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { MDBModalService } from 'angular-bootstrap-md';
@@ -9,19 +9,19 @@ import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-ingredients-page',
-  templateUrl: './ingredients-page.component.html',
-  styleUrls: ['./ingredients-page.component.scss']
+  selector: 'app-employees-page',
+  templateUrl: './employees-page.component.html',
+  styleUrls: ['./employees-page.component.scss']
 })
-export class IngredientsPageComponent implements OnInit, OnDestroy {
+export class EmployeesPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('createModal') createModal;
   @ViewChild('removeModal') removeModal;
   loader;
   submitted;
   modalLoader;
-  ingredients: Ingredient[] = [];
-  selectedIngredient: Ingredient;
+  employees: Employee[] = [];
+  selectedEmployee: Employee;
   unsubscribe: Subject<any> = new Subject();
   isEdit: boolean = false;
   createForm: FormGroup;
@@ -36,87 +36,93 @@ export class IngredientsPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.createForm = new FormGroup({
-      title: new FormControl(null, [Validators.required]),
-      unit: new FormControl(null, [Validators.required]),
+      name: new FormControl(null, [Validators.required]),
+      phone: new FormControl(null, [Validators.required]),
+      pinCode: new FormControl(null, [Validators.required, Validators.pattern(/^(\d{4}$)/)]),
     });
-    this.getIngredients();
+    this.getEmployees();
   }
 
-  getIngredients(){
+  getEmployees(){
     this.loader = true;
-    this.company.getIngredients()
+    this.company.getEmployees()
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    .subscribe(ingredients => {this.ingredients = ingredients})
+    .subscribe(employees => {this.employees = employees})
   }
 
-  onCreateIngredientClick(){
+  onCreateEmployeeClick(){
     this.isEdit = false;
     this.createForm.reset();
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,
-        title: "Добавление ингредиента"
+        title: "Новый сотрудник"
       }
     });
   }
 
-  removeClick(ingredient){
-    this.selectedIngredient = ingredient;
+  removeClick(employee){
+    this.selectedEmployee = employee;
     this.modalService.show(ModalComponent, {
       data: {
-        title: `Удаление ингредиента (${ingredient.title})`,
+        title: `Удаление сотрудника ${employee.name}`,
         content: this.removeModal
       }
     });
   }
 
-  removeIngredient(){
+  removeEmployee(){
     this.modalLoader = true;
-    this.company.removeIngredient(this.selectedIngredient.id)
+    this.company.removeEmployee(this.selectedEmployee.id)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
     .subscribe(message => {
 
       this.modalService.hide(1);
-      this.getIngredients();
+      this.getEmployees();
       this.toasts.show('info', message);
     }, resp => {
       this.toasts.show('error', resp.error.message);
     });
   }
 
-  editClick(ingredient: Ingredient){
-    this.selectedIngredient = ingredient;
-    this.createForm.patchValue(ingredient);
+  editClick(employee){
+    this.selectedEmployee = employee;
+    this.createForm.patchValue(employee);
     this.isEdit = true;
     
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,
-        title: "Изменение ингредиента"
+        title: `Изменение данных для ${employee.name}`
       }
     });
   }
 
-  saveIngredientChanges(){
+  saveEmployeeChanges(){
     this.submitted = true;
     if(this.createForm.invalid) return;
 
     this.modalLoader = true;
-    const ingredient: Ingredient = {
-      unit: this.createForm.value.unit,
-      title: this.createForm.value.title,
-    };
-    this.company.updateIngredient(ingredient, this.selectedIngredient.id)
+    const employee = this.getFormData();
+    this.company.updateEmployee(employee, this.selectedEmployee.id)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; this.submitted = false}))
     .subscribe(message => {
 
       this.createForm.reset();
       this.modalService.hide(1);
       this.toasts.show('info', message);
-      this.getIngredients();
+      this.getEmployees();
     }, resp => {
       this.toasts.show('error', resp.error.message);
     });
+  }
+
+  private getFormData(): Employee{
+    return {
+      name: this.createForm.value.name,
+      phone: this.createForm.value.phone,
+      pinCode: this.createForm.value.pinCode
+    };
   }
 
   createSubmit(){
@@ -124,18 +130,15 @@ export class IngredientsPageComponent implements OnInit, OnDestroy {
     if(this.createForm.invalid) return;
 
     this.modalLoader = true;
-    const ingredient: Ingredient = {
-      unit: this.createForm.value.unit,
-      title: this.createForm.value.title
-    };
-    this.company.createIngredient(ingredient)
+    const employee = this.getFormData();
+    this.company.createEmployee(employee)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; this.submitted = false}))
     .subscribe(message => {
 
       this.createForm.reset();
       this.modalService.hide(1);
       this.toasts.show('success', message);
-      this.getIngredients();
+      this.getEmployees();
     }, resp => {
       this.toasts.show('error', resp.error.message);
     });

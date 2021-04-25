@@ -52,7 +52,11 @@
                             </td>
                             <td style="width: 18%">
                                 <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(acc)"
-                                    [disabled]="mainAccountId === acc.id">Удалить</button>
+                                    [disabled]="mainAccountId === acc.id">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">delete</span> Удалить
+                                    </div>
+                                </button>
                             </td>
                           </tr>
                         </tbody>

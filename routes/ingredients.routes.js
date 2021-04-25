@@ -4,8 +4,6 @@ const { validationResult, check } = require('express-validator');
 const auth = require('../middleware/auth.middleware');
 const Ingredient = require('../models/Ingredient');
 const Company = require('../models/Company');
-const DeliveryIngredients = require('../models/Company');
-const ProductIngredients = require('../models/Company');
 const config = require('config');
 
 router.get('/:companyId', auth, (req, res) => {

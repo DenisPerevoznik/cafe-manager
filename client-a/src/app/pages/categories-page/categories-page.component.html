@@ -44,8 +44,16 @@
                                 <mdb-badge success="true" *ngIf="category.published">Доступно</mdb-badge>
                             </td>
                             <td style="width: 30%">
-                                <button mdbBtn size="sm" color="primary" (click)="editClick(category)">Изменить</button>
-                                <button mdbBtn size="sm" color="danger" (click)="removeClick(category.id)">Удалить</button>
+                                <button mdbBtn size="sm" color="indigo" (click)="editClick(category)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">edit</span> Изменить
+                                    </div>
+                                </button>
+                                <button mdbBtn size="sm" color="danger" (click)="removeClick(category.id)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">delete</span> Удалить
+                                    </div>
+                                </button>
                             </td>
                           </tr>
                         </tbody>
