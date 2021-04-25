@@ -1,0 +1,92 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Поставки</h3>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+                [routerLink]="['create']" [queryParams]="{ isPurchased: true}">
+                <div class="btn-content">
+                    <span class="material-icons-outlined icon">add</span> Новая поставка
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="local_shipping" title="Список продуктов пуст" [show]="!loader && !deliveries.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && deliveries.length">
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2">
+                    <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col">Дата и время</th>
+                            <th scope="col">Поставщик</th>
+                            <th scope="col">Комментарий</th>
+                            <th scope="col">Счет</th>
+                            <th scope="col">Сумма</th>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">handyman</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr mdbTableCol *ngFor="let delivery of deliveries">
+                            <td>{{delivery.createdAt | date:'dd.MM.yyyy HH:mm'}}</td>
+                            <td>{{delivery.supplier.name}}</td>
+                            <td>{{delivery.comment}}</td>
+                            <td>{{delivery.account | checkAccount:delivery.AccountId:accounts}}</td>
+                            <td>₴ {{delivery.sum}}</td>
+                            <td style="width: 35%">
+                                <button mdbBtn size="sm" color="indigo" [routerLink]="['edit', delivery.id]">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">edit</span> Изменить
+                                    </div>
+                                </button>
+                                <button mdbBtn size="sm" color="primary" (click)="getDeliveryInfoClick(delivery)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">search</span> Подробнее
+                                    </div>
+                                </button>
+                                <button mdbBtn size="sm" color="danger" (click)="removeClick(delivery)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">delete</span> Удалить
+                                    </div>
+                                </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #removeModal>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    Вы уверены, что хотите удалить эту информацию о поставке ? Все данные 
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button mdbBtn size="sm" color="danger" (click)="removeDelivery()"
+                 [disabled]="modalLoader">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

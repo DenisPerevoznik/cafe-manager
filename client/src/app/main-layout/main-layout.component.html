@@ -1,0 +1,54 @@
+<ng-sidebar-container style="height: 100vh;">
+  <!-- A sidebar -->
+  <ng-sidebar [(opened)]="sideBarStatus" [autoFocus]="false" [closeOnClickBackdrop]="this.isMobile"
+    [showBackdrop]="this.isMobile">
+    <div class="ng-sidebar__company-name">{{selectedCompany ? selectedCompany.name : ''}}</div>
+    <nav>
+      <ul>
+        <a routerLink="analytics">
+          <li><i class="far fa-chart-bar"></i> Аналитика</li>
+        </a>
+        <a routerLink="shifts">
+          <li><i class="fas fa-exchange-alt"></i> Смены</li>
+        </a>
+        <a routerLink="expenses">
+          <li><i class="fas fa-donate"></i> Расходы вне смены</li>
+        </a>
+        <a routerLink="accounts">
+          <li><i class="fas fa-money-check-alt"></i> Денежные ячейки</li>
+        </a>
+        <a routerLink="categories">
+          <li><i class="fas fa-th-large"></i> Категории</li>
+        </a>
+        <a routerLink="products">
+          <li><i class="fas fa-boxes"></i> Продукция</li>
+        </a>
+        <a routerLink="ingredients">
+          <li><i class="fas fa-carrot"></i> Ингредиенты</li>
+        </a>
+        <a routerLink="employees">
+          <li><i class="fas fa-id-card"></i> Сотрудники</li>
+        </a>
+        <a routerLink="deliveries">
+          <li><i class="fas fa-truck-loading"></i> Поставки</li>
+        </a>
+        <li><i class="fas fa-truck"></i> Поставщики</li>
+      </ul>
+    </nav>
+  </ng-sidebar>
+  <!-- #3b7096 -->
+
+  <!-- Page content -->
+  <div ng-sidebar-content>
+    <div class="container-fluid">
+      <div class="row">
+        <app-header (sidebarToggleChange)="sideBarStatus = $event"></app-header>
+      </div>
+    </div>
+    <div class="dashboard-field">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  
+
+</ng-sidebar-container>

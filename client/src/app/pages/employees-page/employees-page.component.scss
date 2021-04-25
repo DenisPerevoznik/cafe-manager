@@ -1,0 +1,68 @@
+table, th, td {
+  border: 1px dashed rgb(128, 128, 128);
+}
+
+th, td{
+    padding: 4px
+}
+
+table{
+    width: 100%;
+}
+
+.user-main-container{
+    display: flex;
+    flex-direction: row;
+    border-radius: 15px;
+}
+
+.user-image{
+    width: 5rem;
+    border-radius: 15px;
+    height: 5rem;
+    background-image: url('../../../assets/images/employee.png');
+    background-position: center;
+    background-size: cover;
+    background-color: white;
+}
+
+.user-name{
+    display: flex;
+    justify-content: center;
+}
+
+.user-right-part{
+    width: 100%;
+    padding: 15px;
+}
+
+.user-controls{
+    display: flex;
+    margin-top: 10px;
+}
+
+.user-left-part{
+    display: flex;
+    padding: 15px;
+    background-color: white !important;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.card-mark{
+    position: absolute;
+    left: 11rem;
+    font-size: 2.5rem;
+    top: -18px;
+    color: #4f4f4f;
+}
+
+.user-data{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.pin-style{
+    letter-spacing: 5px;
+    font-weight: 600;
+}

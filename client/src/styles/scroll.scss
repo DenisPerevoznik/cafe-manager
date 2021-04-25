@@ -1,4 +1,6 @@
-.scrollbar {
+
+@mixin scroll{
+  .scrollbar {
     overflow: scroll;
   }
   
@@ -15,13 +17,18 @@
   
   /* custom colors  */
   .scrollbar-gray::-webkit-scrollbar {
-    background-color: #1B2430;
+    background-color: #1b2430;
   }
   .scrollbar-gray {
-    scrollbar-color: #9494949c #1B2430;
+    scrollbar-color: #9494949c #1b2430;
   }
   .scrollbar-gray::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
     background-color: #9494949c;
   }
+}
+
+.custom-scroll{
+  @include scroll;
+}

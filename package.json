@@ -4,12 +4,10 @@
   "description": "Application for viewing statistics and managmenting a cafe",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start-node": "node app.js",
     "server": "nodemon app.js",
-    "client-r": "npm run start --prefix client",
-    "client-a": "npm run start --prefix client-a",
-    "start-r": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client-r\"",
-    "start-a": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client-a\""
+    "client": "npm run start --prefix client",
+    "start": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
