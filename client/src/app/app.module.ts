@@ -30,6 +30,7 @@ import { CreateProductPageComponent } from './pages/products-page/create-product
 import { IngredientsFilterPipe } from './pages/products-page/create-product-page/ingredients-filter.pipe';
 import { EmployeesPageComponent } from './pages/employees-page/employees-page.component';
 import { DeliveriesPageComponent } from './pages/deliveries-page/deliveries-page.component';
+import { CreateDeliveryPageComponent } from './pages/deliveries-page/create-delivery-page/create-delivery-page.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { DeliveriesPageComponent } from './pages/deliveries-page/deliveries-page
     IngredientsFilterPipe,
     EmployeesPageComponent,
     DeliveriesPageComponent,
+    CreateDeliveryPageComponent,
   ],
   imports: [
     BrowserModule,

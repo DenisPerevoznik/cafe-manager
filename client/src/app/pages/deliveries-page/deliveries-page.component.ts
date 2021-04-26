@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
 import { Delivery } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
@@ -37,35 +36,35 @@ export class DeliveriesPageComponent implements OnInit {
   }
 
   getDeliveries(){
-    // this.loader = true;
-    // this.company.getDeliveries()
-    // .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    // .subscribe(deliveries => {this.deliveries = deliveries})
+    this.loader = true;
+    this.company.getDeliveries()
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .subscribe(deliveries => {this.deliveries = deliveries})
   }
 
   removeClick(delivery){
-    // this.selectedDelivery = delivery;
-    // this.modalService.show(ModalComponent, {
-    //   data: {
-    //     title: `Удаление продукта (${delivery.title})`,
-    //     content: this.removeModal
-    //   }
-    // });
+    this.selectedDelivery = delivery;
+    this.modalService.show(ModalComponent, {
+      data: {
+        title: `Удаление поставки`,
+        content: this.removeModal
+      }
+    });
   }
 
   getDeliveryInfoClick(delivery: Delivery){}
 
   removeDelivery(){
-    // this.modalLoader = true;
-    // this.company.removeDelivery(this.selectedDelivery.id)
-    // .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
-    // .subscribe(message => {
+    this.modalLoader = true;
+    this.company.removeDelivery(this.selectedDelivery.id)
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
+    .subscribe(message => {
 
-    //   this.modalService.hide(1);
-    //   this.getDeliveries();
-    //   this.toasts.show('info', message);
-    // }, resp => {
-    //   this.toasts.show('error', resp.error.message);
-    // });
+      this.modalService.hide(1);
+      this.getDeliveries();
+      this.toasts.show('info', message);
+    }, resp => {
+      this.toasts.show('error', resp.error.message);
+    });
   }
 }

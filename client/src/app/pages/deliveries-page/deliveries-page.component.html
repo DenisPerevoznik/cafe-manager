@@ -6,7 +6,7 @@
 
         <div class="col-md-6 col-sm-12">
             <button mdbBtn size="sm" color="success" [disabled]="loader"
-                [routerLink]="['create']" [queryParams]="{ isPurchased: true}">
+                [routerLink]="['create']">
                 <div class="btn-content">
                     <span class="material-icons-outlined icon">add</span> Новая поставка
                 </div>
@@ -43,11 +43,6 @@
                             <td>{{delivery.account | checkAccount:delivery.AccountId:accounts}}</td>
                             <td>₴ {{delivery.sum}}</td>
                             <td style="width: 35%">
-                                <button mdbBtn size="sm" color="indigo" [routerLink]="['edit', delivery.id]">
-                                    <div class="btn-content">
-                                        <span class="material-icons-outlined icon">edit</span> Изменить
-                                    </div>
-                                </button>
                                 <button mdbBtn size="sm" color="primary" (click)="getDeliveryInfoClick(delivery)">
                                     <div class="btn-content">
                                         <span class="material-icons-outlined icon">search</span> Подробнее

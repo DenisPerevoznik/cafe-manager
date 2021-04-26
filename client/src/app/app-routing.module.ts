@@ -7,6 +7,7 @@ import { AccountsPageComponent } from './pages/accounts-page/accounts-page.compo
 import { AnalyticsPageComponent } from './pages/analytics-page/analytics-page.component';
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { CompaniesPageComponent } from './pages/companies-page/companies-page.component';
+import { CreateDeliveryPageComponent } from './pages/deliveries-page/create-delivery-page/create-delivery-page.component';
 import { DeliveriesPageComponent } from './pages/deliveries-page/deliveries-page.component';
 import { EmployeesPageComponent } from './pages/employees-page/employees-page.component';
 import { ExpensesPageComponent } from './pages/expenses-page/expenses-page.component';
@@ -41,6 +42,7 @@ const routes: Routes = [
       { path: 'ingredients', component: IngredientsPageComponent },
       { path: 'employees', component: EmployeesPageComponent },
       { path: 'deliveries', component: DeliveriesPageComponent },
+      { path: 'deliveries/create', component: CreateDeliveryPageComponent },
       { path: '**', redirectTo: '/companies' }
     ],
   },
