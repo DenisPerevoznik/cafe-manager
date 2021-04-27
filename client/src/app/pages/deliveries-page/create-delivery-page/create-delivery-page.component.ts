@@ -1,14 +1,18 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Category, Ingredient, IngredientUnitEnum, Product, Supplier } from '@app/shared/interfaces';
+import { Account, Ingredient, IngredientUnitEnum, Supplier } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { forkJoin, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 
 interface DeliveryRowModel{
-  
+  ingredientId: number;
+  unit: IngredientUnitEnum;
+  quantity: number;
+  price: number;
+  sum: number;
 }
 
 @Component({
@@ -16,12 +20,12 @@ interface DeliveryRowModel{
   templateUrl: './create-delivery-page.component.html',
   styleUrls: ['./create-delivery-page.component.scss']
 })
-export class CreateDeliveryPageComponent implements OnInit {
+export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
 
   unsubscribe: Subject<void> = new Subject();
   pageTitle = '';
   isPurchased = false;
-  costPrice = 0;
+  totalSum = 0;
   loader = false;
   submitted = false;
   accounts: Account[] = [];
@@ -40,147 +44,103 @@ export class CreateDeliveryPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm = new FormGroup({
-      title: new FormControl(null, [Validators.required]),
-      category: new FormControl(null, [Validators.required]),
-      price: new FormControl(null, [Validators.required, Validators.min(0)]),
-      published: new FormControl('1')
+      supplier: new FormControl(null, [Validators.required]),
+      account: new FormControl(null, [Validators.required]),
+      comment: new FormControl(null),
     });
     this.getData();
-
-    this.route.queryParams
-    .pipe(takeUntil(this.unsubscribe))
-    .subscribe(params => {
-
-      if('isPurchased' in params){
-        this.isPurchased = params.isPurchased == 'true' ? true : false;
-      }
-      this.pageTitle = this.isPurchased ? 'Добавление товара' : 'Создание тех карты';
-    })
-
-    this.route.params
-    .pipe(takeUntil(this.unsubscribe))
-    .subscribe(params => {
-      // if(params.id){ // isEdit
-      //   this.isEdit = true;
-      //   this.editProductId = params.id;
-      // }
-    });
-  }
-
-  getProduct(id){
-    // this.loader = true;
-    // this.company.getProductById(id)
-    // .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    // .subscribe(product => {
-    //   this.product = product;
-
-    //   this.createForm.patchValue(product);
-    //   this.createForm.get('category').patchValue(product.CategoryId);
-    //   this.createForm.get('published').patchValue(product.published ? '1' : '0');
-
-    //   this.ingredientsRows = this.product.ingredients.map(ing => {
-    //     const costPrice = (ing.price * ing.usingInOne) / 1000;
-    //     const unitPrice = ing.price / 1000;
-    //     return {costPrice, ingredientId: ing.id, unit: this.getUnit(ing.unit), unitPrice, usingInOne: ing.usingInOne};
-    //   });
-    //   this.selectedIngredients = this.product.ingredients.map(ing => ing.id);
-    //   this.costPrice = product.costPrice;
-    // });
   }
 
   getData(){
-    // this.loader = true;
+    this.loader = true;
 
-    // forkJoin({
-    //   categories: this.company.getCategories(),
-    //   ingredients: this.company.getIngredients()
-    // })
-    // .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    // .subscribe(data => {
-    //   this.categories = data.categories;
-    //   this.ingredients = data.ingredients;
-
-    //   if(this.isEdit){
-    //     this.getProduct(this.editProductId);
-    //   }
-    // });
+    forkJoin({
+      accounts: this.company.getAccounts(),
+      ingredients: this.company.getIngredients()
+    })
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .subscribe(data => {
+      this.accounts = data.accounts;
+      this.ingredients = data.ingredients;
+    });
   }
 
-  removeIngredient(index){
-    // this.ingredientsRows.splice(index, 1);
-    // this.updateSelectedIngredient();
+  removeDeliveryItem(index){
+    this.deliveryRows.splice(index, 1);
+    this.updateSelectedIngredient();
+    this.updateTotalSum();
   }
 
   updateSelectedIngredient(){
-    // this.selectedIngredients = this.ingredientsRows
-    // .filter(row => row.ingredientId)
-    // .map(row => row.ingredientId);
-    // this.ingredients = [...this.ingredients];
+    this.selectedIngredients = this.deliveryRows
+    .filter(row => row.ingredientId)
+    .map(row => row.ingredientId);
+    this.ingredients = [...this.ingredients];
   }
 
-  addIngredient(){
-    // this.ingredientsRows.push({
-    //   costPrice: 0,
-    //   ingredientId: null,
-    //   usingInOne: 0,
-    //   unitPrice: 0,
-    //   unit: ''
-    // });
+  addDeliveryItem(){
+    this.deliveryRows.push({
+      ingredientId: null,
+      price: 0,
+      quantity: 0,
+      sum: 0,
+      unit: null
+    });
   }
   
-  get ingredientsIsValid(): boolean{
+  get deliveriesIsValid(): boolean{
 
-    // for (const ingRow of this.ingredientsRows) {
-    //   if(!ingRow.ingredientId || !ingRow.usingInOne)
-    //     return false;
-    // }
+    for (const dRow of this.deliveryRows) {
+      if(!dRow.ingredientId || !dRow.quantity || !dRow.price || !dRow.sum)
+        return false;
+    }
 
     return true;
   }
 
-  onSelectIngredient(rowIngredient: DeliveryRowModel){
+  onSelectIngredient(rowItem: DeliveryRowModel){
 
-    // const ingredient = this.ingredients.find(ing => ing.id == rowIngredient.ingredientId);
+    const ingredient = this.ingredients.find(ing => ing.id == rowItem.ingredientId);
 
-    // rowIngredient.unitPrice = ingredient.price / 1000;
-    // rowIngredient.unit = this.getUnit(ingredient.unit);
-    // this.updateSelectedIngredient();
-    // this.updateCostPrice();
+    rowItem.unit = ingredient.unit;
+    this.updateSelectedIngredient();
+    this.updateTotalSum();
   }
 
-  private getUnit(unit: IngredientUnitEnum): string{
+  updateTotalSum(){
+    this.totalSum = this.deliveryRows.reduce((acc, ing) => acc += ing.sum, 0);
+  }
 
-    let result = '';
-    switch (unit) {
-      case IngredientUnitEnum.Kilogram:
-        result = 'г.';
-        break;
+  onChangePriceOrQuantity(event, index, isPriceChanged = true){ // проверить раоту
+    const row = this.deliveryRows[index];
+    const price = isPriceChanged ? event.target.value : row.price;
+    row.sum = price * row.quantity;
+    this.updateTotalSum();
+  }
 
-      case IngredientUnitEnum.Liter:
-        result = 'мл.';
-        break;
+  onChangeSum(event, index){
+    const sum = event.target.value;
+    const row = this.deliveryRows[index];
+    row.price = this.trimAfterDecimalPoint(sum / row.quantity); // работает не правильно
+    this.updateTotalSum();
+  }
 
-      case IngredientUnitEnum.Piece:
-        result = 'шт.';
-        break;
+  private trimAfterDecimalPoint(digit: number): number{
+    //!!!
+    const strNum = digit.toString();
+    let symbol = '.';
+    if(strNum.includes(',')){
+      symbol = ',';
+    }
+    else if (strNum.includes('.')){
+      symbol = '.';
+    }
+    else{
+      return digit;
     }
 
-    return result;
-  }
-
-  updateCostPrice(){
-    // this.costPrice = this.ingredientsRows.reduce((acc, ing) => acc += ing.costPrice, 0);
-  }
-
-  usedInOneChnage(index){
-
-    // const row = this.ingredientsRows[index];
-    // const value = row.usingInOne;
-    // const ingredient = this.ingredients.find(ing => ing.id == row.ingredientId);
-
-    // row.unitPrice = ingredient.price / 1000;
-    // row.costPrice = (ingredient.price * value) / 1000;
-    // this.updateCostPrice();
+    const splitted = strNum.split(symbol);
+    return parseFloat(`${splitted[1]}.${splitted[1].substr(0, 2)}`);
   }
 
   onSubmit(){
@@ -214,7 +174,7 @@ export class CreateDeliveryPageComponent implements OnInit {
   }
 
   private successExit(message){
-    this.router.navigate(['/dashboard/products']);
+    this.router.navigate(['/dashboard/deliveries']);
     this.toats.show('success', message);
   }
 

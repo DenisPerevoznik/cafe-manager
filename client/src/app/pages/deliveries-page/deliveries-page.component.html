@@ -16,7 +16,7 @@
 
     <hr>
     <app-page-loader [show]="loader"></app-page-loader>
-    <app-no-data icon="local_shipping" title="Список продуктов пуст" [show]="!loader && !deliveries.length"></app-no-data>
+    <app-no-data icon="local_shipping" title="Список поставок пуст" [show]="!loader && !deliveries.length"></app-no-data>
 
     <ng-container *ngIf="!loader && deliveries.length">
         <div class="row mt-2">

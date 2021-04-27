@@ -20,13 +20,13 @@
     <form [formGroup]="createForm" (ngSubmit)="onSubmit()" *ngIf="!loader">
         <div class="row">
             <div [ngClass]="{'col-md-6': isPurchased}" [class]="(isPurchased ? 'col-md-6' : 'col-md-8') + ' col-sm-12'">
-                <div class="card shadow p-3 ml-2 mb-4" [ngClass]="{'form50': !isPurchased}">
+                <div class="card shadow p-3 ml-2 mb-4">
                     <label>Название</label>
-                    <input type="text" class="form-control f50" formControlName="title" placeholder="Введите название">
+                    <input type="text" [ngClass]="{'w-50': !isPurchased}" class="form-control" formControlName="title" placeholder="Введите название">
                     <small class="invalid" *ngIf="submitted && createForm.get('title').invalid">Это поле нужно заполнить</small>
 
                     <label class="mt-3">Категория</label>
-                    <select class="form-control f50" formControlName="category">
+                    <select class="form-control" [ngClass]="{'w-50': !isPurchased}" formControlName="category">
                         <option [ngValue]="null">Выберите категорию</option>
                         <option [value]="category.id" *ngFor="let category of categories">{{category.title}}</option>
                     </select>
@@ -93,12 +93,14 @@
                     <ng-container *ngIf="isPurchased">
                         <label class="mt-3">Себестоимость товара</label>
                         <input type="number" min="0" step=".1" [ngModelOptions]="{standalone: true}" 
-                            [(ngModel)]="costPrice" class="form-control f50" placeholder="Введите сумму">
+                            [ngClass]="{'w-50': !isPurchased}"
+                            [(ngModel)]="costPrice" class="form-control" placeholder="Введите сумму">
                         <small class="invalid" *ngIf="costPrice < 0 && submitted">Значение должно быть больше 0</small>
                     </ng-container>
 
                     <label class="mt-3">Итоговая стоимость</label>
-                    <input type="number" min="0" step=".1" formControlName="price" class="form-control f50" placeholder="Введите сумму">
+                    <input type="number" min="0" step=".1" formControlName="price" [ngClass]="{'w-50': !isPurchased}" 
+                        class="form-control" placeholder="Введите сумму">
                     <small class="invalid" *ngIf="submitted && createForm.get('price').invalid">Введите сумму</small>
 
                     <label class="mt-3">Видимость продукта</label>

@@ -217,4 +217,7 @@ export class CompanyService {
     return this.http.delete<any>(`/api/deliveries/remove/${id}`)
     .pipe(map(resp => resp.message));;
   }
+
+  // SUPPLIERS
+  
 }
