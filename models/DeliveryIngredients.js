@@ -34,7 +34,7 @@ const DeliveryIngredients = db.define('delivery_ingredients', {
     allowNull: false,
     defautlValue: 0,
   }
-});
+}, {timestamps: false});
 
 Delivery.belongsToMany(Ingredient, { through: DeliveryIngredients });
 Ingredient.belongsToMany(Delivery, { through: DeliveryIngredients });

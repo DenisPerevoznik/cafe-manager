@@ -1,0 +1,133 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Поставщики</h3>
+        </div>
+
+        <div class="col-12">
+            <button mdbBtn size="sm" color="success" [disabled]="loader"
+            (click)="onCreateSupplierClick()">Добавить поставщика</button>
+        </div>
+    </div>
+
+    <hr>
+    <app-page-loader [show]="loader"></app-page-loader>
+    <app-no-data icon="engineering" title="Список поставщиков пуст" [show]="!loader && !suppliers.length"></app-no-data>
+
+    <ng-container *ngIf="!loader && suppliers.length">
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2">
+                    <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                        <thead>
+                          <tr>
+                            <th scope="col">Имя</th>
+                            <th scope="col">Телефон</th>
+                            <th scope="col">Адрес</th>
+                            <th scope="col">Комментарий</th>
+                            <th scope="col" class="th-icon">
+                                <span class="material-icons-outlined">handyman</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr mdbTableCol *ngFor="let supplier of suppliers">
+                            <td>{{supplier.name}}</td>
+                            <td>{{supplier.phone}}</td>
+                            <td>{{supplier.address}}</td>
+                            <td>{{supplier.comment}}</td>
+                            <td style="width: 30%">
+                                <button mdbBtn size="sm" color="indigo" (click)="editClick(supplier)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">edit</span> Изменить
+                                    </div>
+                                </button>
+                                <button mdbBtn size="sm" color="danger" (click)="removeClick(supplier.id)">
+                                    <div class="btn-content">
+                                        <span class="material-icons-outlined icon">delete</span> Удалить
+                                    </div>
+                                </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #createModal>
+
+    <div class="container-fluid">
+        <form [formGroup]="createForm" (ngSubmit)="createSubmit()">
+            <ng-container *ngIf="!modalLoader">
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <label for="name">Имя</label>
+                        <input type="text" formControlName="name" placeholder="Введите название" id="name" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('name').invalid && submitted">Заполните это поле</small>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="egrpou">ЕГРПОУ</label>
+                        <input type="text" formControlName="egrpou" placeholder="ЕГРПОУ" id="egrpou" class="form-control">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="taxpayerNumber">Номер налогоплательщика</label>
+                        <input type="text" formControlName="taxpayerNumber" placeholder="Введите номер" id="taxpayerNumber" class="form-control">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="title">Телефон</label>
+                        <input type="phone" formControlName="phone" placeholder="+ (380) __ ____ ____" id="phone" class="form-control">
+                        <small class="invalid" *ngIf="createForm.get('phone').invalid && submitted">Заполните это поле</small>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="address">Адрес</label>
+                        <input type="text" formControlName="address" placeholder="Введите название" id="address" class="form-control">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="comment">Комментарий</label>
+                        <textarea formControlName="comment" id="comment" cols="20" rows="5" placeholder="Введите комментарий"
+                        class="form-control"></textarea>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="row mt-2">
+                <div class="col-12 d-flex justify-content-end">
+                    <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <button mdbBtn size="sm" color="success" type="submit"
+                     [disabled]="modalLoader" *ngIf="!isEdit">Создать</button>
+
+                    <button mdbBtn size="sm" color="primary" type="button" (click)="saveSupplierChanges()"
+                     [disabled]="modalLoader" *ngIf="isEdit">Сохранить изменения</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #removeModal>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    Вы уверены, что хотите удалить выбранного поставщика ?
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button mdbBtn size="sm" color="danger" (click)="removeSupplier()"
+                 [disabled]="modalLoader" [disabled]="modalLoader">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -5,7 +5,7 @@ import { AppState } from '@app/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { first, map, mergeMap } from 'rxjs/operators';
-import { Account, Category, Company, Expense, Ingredient, Product, WorkShift, Employee, Delivery } from '../interfaces';
+import { Account, Category, Company, Expense, Ingredient, Product, WorkShift, Employee, Delivery, Supplier } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -219,5 +219,26 @@ export class CompanyService {
   }
 
   // SUPPLIERS
-  
+  getSuppliers(): Observable<Supplier[]>{
+    return this.http.get<Supplier[]>(`/api/suppliers/${this.selectedCompany.id}`);
+  }
+
+  createSupplier(supplier: Supplier): Observable<string>{
+    return this.http.post<{supplier: Supplier, message: string}>('/api/suppliers/create', supplier)
+    .pipe(map(resp => resp.message));
+  }
+
+  getSupplierById(id: string | number): Observable<Supplier>{
+    return this.http.get<Supplier>(`/api/suppliers/get/${id}`);
+  }
+
+  updateSupplier(supplier: Supplier, supplierId: string | number): Observable<string>{
+    return this.http.put<any>(`/api/suppliers/update/${supplierId}`, supplier)
+    .pipe(map(resp => resp.message));
+  }
+
+  removeSupplier(id): Observable<string>{
+    return this.http.delete<any>(`/api/suppliers/remove/${id}`)
+    .pipe(map(resp => resp.message));;
+  }
 }

@@ -16,6 +16,7 @@ import { CreateProductPageComponent } from './pages/products-page/create-product
 import { ProductsPageComponent } from './pages/products-page/products-page.component';
 import { ShiftSinglePageComponent } from './pages/shifts-page/shift-single-page/shift-single-page.component';
 import { ShiftsPageComponent } from './pages/shifts-page/shifts-page.component';
+import { SuppliersPageComponent } from './pages/suppliers-page/suppliers-page.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,7 @@ const routes: Routes = [
       { path: 'employees', component: EmployeesPageComponent },
       { path: 'deliveries', component: DeliveriesPageComponent },
       { path: 'deliveries/create', component: CreateDeliveryPageComponent },
+      { path: 'suppliers', component: SuppliersPageComponent },
       { path: '**', redirectTo: '/companies' }
     ],
   },
