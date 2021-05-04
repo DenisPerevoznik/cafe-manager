@@ -56,12 +56,14 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
 
     forkJoin({
       accounts: this.company.getAccounts(),
-      ingredients: this.company.getIngredients()
+      ingredients: this.company.getIngredients(),
+      suppliers: this.company.getSuppliers()
     })
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
     .subscribe(data => {
       this.accounts = data.accounts;
       this.ingredients = data.ingredients;
+      this.suppliers = data.suppliers;
     });
   }
 

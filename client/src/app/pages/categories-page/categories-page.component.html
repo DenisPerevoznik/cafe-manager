@@ -6,7 +6,11 @@
 
         <div class="col-12">
             <button mdbBtn size="sm" color="success" [disabled]="loader"
-            (click)="onCreateCategoryClick()">Создать категорию</button>
+                (click)="onCreateCategoryClick()">
+                <div class="btn-content">
+                    <span class="material-icons-outlined icon">add</span> Создать категорию
+                </div>
+            </button>
         </div>
     </div>
 

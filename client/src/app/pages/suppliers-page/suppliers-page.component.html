@@ -6,7 +6,11 @@
 
         <div class="col-12">
             <button mdbBtn size="sm" color="success" [disabled]="loader"
-            (click)="onCreateSupplierClick()">Добавить поставщика</button>
+                (click)="onCreateSupplierClick()">
+                <div class="btn-content">
+                    <span class="material-icons-outlined icon">add</span> Добавить поставщика
+                </div>
+            </button>
         </div>
     </div>
 
@@ -34,8 +38,14 @@
                           <tr mdbTableCol *ngFor="let supplier of suppliers">
                             <td>{{supplier.name}}</td>
                             <td>{{supplier.phone}}</td>
-                            <td>{{supplier.address}}</td>
-                            <td>{{supplier.comment}}</td>
+                            <td>
+                                <span class="material-icons-outlined" *ngIf="!supplier.address">remove</span>
+                                {{supplier.address}}
+                            </td>
+                            <td>
+                                <span class="material-icons-outlined" *ngIf="!supplier.comment">remove</span>
+                                {{supplier.comment}}
+                            </td>
                             <td style="width: 30%">
                                 <button mdbBtn size="sm" color="indigo" (click)="editClick(supplier)">
                                     <div class="btn-content">

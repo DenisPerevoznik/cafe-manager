@@ -241,6 +241,10 @@ table td {
   }
 }
 
+.modal-open .modal{
+  overflow-y: auto !important;
+}
+
 .w-50{
   width: 50% !important;
 }

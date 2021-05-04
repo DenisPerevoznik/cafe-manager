@@ -136,8 +136,11 @@ router.get('/:companyId', auth, (req, res) => {
       return ingredientsArray;
     })
     .then(async (ingredients) => {
-      const category = await delivery.getCategory();
-      return {...delivery.dataValues, ingredients, category};
+      const account = await delivery.getAccount();
+      const supplier = await delivery.getSupplier();
+      return {...delivery.dataValues, ingredients, 
+        account: account ? account : {title: '(этот счет был удален)'}, 
+        supplier: supplier ? supplier : {name: '(этот поставщик был удален)'}};
     })
   }
 

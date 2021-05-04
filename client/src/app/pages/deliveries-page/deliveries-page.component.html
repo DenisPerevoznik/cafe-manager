@@ -40,7 +40,7 @@
                             <td>{{delivery.createdAt | date:'dd.MM.yyyy HH:mm'}}</td>
                             <td>{{delivery.supplier.name}}</td>
                             <td>{{delivery.comment}}</td>
-                            <td>{{delivery.account | checkAccount:delivery.AccountId:accounts}}</td>
+                            <td>{{delivery.account.title}}</td>
                             <td>₴ {{delivery.sum}}</td>
                             <td style="width: 35%">
                                 <button mdbBtn size="sm" color="primary" (click)="getDeliveryInfoClick(delivery)">
@@ -69,7 +69,7 @@
         <div class="row">
             <div class="col-12">
                 <p>
-                    Вы уверены, что хотите удалить эту информацию о поставке ? Все данные 
+                    Вы уверены, что хотите удалить информацию выбранной о поставке ?
                 </p>
             </div>
         </div>
