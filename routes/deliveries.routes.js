@@ -53,11 +53,13 @@ router.get('/:companyId', auth, (req, res) => {
             
             try {
                 await attachIngredients(delivery, ingredients, req.body.companyId);
+                await processingOfIngredients(ingredients);
+                await processingOfAccount(delivery);
 
                 return res.json({message: "Информация о поставке успешно добавлена"});
             } catch (error) {
                 return res.status(400)
-                    .json({ message: 'Ошибка при создании: ' + error.message });
+                  .json({ message: 'Ошибка при создании: ' + error.message });
             }
           });
         })
@@ -68,6 +70,21 @@ router.get('/:companyId', auth, (req, res) => {
         });
     }
   );
+
+  async function processingOfIngredients(requestIngredients){
+
+    for (const ingredient of requestIngredients) {
+      const ingredientModel = await Ingredient.findByPk(ingredient.id);
+      const quantity = parseFloat(ingredientModel.dataValues.quantity) + parseFloat(ingredient.quantity);
+      await ingredientModel.update({quantity, price: ingredient.unitPrice});
+    }
+  }
+
+  async function processingOfAccount(deliveryModel){
+    const account = await deliveryModel.getAccount();
+    const balance = account.dataValues.balance - deliveryModel.dataValues.sum;
+    await account.update({balance});
+  }
 
   async function attachIngredients(delivery, reqIngredients, CompanyId){
     for (const ing of reqIngredients) {

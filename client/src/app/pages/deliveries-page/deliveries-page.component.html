@@ -20,7 +20,37 @@
 
     <ng-container *ngIf="!loader && deliveries.length">
         <div class="row mt-2">
-            <div class="col-12">
+            <ng-container *ngIf="currentDelivery">
+                <div class="col-12">
+                    <button mdbBtn size="sm" color="primary" (click)="this.currentDelivery = null">
+                        <div class="btn-content">
+                            <span class="material-icons-outlined icon">reply</span> Назад к списку
+                        </div>
+                    </button>
+                </div>
+                <div class="col-12">
+                    <div class="card p-2">
+                        <h5>Просмотр поставки {{currentDelivery.createdAt | date:'dd.MM.yyyy HH:mm'}}</h5>
+                        <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                            <thead>
+                                <tr>
+                                  <th scope="col">Товар</th>
+                                  <th scope="col">Кол-во</th>
+                                  <th scope="col">Итог</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr mdbTableCol *ngFor="let delivery of currentDelivery.ingredients" class="d-info-table">
+                                  <td>{{delivery.title}}</td>
+                                  <td>{{delivery.quantity}} {{delivery.unit}}</td>
+                                  <td>₴ {{delivery.sum}}</td>
+                                </tr>
+                              </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ng-container>
+            <div class="col-12" *ngIf="!currentDelivery">
                 <div class="card shadow p-2">
                     <table mdbTable bordered="true" striped="true" class="custom-tbl">
                         <thead>
@@ -43,7 +73,7 @@
                             <td>{{delivery.account.title}}</td>
                             <td>₴ {{delivery.sum}}</td>
                             <td style="width: 35%">
-                                <button mdbBtn size="sm" color="primary" (click)="getDeliveryInfoClick(delivery)">
+                                <button mdbBtn size="sm" color="primary" (click)="currentDelivery = delivery">
                                     <div class="btn-content">
                                         <span class="material-icons-outlined icon">search</span> Подробнее
                                     </div>

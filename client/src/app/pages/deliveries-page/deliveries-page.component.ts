@@ -19,6 +19,7 @@ export class DeliveriesPageComponent implements OnInit {
   loader;
   submitted;
   modalLoader;
+  currentDelivery: Delivery = null;
   accounts: Account[] = [];
   deliveries: Delivery[] = [];
   selectedDelivery: Delivery;
@@ -51,8 +52,6 @@ export class DeliveriesPageComponent implements OnInit {
       }
     });
   }
-
-  getDeliveryInfoClick(delivery: Delivery){}
 
   removeDelivery(){
     this.modalLoader = true;
