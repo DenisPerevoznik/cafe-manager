@@ -324,13 +324,14 @@ table td {
 table.custom-tbl{
   td{
     padding: 0px !important;
-    font-weight: 600;
+    font-weight: 400;
     vertical-align: inherit;
     text-align: center;
   }
 
   th{
     padding: 15px !important;
+    font-weight: 600;
     font-size: 15px;
   }
 }

@@ -24,13 +24,14 @@
                 <div class="col-12">
                     <button mdbBtn size="sm" color="primary" (click)="this.currentDelivery = null">
                         <div class="btn-content">
-                            <span class="material-icons-outlined icon">reply</span> Назад к списку
+                            <span class="material-icons-outlined icon">reply</span> Назад к списку поставок
                         </div>
                     </button>
                 </div>
                 <div class="col-12">
                     <div class="card p-2">
-                        <h5>Просмотр поставки {{currentDelivery.createdAt | date:'dd.MM.yyyy HH:mm'}}</h5>
+                        <h6>Просмотр поставки ({{currentDelivery.createdAt | date:'dd.MM.yyyy HH:mm'}})</h6>
+                        <p>{{currentDelivery.comment ? currentDelivery.comment : 'Коментарий отсутствует'}}</p>
                         <table mdbTable bordered="true" striped="true" class="custom-tbl">
                             <thead>
                                 <tr>
@@ -69,7 +70,10 @@
                           <tr mdbTableCol *ngFor="let delivery of deliveries">
                             <td>{{delivery.createdAt | date:'dd.MM.yyyy HH:mm'}}</td>
                             <td>{{delivery.supplier.name}}</td>
-                            <td>{{delivery.comment}}</td>
+                            <td>
+                                <span class="material-icons-outlined" *ngIf="!delivery.comment">remove</span>
+                                {{delivery.comment}}
+                            </td>
                             <td>{{delivery.account.title}}</td>
                             <td>₴ {{delivery.sum}}</td>
                             <td style="width: 35%">

@@ -71,7 +71,7 @@
                   <app-statistic-card [title]="'Чеки'" [value]="selectedShift.receipts + ' шт.'"
                       [iconName]="'receipt_long'"></app-statistic-card>
               </div>
-              <div class="col-4">
+              <div class="col-4" *ngIf="!selectedShift.status">
                   <app-statistic-card [title]="'Остаток на размен'" [value]="'₴' + selectedShift.closingBalance"
                       [iconName]="'payments'"></app-statistic-card>
               </div>
