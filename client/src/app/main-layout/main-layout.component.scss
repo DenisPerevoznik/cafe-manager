@@ -1,1 +1,33 @@
 @import "../../styles/variables";
+
+.sync-block{
+    background: #232f3e;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: 35rem;
+    height: 4rem;
+    left: 0;
+
+    font-size: 12px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+
+    &-indicator{
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        top: 29px;
+        right: 23px;
+        border: 2px solid white;
+        opacity: 1;
+        border-radius: 50%;
+        background-color: #00d600;
+    }
+
+    &-icon{
+        font-size: 2rem;
+        opacity: 0.7;
+    }
+}
