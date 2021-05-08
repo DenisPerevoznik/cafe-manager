@@ -15,10 +15,12 @@ import { finalize, takeUntil } from 'rxjs/operators';
 export class ProductsPageComponent implements OnInit {
 
   @ViewChild('removeModal') removeModal;
+  @ViewChild('productInfoModal') productInfoModal;
   loader;
   submitted;
   modalLoader;
   products: Product[] = [];
+  searchText = '';
   selectedProduct: Product;
   unsubscribe: Subject<any> = new Subject();
   constructor(private company: CompanyService, private toasts: ToastService,
@@ -50,7 +52,19 @@ export class ProductsPageComponent implements OnInit {
     });
   }
 
-  getProductInfoClick(product: Product){}
+  getProductInfoClick(product: Product){
+    this.selectedProduct = product;
+    this.modalService.show(ModalComponent, {
+      data: {
+        title: product.title,
+        content: this.productInfoModal
+      }
+    });
+  }
+
+  closeModalInfo(){
+    this.modalService.hide(1);
+  }
 
   removeProduct(){
     this.modalLoader = true;

@@ -84,7 +84,8 @@
                     </div>
                     <div class="col-12 mt-2">
                         <label for="pinCode">Пин-код для терминала</label>
-                        <input type="text" pattern="^(\d{4}$)" formControlName="pinCode" placeholder="Пин" id="pinCode" class="form-control">
+                        <input type="text" pattern="^(\d{4}$)" formControlName="pinCode" placeholder="Пин" 
+                            id="pinCode" class="form-control" style="width: 25%">
                         <small class="invalid" *ngIf="createForm.get('pinCode').errors 
                             && createForm.get('pinCode').errors.required && submitted">Заполните это поле</small>
                         <small class="invalid" *ngIf="createForm.get('pinCode').errors

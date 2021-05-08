@@ -19,6 +19,7 @@ export class IngredientsPageComponent implements OnInit, OnDestroy {
   @ViewChild('removeModal') removeModal;
   loader;
   submitted;
+  searchText = '';
   modalLoader;
   ingredients: Ingredient[] = [];
   selectedIngredient: Ingredient;

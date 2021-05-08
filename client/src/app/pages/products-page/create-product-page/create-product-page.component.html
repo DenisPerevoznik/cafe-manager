@@ -2,105 +2,85 @@
     <div class="row">
         <div class="col-12">
             <h3 class="page-title" *ngIf="isEdit && product">Изменение "{{product.title}}"</h3>
-            <ng-container *ngIf="!isEdit">
-                <h3 class="page-title">{{pageTitle}}</h3>
-                <h6 class="page-title-second-text" *ngIf="isPurchased">
-                Товар - это то, что не требует приготовление (перепродается в готовом виде) 
-                <span style="font-size: 20px"> 🧃</span>
-                </h6>
-                <h6 class="page-title-second-text" *ngIf="!isPurchased">
-                Тех карта - это продаваемый продукт, который готовит заведение с использованием ингредиентов
-                <span style="font-size: 20px"> 🍳</span>
-                </h6>
-            </ng-container>
+            <h3 class="page-title" *ngIf="!isEdit">Добавление нового продукта</h3>
         </div>
     </div>
     <hr>
     <app-page-loader [show]="loader"></app-page-loader>
     <form [formGroup]="createForm" (ngSubmit)="onSubmit()" *ngIf="!loader">
         <div class="row">
-            <div [ngClass]="{'col-md-6': isPurchased}" [class]="(isPurchased ? 'col-md-6' : 'col-md-8') + ' col-sm-12'">
+            <div class="col-md-9 col-sm-12'">
                 <div class="card shadow p-3 ml-2 mb-4">
                     <label>Название</label>
-                    <input type="text" [ngClass]="{'w-50': !isPurchased}" class="form-control" formControlName="title" placeholder="Введите название">
+                    <input type="text" class="form-control w-50" formControlName="title" placeholder="Введите название">
                     <small class="invalid" *ngIf="submitted && createForm.get('title').invalid">Это поле нужно заполнить</small>
 
                     <label class="mt-3">Категория</label>
-                    <select class="form-control" [ngClass]="{'w-50': !isPurchased}" formControlName="category">
+                    <select class="form-control w-50" formControlName="category">
                         <option [ngValue]="null">Выберите категорию</option>
                         <option [value]="category.id" *ngFor="let category of categories">{{category.title}}</option>
                     </select>
                     <small class="invalid" *ngIf="submitted && createForm.get('category').invalid">Выберите категорию</small>
 
-                    <ng-container *ngIf="!isPurchased">
-                        <div class="ingredients-container mt-3 p-3">
-                        
-                            <label class="mt-2 mb-2">Укажите состав</label>
-                            <table mdbTable bordered="true" striped="true" class="ing-table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">Ингредиент</th>
-                                    <th scope="col" style="width: 25%">Удельное потребление</th>
-                                    <th scope="col" style="width: 15%">Цена за ед.</th>
-                                    <th scope="col" style="width: 15%">Себестоимость</th>
-                                    <th scope="col" style="width: 5%"></th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr *ngIf="!ingredientsRows.length">
-                                      <td colspan="5" style="text-align: center"><span>Добавьте ингредиент</span></td>
-                                  </tr>
-                                  <tr mdbTableCol *ngFor="let item of ingredientsRows; let i = index">
-                                    <td>
-                                        <select class="form-control" [ngModelOptions]="{standalone: true}" 
-                                            [(ngModel)]="item.ingredientId" (change)="onSelectIngredient(item)">
-                                            <option [ngValue]="null">Выберите ингредиент</option>
-                                            <option *ngFor="let ing of ingredients | ingredientsFilter:selectedIngredients:item.ingredientId" 
-                                                [value]="ing.id">{{ing.title}}</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex">
-                                            <input type="number" min="0" class="form-control" [ngModelOptions]="{standalone: true}"
-                                                [(ngModel)]="item.usingInOne" (input)="usedInOneChnage(i)" placeholder="Введите значение">
-                                            <span class="ml-2">{{item.unit}}</span>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: center">₴ {{item.unitPrice}}</td>
-                                    <td style="text-align: center">₴ {{item.costPrice}}</td>
-                                    <td><span class="material-icons-outlined remove-ing" (click)="removeIngredient(i)"
-                                        title="Убрать ингредиент">cancel_presentation</span></td>
-                                  </tr>
-                                </tbody>
-                            </table>
-                            <small class="invalid" *ngIf="submitted && !ingredientsIsValid">Некоторые поля заполнены не верно</small>
-                            <small class="invalid" *ngIf="submitted && !ingredientsRows.length">Список ингредиентов не может быть пустым</small>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <button mdbBtn size="sm" color="deep-orange" type="button" (click)="addIngredient()">
-                                <div class="btn-content">
-                                    <span class="material-icons-outlined icon">add</span> Добавить
-                                </div>
-                            </button>
-    
-                            <div *ngIf="ingredientsRows.length">
-                                <label class="mt-2"><b>Сумма себестоимости:</b></label>
-                                <span class="ml-2">₴ {{costPrice}}</span>
+                    <div class="ingredients-container mt-3 p-3">
+                    
+                        <label class="mt-2 mb-2">Укажите состав</label>
+                        <table mdbTable bordered="true" striped="true" class="ing-table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Ингредиент</th>
+                                <th scope="col" style="width: 25%">Удельное потребление</th>
+                                <th scope="col" style="width: 15%">Цена за ед.</th>
+                                <th scope="col" style="width: 15%">Себестоимость</th>
+                                <th scope="col" style="width: 5%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngIf="!ingredientsRows.length">
+                                    <td colspan="5" style="text-align: center"><span>Добавьте ингредиент</span></td>
+                                </tr>
+                                <tr mdbTableCol *ngFor="let item of ingredientsRows; let i = index">
+                                <td>
+                                    <select class="form-control" [ngModelOptions]="{standalone: true}" 
+                                        [(ngModel)]="item.ingredientId" (change)="onSelectIngredient(item)">
+                                        <option [ngValue]="null">Выберите ингредиент</option>
+                                        <option *ngFor="let ing of ingredients | ingredientsFilter:selectedIngredients:item.ingredientId" 
+                                            [value]="ing.id">{{ing.title}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <input type="number" min="0" class="form-control" [ngModelOptions]="{standalone: true}"
+                                            [(ngModel)]="item.usingInOne" (input)="usedInOneChnage(i)" placeholder="Введите значение">
+                                        <span class="ml-2">{{item.unit}}</span>
+                                    </div>
+                                </td>
+                                <td style="text-align: center">₴ {{item.unitPrice}}</td>
+                                <td style="text-align: center">₴ {{item.costPrice}}</td>
+                                <td><span class="material-icons-outlined remove-ing" (click)="removeIngredient(i)"
+                                    title="Убрать ингредиент">cancel_presentation</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <small class="invalid" *ngIf="submitted && !ingredientsIsValid">Некоторые поля заполнены не верно</small>
+                        <small class="invalid" *ngIf="submitted && !ingredientsRows.length">Список ингредиентов не может быть пустым</small>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button mdbBtn size="sm" color="deep-orange" type="button" (click)="addIngredient()">
+                            <div class="btn-content">
+                                <span class="material-icons-outlined icon">add</span> Добавить
                             </div>
-                        </div>
-                    </ng-container>
+                        </button>
 
-                    <ng-container *ngIf="isPurchased">
-                        <label class="mt-3">Себестоимость товара</label>
-                        <input type="number" min="0" step=".1" [ngModelOptions]="{standalone: true}" 
-                            [ngClass]="{'w-50': !isPurchased}"
-                            [(ngModel)]="costPrice" class="form-control" placeholder="Введите сумму">
-                        <small class="invalid" *ngIf="costPrice < 0 && submitted">Значение должно быть больше 0</small>
-                    </ng-container>
+                        <div *ngIf="ingredientsRows.length">
+                            <label class="mt-2"><b>Сумма себестоимости:</b></label>
+                            <span class="ml-2">₴ {{costPrice}}</span>
+                        </div>
+                    </div>
 
                     <label class="mt-3">Итоговая стоимость</label>
-                    <input type="number" min="0" step=".1" formControlName="price" [ngClass]="{'w-50': !isPurchased}" 
-                        class="form-control" placeholder="Введите сумму">
+                    <input type="number" min="0" step=".1" formControlName="price"
+                        class="form-control w-50" placeholder="Введите сумму">
                     <small class="invalid" *ngIf="submitted && createForm.get('price').invalid">Введите сумму</small>
 
                     <label class="mt-3">Видимость продукта</label>

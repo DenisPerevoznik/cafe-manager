@@ -52,18 +52,14 @@ router.get('/:companyId', auth, (req, res) => {
         .then((company) => {
           company.createProduct(product).then(async (product) => {
             
-            if(!product.isPurchased){
+            try {
+                await attachIngredients(product, ingredients, req.body.companyId);
 
-                try {
-                    await attachIngredients(product, ingredients, req.body.companyId);
-
-                    return res.json({message: "Тех карта успешно создана"});
-                } catch (error) {
-                    return res.status(400)
-                        .json({ message: 'Ошибка при создании: ' + error.message });
-                }
+                return res.json({message: "Продукт успешно добавлен"});
+            } catch (error) {
+                return res.status(400)
+                    .json({ message: 'Ошибка при создании: ' + error.message });
             }
-            res.json({ product, message: 'Продукт успешно добавлен' });
           });
         })
         .catch((err) => {

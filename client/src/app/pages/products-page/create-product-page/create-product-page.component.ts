@@ -24,7 +24,6 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
 
   unsubscribe: Subject<void> = new Subject();
   pageTitle = '';
-  isPurchased = false;
   costPrice = 0;
   loader = false;
   submitted = false;
@@ -53,16 +52,6 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     });
     this.getData();
 
-    this.route.queryParams
-    .pipe(takeUntil(this.unsubscribe))
-    .subscribe(params => {
-
-      if('isPurchased' in params){
-        this.isPurchased = params.isPurchased == 'true' ? true : false;
-      }
-      this.pageTitle = this.isPurchased ? 'Добавление товара' : 'Создание тех карты';
-    })
-
     this.route.params
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(params => {
@@ -85,8 +74,11 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
       this.createForm.get('published').patchValue(product.published ? '1' : '0');
 
       this.ingredientsRows = this.product.ingredients.map(ing => {
-        const costPrice = (ing.price * ing.usingInOne) / 1000;
-        const unitPrice = ing.price / 1000;
+        const costPrice = ing.unit === IngredientUnitEnum.Piece
+          ? ing.price * ing.usingInOne
+          : (ing.price * ing.usingInOne) / 1000;
+
+        const unitPrice = ing.unit === IngredientUnitEnum.Piece ? ing.price : ing.price / 1000;
         return {costPrice, ingredientId: ing.id, unit: this.getUnit(ing.unit), unitPrice, usingInOne: ing.usingInOne};
       });
       this.selectedIngredients = this.product.ingredients.map(ing => ing.id);
@@ -148,7 +140,7 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
 
     const ingredient = this.ingredients.find(ing => ing.id == rowIngredient.ingredientId);
 
-    rowIngredient.unitPrice = ingredient.price / 1000;
+    rowIngredient.unitPrice = ingredient.unit === IngredientUnitEnum.Piece ? ingredient.price : ingredient.price / 1000;
     rowIngredient.unit = this.getUnit(ingredient.unit);
     this.updateSelectedIngredient();
     this.updateCostPrice();
@@ -184,22 +176,22 @@ export class CreateProductPageComponent implements OnInit, OnDestroy {
     const value = row.usingInOne;
     const ingredient = this.ingredients.find(ing => ing.id == row.ingredientId);
 
-    row.unitPrice = ingredient.price / 1000;
-    row.costPrice = (ingredient.price * value) / 1000;
+    row.unitPrice = ingredient.unit === IngredientUnitEnum.Piece ? ingredient.price : ingredient.price / 1000;
+    row.costPrice = ingredient.unit === IngredientUnitEnum.Piece 
+    ? ingredient.price * value
+    : (ingredient.price * value) / 1000;
     this.updateCostPrice();
   }
 
   onSubmit(){
     this.submitted = true;
-    if(this.costPrice < 0 || this.createForm.invalid || (!this.isPurchased 
-      && (!this.ingredientsIsValid || !this.ingredientsRows.length))){
+    if(this.costPrice < 0 || this.createForm.invalid || !this.ingredientsIsValid || !this.ingredientsRows.length){
       return;
     }
     
     this.loader = true;
     const product: Product = {
       costPrice: this.costPrice,
-      isPurchased: this.isPurchased,
       price: this.createForm.value.price,
       published: this.createForm.value.published,
       title: this.createForm.value.title,

@@ -1,20 +1,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-          <h3 class="page-title">Продукты и тех карты</h3>
+          <h3 class="page-title">Продукция</h3>
         </div>
 
         <div class="col-md-6 col-sm-12">
             <button mdbBtn size="sm" color="success" [disabled]="loader"
-                [routerLink]="['create']" [queryParams]="{ isPurchased: true}">
+                [routerLink]="['create']">
                 <div class="btn-content">
-                    <span class="material-icons-outlined icon">add</span> Добавить товар
-                </div>
-            </button>
-            <button mdbBtn size="sm" color="deep-orange" [disabled]="loader"
-                [routerLink]="['create']" [queryParams]="{ isPurchased: false}">
-                <div class="btn-content">
-                    <span class="material-icons-outlined icon">add_to_photos</span> Создать тех карту
+                    <span class="material-icons-outlined icon">add_to_photos</span> Добавить продукт
                 </div>
             </button>
         </div>
@@ -22,11 +16,15 @@
 
     <hr>
     <app-page-loader [show]="loader"></app-page-loader>
-    <app-no-data icon="menu_book" title="Список продуктов пуст" [show]="!loader && !products.length"></app-no-data>
+    <app-no-data icon="menu_book" title="Список продукции пуст" [show]="!loader && !products.length"></app-no-data>
 
     <ng-container *ngIf="!loader && products.length">
         <div class="row mt-2">
             <div class="col-12">
+                <div class="d-flex">
+                    <span class="material-icons-outlined mt-2 mr-2">search</span>
+                    <input type="text" style="width: 30%" placeholder="Поиск" [(ngModel)]="searchText" class="form-control mb-2">
+                </div>
                 <div class="card shadow p-2">
                     <table mdbTable bordered="true" striped="true" class="custom-tbl">
                         <thead>
@@ -35,14 +33,13 @@
                             <th scope="col">Цена</th>
                             <th scope="col">Категория</th>
                             <th scope="col">Статус</th>
-                            <th scope="col">Тип</th>
                             <th scope="col" class="th-icon">
                                 <span class="material-icons-outlined">handyman</span>
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr mdbTableCol *ngFor="let product of products">
+                          <tr mdbTableCol *ngFor="let product of products | search:searchText:'title'">
                             <td>{{product.title}}</td>
                             <td>₴ {{product.price}}</td>
                             <td>{{product.category.title}}</td>
@@ -50,10 +47,8 @@
                                 <mdb-badge color="pink" *ngIf="!product.published">Скрыто</mdb-badge>
                                 <mdb-badge success="true" *ngIf="product.published">Доступно</mdb-badge>
                             </td>
-                            <td><mdb-badge color="cyan">{{product.isPurchased ? 'Товар' : 'Тех карта'}}</mdb-badge></td>
                             <td style="width: 35%">
-                                <button mdbBtn size="sm" color="indigo" [routerLink]="['edit', product.id]" 
-                                    [queryParams]="{ isPurchased: product.isPurchased}">
+                                <button mdbBtn size="sm" color="indigo" [routerLink]="['edit', product.id]">
                                     <div class="btn-content">
                                         <span class="material-icons-outlined icon">edit</span> Изменить
                                     </div>
@@ -71,7 +66,7 @@
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                    </table>
                 </div>
             </div>
         </div>
@@ -96,6 +91,48 @@
                 </div>
                 <button mdbBtn size="sm" color="danger" (click)="removeProduct()"
                  [disabled]="modalLoader">Подтвердить удаление</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #productInfoModal>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-column">
+                    <span><b>Категория: </b>{{selectedProduct.category.title}}</span>
+                    <span><b>Себестоимость: </b>₴ {{selectedProduct.costPrice}}</span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <h6>Используемые ингредиенты</h6>
+                <table mdbTable bordered="true" striped="true" class="custom-tbl">
+                    <thead>
+                      <tr>
+                        <th scope="col">Наименование</th>
+                        <th scope="col">Остаток</th>
+                        <th scope="col">Удельное потребление</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr mdbTableCol *ngFor="let ingredient of selectedProduct.ingredients">
+                        <td>{{ingredient.title}}</td>
+                        <td>{{ingredient.quantity}} {{ingredient.unit}}</td>
+                        <td>{{ingredient.usingInOne}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <button mdbBtn size="sm" color="primary" (click)="closeModalInfo()">Закрыть</button>
             </div>
         </div>
     </div>

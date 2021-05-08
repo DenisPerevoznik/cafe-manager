@@ -24,6 +24,10 @@ const Company = db.define('Company', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   mainAccount: {
     type: DataTypes.INTEGER,
     allowNull: true,

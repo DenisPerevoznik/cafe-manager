@@ -24,7 +24,8 @@ router.post(
   '/create',
   [
     auth,
-    check('name', 'Поле с именем компании обязательно к заполнению')
+    check('name', 'Поле с именем компании обязательно к заполнению'),
+    check('address', 'Поле с адресом компании обязательно к заполнению')
       .not()
       .isEmpty(),
   ],
@@ -35,15 +36,13 @@ router.post(
     }
 
     const userId = req.user.userId;
-    const { name } = req.body;
     User.findByPk(userId)
       .then(async (user) => {
         if (!user) {
           return res.status(400).json({ message: 'Пользователь не найден' });
         }
 
-        user
-          .createCompany({ name })
+        user.createCompany(req.body)
           .then((company) => {
             return res.json({
               company,

@@ -20,6 +20,7 @@ export class CategoriesPageComponent implements OnInit, OnDestroy {
   loader;
   submitted;
   modalLoader;
+  searchText = '';
   categories: Category[] = [];
   selectedCategoryId: string | number = 0;
   unsubscribe: Subject<any> = new Subject();

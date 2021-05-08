@@ -6,9 +6,10 @@ export interface User {
 export interface Company {
   id?: number;
   name: string;
+  address: string;
   mainAccount?: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface DailyData{
@@ -115,7 +116,6 @@ export interface Product {
   price: number;
   published: boolean;
   costPrice: number;
-  isPurchased: boolean;
   type?: string;
   ingredients?: Ingredient[],
   createdAt?: string;

@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-          <h3 class="page-title">Ингредиенты</h3>
+          <h3 class="page-title">Ингредиенты и товары</h3>
         </div>
 
         <div class="col-12">
@@ -21,6 +21,10 @@
     <ng-container *ngIf="!loader && ingredients.length">
         <div class="row mt-2">
             <div class="col-12">
+                <div class="d-flex">
+                    <span class="material-icons-outlined mt-2 mr-2">search</span>
+                    <input type="text" style="width: 30%" placeholder="Поиск" [(ngModel)]="searchText" class="form-control mb-2">
+                </div>
                 <div class="card shadow p-2">
                     <table mdbTable bordered="true" striped="true" class="custom-tbl">
                         <thead>
@@ -35,7 +39,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr mdbTableCol *ngFor="let ing of ingredients">
+                          <tr mdbTableCol *ngFor="let ing of ingredients | search:searchText:'title'">
                             <td>{{ing.title}}</td>
                             <td>₴ {{ing.price}}</td>
                             <td>{{ing.unit}}</td>

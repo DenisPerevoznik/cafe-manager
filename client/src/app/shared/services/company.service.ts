@@ -13,8 +13,13 @@ import { Account, Category, Company, Expense, Ingredient, Product, WorkShift, Em
 export class CompanyService {
 
   unsubscribe: Subject<any> = new Subject<any>();
-  selectedCompany: Company = {createdAt: null, id: 0, name: null, updatedAt: null};
+  selectedCompany: Company = {id: 0, name: null, address: null};
   constructor(private http: HttpClient, private store: Store<AppState>) {}
+
+  createCompany(company: Company): Observable<string>{
+    return this.http.post<{company: Company, message: string}>(`/api/companies/create`, company)
+    .pipe(map(response => response.message));
+  }
 
   getWorkShifts(id = null): Observable<WorkShift[] | WorkShift>{
 
