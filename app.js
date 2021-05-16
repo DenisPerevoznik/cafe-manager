@@ -5,10 +5,24 @@ const cors = require('cors');
 //Database
 const db = require('./config/database');
 
-const port =
-  process.env.NODE_ENV === 'production' ? process.env.PORT : config.get('port');
+const port = process.env.NODE_ENV === 'production' ? process.env.PORT : config.get('port');
 
-app.use(cors({ origin: 'http://localhost:4200' }));
+// CORS Settings
+
+const whitelist = ['http://localhost:4200', 'http://localhost:8100']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      // callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors({origin: '*'}));
+////////
+
 app.use(express.json({ extended: true }));
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/companies', require('./routes/company.routes'));
@@ -23,8 +37,11 @@ app.use('/api/employees', require('./routes/employees.routes'));
 app.use('/api/deliveries', require('./routes/deliveries.routes'));
 app.use('/api/suppliers', require('./routes/suppliers.routes'));
 
+// mobile app routes
+app.use('/api/app', require('./routes/mobile.routes'));
+
 db.sync({ alter: false, force: false });
 
 app.listen(port, () => {
-  console.log('server started on port 5000!');
+  console.log(`Server started on port ${port}!`);
 });
