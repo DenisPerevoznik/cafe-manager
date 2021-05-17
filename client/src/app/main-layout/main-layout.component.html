@@ -37,12 +37,12 @@
         </a>
       </ul>
     </nav>
-    <div class="sync-block">
+    <div class="sync-block" *ngIf="selectedCompany && selectedCompany.lastSync">
       <div class="sync-block-indicator"></div>
       <span class="material-icons-outlined sync-block-icon">sync</span>
       <div class="ml-2">
         <span>Последняя синхронизация с терминалом: </span>
-        <span style="font-weight: 500">9.05.2021 02:14</span>
+        <span style="font-weight: 500">{{selectedCompany.lastSync | date:'dd.MM.yyyy HH:mm'}}</span>
       </div>
     </div>
   </ng-sidebar>

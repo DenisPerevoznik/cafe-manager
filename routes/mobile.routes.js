@@ -45,6 +45,7 @@ router.post('/sync', async(req, res) => {
 
   const products = await Product.findAll({where: {published: 1, CompanyId: companyId}});
   const categories = await Category.findAll({where: {published: 1, CompanyId: companyId}});
+  await Company.update({lastSync: new Date()}, {where: {id: companyId}});
   res.status(200).json({categories, products});
 });
 

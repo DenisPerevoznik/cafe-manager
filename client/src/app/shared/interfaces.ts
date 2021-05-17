@@ -8,6 +8,7 @@ export interface Company {
   name: string;
   address: string;
   mainAccount?: number;
+  lastSync?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }

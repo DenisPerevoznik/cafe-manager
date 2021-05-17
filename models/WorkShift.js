@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 const Report = require('./Report');
+const WorkShiftExpense = require('./WorkShiftExpense');
 
 const WorkShift = db.define('WorkShift', {
   id: {
@@ -52,5 +53,6 @@ const WorkShift = db.define('WorkShift', {
 });
 
 WorkShift.hasMany(Report, { onDelete: 'cascade' });
+WorkShift.hasMany(WorkShiftExpense, { onDelete: 'cascade' });
 
 module.exports = WorkShift;

@@ -12,6 +12,7 @@ const Delivery = require('./Delivery');
 const Supplier = require('./Supplier');
 const DeliveryIngredients = require('./DeliveryIngredients');
 const ProductIngredients = require('./ProductIngredients');
+const WorkShiftExpense = require('./WorkShiftExpense');
 
 const Company = db.define('Company', {
   id: {
@@ -32,6 +33,10 @@ const Company = db.define('Company', {
     type: DataTypes.INTEGER,
     allowNull: true,
   },
+  lastSync: {
+    type: DataTypes.DATE,
+    allowNull: true
+  }
 });
 
 Company.hasMany(Account, { onDelete: 'cascade' });
@@ -46,5 +51,6 @@ Company.hasMany(Delivery, { onDelete: 'cascade' });
 Company.hasMany(Supplier, { onDelete: 'cascade' });
 Company.hasMany(DeliveryIngredients, { onDelete: 'cascade' });
 Company.hasMany(ProductIngredients, { onDelete: 'cascade' });
+Company.hasMany(WorkShiftExpense, { onDelete: 'cascade' });
 
 module.exports = Company;
