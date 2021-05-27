@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Account, Delivery, Ingredient, IngredientUnitEnum, Supplier } from '@app/shared/interfaces';
+import { AppHelpService } from '@app/shared/services/app-help.service';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -35,7 +36,7 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
   createForm: FormGroup;
   deliveryRows: DeliveryRowModel[] = [];
   constructor(private route: ActivatedRoute, private company: CompanyService,
-    private router: Router, private toats: ToastService) { }
+    private router: Router, private toats: ToastService, private helpService: AppHelpService) { }
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
@@ -123,26 +124,11 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
   onChangeSum(event, index){
     const sum = event.target.value;
     const row = this.deliveryRows[index];
-    row.price = this.trimAfterDecimalPoint(sum / row.quantity);
+    row.price = this.helpService.trimAfterDecimalPoint(sum / row.quantity);
     this.updateTotalSum();
   }
 
-  private trimAfterDecimalPoint(digit: number): number{
-    const strNum = digit.toString();
-    let symbol = '.';
-    if(strNum.includes(',')){
-      symbol = ',';
-    }
-    else if (strNum.includes('.')){
-      symbol = '.';
-    }
-    else{
-      return digit;
-    }
-
-    const splitted = strNum.split(symbol);
-    return parseFloat(`${splitted[0]}.${splitted[1].substr(0, 2)}`);
-  }
+  
 
   onSubmit(){
     this.submitted = true;

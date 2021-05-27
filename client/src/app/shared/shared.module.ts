@@ -13,6 +13,7 @@ import { NoDataComponent } from './components/no-data/no-data.component';
 import { CheckAccountPipe } from './pipes/check-account.pipe';
 import { ColorPickerComponent } from './components/color-picker/color-picker.component';
 import { SearchPipe } from './pipes/search.pipe';
+import { AppHelpService } from './services/app-help.service';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { SearchPipe } from './pipes/search.pipe';
     SimpleNotificationsModule.forRoot({position: ['top', 'right'], pauseOnHover: true, timeOut: 5000}),
     MDBBootstrapModule.forRoot(),
   ],
-  providers: [ToastService, MDBModalService],
+  providers: [ToastService, MDBModalService, AppHelpService],
   declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent, CheckAccountPipe, ColorPickerComponent, SearchPipe],
   exports: [
     HttpClientModule,

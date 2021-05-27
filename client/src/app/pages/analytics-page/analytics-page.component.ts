@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { CurrentStatistic, DailyData } from '@app/shared/interfaces';
+import { CurrentStatistic, DailyData, MonthlyData } from '@app/shared/interfaces';
 import { AnalyticsService } from '@app/shared/services/analytics.service';
+import { AppHelpService } from '@app/shared/services/app-help.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -23,14 +24,15 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
 
   private unsubscribe: Subject<any> = new Subject<any>();
   public dailyData$;
-  public monthlyData$;
+  public monthlyData: MonthlyData;
+  public monthlyAverage = {profit: 0, revenue: 0, receipts: 0};
   public currentDailyDate;
   public currentStatistic: CurrentStatistic = {receipts: 0, revenue: 0, profit: 0};
 
-  constructor(private analyticsService: AnalyticsService) { }
+  constructor(private analyticsService: AnalyticsService, private helpService: AppHelpService) { }
 
   ngAfterViewInit(): void {
-    this.monthlyData$ = this.analyticsService.getMonthlyAnalytics(new Date().getFullYear());
+    this.getMonthlyData();
   }
 
   ngOnDestroy(): void {
@@ -49,11 +51,51 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     return new Date();
   }
 
+  getMonthlyData(year = null){
+
+    if(!year)
+      year = new Date().getFullYear();
+
+    this.analyticsService.getMonthlyAnalytics(year)
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(data => {
+      this.monthlyData = data;
+      this.setMonthlyAverage();
+    });
+  }
+
   onDailyDateChange(event){
     this.dailyData$ = this.analyticsService.getDailyAnalytics(event.target.value);
   }
 
   onMonthlyYearChange(event){
-    this.monthlyData$ = this.analyticsService.getMonthlyAnalytics(event.target.value);
+    this.getMonthlyData(event.target.value);
+  }
+
+  private setMonthlyAverage(){
+
+    const profitArr = this.monthlyData.profitArr.filter(val => val > 0);
+    const revenueArr = this.monthlyData.revenueArr.filter(val => val > 0);
+    const receiptsArr = this.monthlyData.receiptArr.filter(val => val > 0);
+
+    const profitSum = profitArr.reduce((acc, val) => acc += val, 0);
+    const revenueSum = revenueArr.reduce((acc, val) => acc += val, 0);
+    const receiptsSum = receiptsArr.reduce((acc, val) => acc += val, 0);
+
+    const profit = profitArr.length 
+    ? this.helpService.trimAfterDecimalPoint(profitSum / profitArr.length )
+    : 0;
+
+    const revenue = revenueArr.length 
+    ? this.helpService.trimAfterDecimalPoint(revenueSum / revenueArr.length) 
+    : 0;
+
+    const receipts = receiptsArr.length 
+    ? this.helpService.trimAfterDecimalPoint(receiptsSum / receiptsArr.length) 
+    : 0;
+
+    this.monthlyAverage = {
+      profit, revenue, receipts
+    };
   }
 }

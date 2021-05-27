@@ -45,9 +45,12 @@ export class MonthlyChartComponent implements OnChanges, OnInit {
     ];
 
     this.colors = [
-      {backgroundColor: '#4883da'},
-      {backgroundColor: '#26415a'},
-      {backgroundColor: '#ffc81b'}
+      {backgroundColor: '#11ca289e'},
+      {backgroundColor: '#11A8CA'},
+      {backgroundColor: '#FFBC24'}
+      // {backgroundColor: '#4883da'},
+      // {backgroundColor: '#26415a'},
+      // {backgroundColor: '#ffc81b'}
     ];
   }
 

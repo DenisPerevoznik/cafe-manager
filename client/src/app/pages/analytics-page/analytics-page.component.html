@@ -78,6 +78,7 @@
   <div class="row">
     <div class="col-12">
       <h4 class="page-sub-title">Ежемесячный отчет </h4>
+      <p style="margin-left: 15px">В среднем за год</p>
     </div>
     <div class="col-md-3 col-lg-3 col-sm-12">
       <div class="row">
@@ -87,8 +88,8 @@
               <span class="material-icons">attach_money</span>
             </div>
             <div class="monthly-card-content">
-              <span>Description</span>
-              <h5>3090</h5>
+              <span>Выручка</span>
+              <h5>₴ {{monthlyAverage.revenue}}</h5>
             </div>
           </div>
         </div>
@@ -98,8 +99,8 @@
               <span class="material-icons">timeline</span>
             </div>
             <div class="monthly-card-content">
-              <span>Description</span>
-              <h5>221</h5>
+              <span>Марж. прибыль</span>
+              <h5>₴ {{monthlyAverage.profit}}</h5>
             </div>
           </div>
         </div>
@@ -109,8 +110,8 @@
               <span class="material-icons">how_to_reg</span>
             </div>
             <div class="monthly-card-content">
-              <span>Description</span>
-              <h5>500</h5>
+              <span>Посещаемость</span>
+              <h5>{{monthlyAverage.receipts}}</h5>
             </div>
           </div>
         </div>
@@ -131,7 +132,7 @@
           <option value="2029">2029</option>
           <option value="2030">2030</option>
         </select>
-        <app-monthly-chart [dataSource]="monthlyData$ | async"></app-monthly-chart>
+        <app-monthly-chart [dataSource]="monthlyData"></app-monthly-chart>
       </div>
     </div>
   </div>
