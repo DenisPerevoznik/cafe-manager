@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AppHelpService } from '@app/shared/services/app-help.service';
 
 @Component({
   selector: 'app-statistic-card',
@@ -17,9 +18,12 @@ export class StatisticCardComponent implements OnInit {
   @Input() btnIcon;
   @Input() btnText = '';
 
-  constructor() { }
+  constructor(private helpService: AppHelpService) { }
 
   ngOnInit(): void {
   }
 
+  get fixPercent(){
+    return this.helpService.trimAfterDecimalPoint(this.percentage);
+  }
 }

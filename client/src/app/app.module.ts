@@ -32,6 +32,7 @@ import { EmployeesPageComponent } from './pages/employees-page/employees-page.co
 import { DeliveriesPageComponent } from './pages/deliveries-page/deliveries-page.component';
 import { CreateDeliveryPageComponent } from './pages/deliveries-page/create-delivery-page/create-delivery-page.component';
 import { SuppliersPageComponent } from './pages/suppliers-page/suppliers-page.component';
+import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { SuppliersPageComponent } from './pages/suppliers-page/suppliers-page.co
     DeliveriesPageComponent,
     CreateDeliveryPageComponent,
     SuppliersPageComponent,
+    SettingsPageComponent,
   ],
   imports: [
     BrowserModule,

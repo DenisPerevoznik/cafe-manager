@@ -123,7 +123,7 @@
                       <tr mdbTableCol *ngFor="let ingredient of selectedProduct.ingredients">
                         <td>{{ingredient.title}}</td>
                         <td>{{ingredient.quantity}} {{ingredient.unit}}</td>
-                        <td>{{ingredient.usingInOne}}</td>
+                        <td>{{ingredient.usingInOne}} {{ingredient.unit | productUnit}}</td>
                       </tr>
                     </tbody>
                   </table>

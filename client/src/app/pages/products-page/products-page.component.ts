@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
-import { Product } from '@app/shared/interfaces';
+import { IngredientUnitEnum, Product } from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { MDBModalService } from 'angular-bootstrap-md';

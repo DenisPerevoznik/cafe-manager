@@ -14,20 +14,22 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
 
   currentUser = {name: 'Denis'};
   elements: any = [
-    {first: 'Доходы', last: '1254', handle: '+35%'},
+    {first: 'Доход', last: '1254', handle: '+35%'},
     {first: 'Расходы', last: '520', handle: '-12%'},
     {first: 'Зарплаты', last: '1050', handle: '+46%'},
     {first: 'Средний чек', last: '1020', handle: '+24%'},
   ];
-
-  headElements = ['Название', 'Значение', 'Разница'];
 
   private unsubscribe: Subject<any> = new Subject<any>();
   public dailyData$;
   public monthlyData: MonthlyData;
   public monthlyAverage = {profit: 0, revenue: 0, receipts: 0};
   public currentDailyDate;
-  public currentStatistic: CurrentStatistic = {receipts: 0, revenue: 0, profit: 0};
+  public currentStatistic: CurrentStatistic = {
+    profit: {value: 0, percent: 0},
+    revenue: {value: 0, percent: 0},
+    receipts: {value: 0, percent: 0}
+  };
 
   constructor(private analyticsService: AnalyticsService, private helpService: AppHelpService) { }
 

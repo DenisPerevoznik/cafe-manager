@@ -15,9 +15,9 @@
     <div class="statistic-card-footer">
       <h6 *ngIf="!!percentage">
         <span [ngStyle]="{color: percentage < 0 ? '#f44336' : '#4caf50', background: percentage < 0 ? '#f443361a' : '#4caf501a'}">
-          {{percentage < 0 ? percentage : '+' + percentage}}%
+          {{percentage < 0 ? fixPercent : '+' + fixPercent}}%
         </span>
-        С прошлого дня
+        С прошлого рабочего дня
       </h6>
     </div>
     <button *ngIf="showButton" mdbBtn size="sm" color="primary" class="statistic-card-btn">

@@ -30,9 +30,18 @@ export interface MonthlyData{
 
 export interface CurrentStatistic{
 
-  revenue: number;
-  profit: number;
-  receipts: number;
+  revenue: {
+    value: number;
+    percent: number;
+  };
+  profit: {
+    value: number;
+    percent: number;
+  };
+  receipts: {
+    value: number;
+    percent: number;
+  };
 }
 
 export interface WorkShift {

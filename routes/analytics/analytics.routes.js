@@ -32,10 +32,18 @@ router.post('/now', auth, (req, res) => {
         }
       }
 
-      res.json({
+      const data = {
         revenue: revenueSum,
         profit: revenueSum - costAmount,
         receipts,
+      };
+
+      const percentage = await getPercentage(data, companyId);
+
+      res.json({
+        revenue: {value: data.revenue, percent: percentage.revenue},
+        profit: {value: data.profit, percent: percentage.profit},
+        receipts: {value: data.receipts, percent: percentage.receipts}
       });
     })
     .catch((error) => {
@@ -44,6 +52,40 @@ router.post('/now', auth, (req, res) => {
         .json({ message: config.get('unknownErrorMessage'), error });
     });
 });
+
+async function getPercentage(data, companyId){
+  
+  const shifts = await WorkShift.findAll({
+    limit: 2,
+    where: {CompanyId: companyId},
+    order: [[ 'createdAt', 'DESC' ]]
+  });
+
+  let percentage = {
+    revenue: 0, profit: 0, receipts: 0
+  };
+  if(shifts.length > 1){
+
+    const previousShift = shifts[1];
+    let costAmount = 0;
+
+    const lastRevenueSum = parseFloat(previousShift.revenue);
+    const lastReceipts = previousShift.receipts;
+    const reports = await previousShift.getReports();
+
+    for (const report of reports) {
+      const product = await report.getProduct();
+      costAmount += product.costPrice * report.quantity;
+    }
+    const lastProfit = lastRevenueSum - costAmount;
+
+    percentage.profit = (data.profit / lastProfit - 1) * 100;
+    percentage.revenue = (data.revenue / lastRevenueSum - 1) * 100;
+    percentage.receipts = (data.receipts / lastReceipts - 1) * 100;
+  }
+
+  return percentage;
+}
 
 router.post('/finance', auth, (req, res) => {
   res.json({ data: 0 });
@@ -86,7 +128,7 @@ router.post(
     auth,
     check('year', 'Значение "year" должно быть четырехзначным числом').isInt({
       min: 2020,
-      max: 2100,
+      max: 3000,
     }),
   ],
   async (req, res) => {

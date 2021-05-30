@@ -19,18 +19,18 @@
     </div>
 
     <div class="col-md-3 col-lg-3 col-sm-12">
-      <app-statistic-card [iconName]="'monetization_on'" [percentage]="26"
-        [value]="'₴ ' + currentStatistic.revenue" [title]="'Выручка'"></app-statistic-card>
+      <app-statistic-card [iconName]="'monetization_on'" [percentage]="currentStatistic.revenue.percent"
+        [value]="'₴ ' + currentStatistic.revenue.value" [title]="'Выручка'"></app-statistic-card>
     </div>
 
     <div class="col-md-3 col-lg-3 col-sm-12">
-      <app-statistic-card [iconName]="'account_balance_wallet'" [percentage]="-14"
-        [value]="'₴ ' + currentStatistic.profit" [title]="'Марж. прибыль'"></app-statistic-card>
+      <app-statistic-card [iconName]="'account_balance_wallet'" [percentage]="currentStatistic.profit.percent"
+        [value]="'₴ ' + currentStatistic.profit.value" [title]="'Марж. прибыль'"></app-statistic-card>
     </div>
 
     <div class="col-md-3 col-lg-3 col-sm-12">
-      <app-statistic-card [iconName]="'receipt_long'" [percentage]="10"
-        [value]="currentStatistic.receipts + ' шт.'" [title]="'Чеки'"></app-statistic-card>
+      <app-statistic-card [iconName]="'receipt_long'" [percentage]="currentStatistic.receipts.percent"
+        [value]="currentStatistic.receipts.value + ' шт.'" [title]="'Чеки'"></app-statistic-card>
     </div>
   </div>
 
@@ -58,7 +58,9 @@
         <table mdbTable hover="true" [small]="true">
           <thead>
             <tr>
-              <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+              <th scope="col">Название</th>
+              <th scope="col">Значение</th>
+              <th scope="col">Разница</th>
             </tr>
           </thead>
           <tbody>
