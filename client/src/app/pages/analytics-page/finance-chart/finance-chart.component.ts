@@ -8,13 +8,13 @@ import { Color, Label, MultiDataSet } from 'ng2-charts';
 })
 export class FinanceChartComponent implements OnInit {
 
-  public doughnutChartLabels: Label[] = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales', 'kkk'];
+  public doughnutChartLabels: Label[] = ['Доход', 'Расходы', 'Средний чек'];
   public doughnutChartData: MultiDataSet = [
-    [350, 450, 100, 50],
+    [350, 450, 100],
   ];
 
   colors: Color[] = [
-    {backgroundColor: ['#4782da', '#f44336', '#ff9800'],},
+    {backgroundColor: ['#4782da', '#f44336']}, //#ff9800
   ];
 
   constructor() { }

@@ -14,6 +14,17 @@
     font-weight: 500;
 }
 
+.finance-title-td{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    .fin-icon{
+        font-size: 22px;
+        margin-right: 5px;
+    }
+}
+
 .monthly-card{
     display: flex;
     flex-direction: row;

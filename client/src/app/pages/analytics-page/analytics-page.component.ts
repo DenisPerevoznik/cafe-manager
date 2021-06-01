@@ -5,6 +5,12 @@ import { AppHelpService } from '@app/shared/services/app-help.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+type FinanceData = {
+  income: {value: number, difference: number},
+  costs: {value: number, difference: number},
+  averageCheck: {value: number, difference: number}
+}
+
 @Component({
   selector: 'app-analytics-page',
   templateUrl: './analytics-page.component.html',
@@ -13,12 +19,12 @@ import { takeUntil } from 'rxjs/operators';
 export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit {
 
   currentUser = {name: 'Denis'};
-  elements: any = [
-    {first: 'Доход', last: '1254', handle: '+35%'},
-    {first: 'Расходы', last: '520', handle: '-12%'},
-    {first: 'Зарплаты', last: '1050', handle: '+46%'},
-    {first: 'Средний чек', last: '1020', handle: '+24%'},
-  ];
+
+  financeData: FinanceData = {
+    averageCheck: {value: 1020, difference: 24},
+    costs: {value: 520, difference: -12},
+    income: {value: 1254, difference: 35}
+  };
 
   private unsubscribe: Subject<any> = new Subject<any>();
   public dailyData$;

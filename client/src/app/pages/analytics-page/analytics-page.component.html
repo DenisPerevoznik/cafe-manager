@@ -64,10 +64,35 @@
             </tr>
           </thead>
           <tbody>
-            <tr mdbTableCol *ngFor="let el of elements">
-              <td>{{el.first}}</td>
-              <td>{{el.last}}</td>
-              <td class="finance-chart-value">{{el.handle}}</td>
+            <tr mdbTableCol>
+              <td class="finance-title-td">
+                <span class="material-icons-outlined fin-icon" style="color: #4782da">donut_large</span>
+                Доход
+              </td>
+              <td>₴ {{financeData.income.value}}</td>
+              <td class="finance-chart-value" 
+              [ngStyle]="{color: financeData.income.difference < 0 ? '#F4436B' : '#66BB6A'}">
+              {{(financeData.income.difference > 0 ? '+' : '') + financeData.income.difference}}%</td>
+            </tr>
+            <tr mdbTableCol>
+              <td class="finance-title-td">
+                <span class="material-icons-outlined fin-icon" style="color: #f44336">donut_large</span>
+                Расходы
+              </td>
+              <td>₴ {{financeData.costs.value}}</td>
+              <td class="finance-chart-value"
+              [ngStyle]="{color: financeData.costs.difference < 0 ? '#F4436B' : '#66BB6A'}">
+              {{(financeData.costs.difference > 0 ? '+' : '') + financeData.costs.difference}}%</td>
+            </tr>
+            <tr mdbTableCol>
+              <td class="finance-title-td">
+                <span class="material-icons-outlined fin-icon" style="color: #E5E5E5">donut_large</span>
+                Средний чек
+              </td>
+              <td>₴ {{financeData.averageCheck.value}}</td>
+              <td class="finance-chart-value"
+              [ngStyle]="{color: financeData.averageCheck.difference < 0 ? '#F4436B' : '#66BB6A'}">
+                {{(financeData.averageCheck.difference > 0 ? '+' : '') + financeData.averageCheck.difference}}%</td>
             </tr>
           </tbody>
         </table>
