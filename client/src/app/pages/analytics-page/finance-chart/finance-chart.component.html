@@ -1,6 +1,6 @@
 <div class="chart-container">
     <div class="chart-container-content">
-        <h4>+27%</h4>
+        <h4> {{financesData.differencePrevMonth > 0 ? ('+' + financesData.differencePrevMonth) : financesData.differencePrevMonth}}%</h4>
         <span>С прошлого месяца</span>
     </div>
     <canvas baseChart 

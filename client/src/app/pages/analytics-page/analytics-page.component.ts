@@ -1,34 +1,32 @@
+import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { CurrentStatistic, DailyData, MonthlyData } from '@app/shared/interfaces';
 import { AnalyticsService } from '@app/shared/services/analytics.service';
 import { AppHelpService } from '@app/shared/services/app-help.service';
-import { Subject } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-type FinanceData = {
-  income: {value: number, difference: number},
-  costs: {value: number, difference: number},
-  averageCheck: {value: number, difference: number}
-}
+import { FinanceData } from './finance-chart/finance-chart.component';
 
 @Component({
   selector: 'app-analytics-page',
   templateUrl: './analytics-page.component.html',
-  styleUrls: ['./analytics-page.styles.scss']
+  styleUrls: ['./analytics-page.styles.scss'],
+  providers: [DatePipe]
 })
 export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit {
 
   currentUser = {name: 'Denis'};
 
   financeData: FinanceData = {
-    averageCheck: {value: 1020, difference: 24},
-    costs: {value: 520, difference: -12},
-    income: {value: 1254, difference: 35}
+    differencePrevMonth: 0,
+    averageCheck: {value: 0, difference: 0},
+    income: {value: 0, difference: 0},
+    costs: {value: 0, difference: 0}
   };
 
   private unsubscribe: Subject<any> = new Subject<any>();
-  public dailyData$;
   public monthlyData: MonthlyData;
+  public dailyData: DailyData;
   public monthlyAverage = {profit: 0, revenue: 0, receipts: 0};
   public currentDailyDate;
   public currentStatistic: CurrentStatistic = {
@@ -37,10 +35,12 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     receipts: {value: 0, percent: 0}
   };
 
-  constructor(private analyticsService: AnalyticsService, private helpService: AppHelpService) { }
+  constructor(private analyticsService: AnalyticsService, private helpService: AppHelpService,
+    private datePipe: DatePipe) { }
 
   ngAfterViewInit(): void {
     this.getMonthlyData();
+    this.getDailyData();
   }
 
   ngOnDestroy(): void {
@@ -73,7 +73,61 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
   }
 
   onDailyDateChange(event){
-    this.dailyData$ = this.analyticsService.getDailyAnalytics(event.target.value);
+    this.getDailyData(event.target.value);
+  }
+
+  getDailyData(selectedDate = null){
+
+    if(!selectedDate)
+      selectedDate = this.datePipe.transform(new Date(), 'yyyy-MM').toString();
+
+    const currentDate = new Date(selectedDate.split('-')[0], parseInt(selectedDate.split('-')[1]) - 1);
+    const prevDate = this.datePipe.transform(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1), 'yyyy-MM');
+
+    forkJoin({
+      currentMonthData: this.analyticsService.getDailyAnalytics(selectedDate),
+      previousMonthData: this.analyticsService.getDailyAnalytics(prevDate)
+    })
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(data => {
+        this.dailyData = data.currentMonthData;
+        this.setFinances(data.currentMonthData, data.previousMonthData);
+    });
+  }
+
+  private setFinances(currentData: DailyData, prevData: DailyData){
+
+    const currentProfit = this.helpService.getSum(currentData.profitArr);
+    const prevProfit = this.helpService.getSum(prevData.profitArr);
+    const currentReceiptSum = this.helpService.getSum(currentData.receiptArr);
+    const prevReceiptSum = this.helpService.getSum(prevData.receiptArr);
+
+    const currentAverageCheck = currentReceiptSum == 0
+    ? 0
+    : this.helpService.getSum(currentData.revenueArr) / currentReceiptSum;
+
+    const prevAverageCheck = prevReceiptSum == 0 
+    ? 0
+    : this.helpService.getSum(prevData.revenueArr) / prevReceiptSum;
+
+    this.financeData = {
+      income: {
+        value: currentProfit,
+        difference: this.helpService.getDifference(currentProfit, prevProfit)
+      },
+      averageCheck: {
+        value: currentAverageCheck,
+        difference: this.helpService.getDifference(currentAverageCheck, prevAverageCheck)
+      },
+      costs: {
+        value: 100,
+        difference: 20
+      },
+      differencePrevMonth: 0
+    };
+
+    this.financeData.differencePrevMonth = this.helpService.trimAfterDecimalPoint(this.helpService
+      .getSum([this.financeData.averageCheck.difference, this.financeData.costs.difference, this.financeData.income.difference]) / 3);
   }
 
   onMonthlyYearChange(event){

@@ -12,6 +12,7 @@ const {
   getMonthlyChartData,
 } = require('./functions');
 const Expense = require('../../models/Expense');
+const WorkShiftExpense = require('../../models/WorkShiftExpense');
 
 router.post('/now', auth, (req, res) => {
   const { companyId } = req.body;
@@ -87,8 +88,20 @@ async function getPercentage(data, companyId){
   return percentage;
 }
 
-router.post('/finance', auth, (req, res) => {
-  res.json({ data: 0 });
+router.get('/get-expanses', auth, async(req, res) => {
+
+  // const {date, companyId} = req.body;
+
+  // const expanses = await Expense.findAll({where: {CompanyId: companyId}});
+  // const workShiftExpanses = await WorkShiftExpense.findAll({where: {CompanyId: companyId}});
+
+  // const response = [];
+
+  // for (const exp of expanses) {
+
+  //   if(exp.dataValues.createdAt)
+  //     response.push(exp.dataValues.expenseAmount);
+  // }
 });
 
 router.post(

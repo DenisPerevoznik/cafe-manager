@@ -48,13 +48,13 @@
     <div class="col-md-8 col-lg-8 col-sm-12">
       <div class="card shadow">
         <span class="chart-title">Ежедневный отчет</span>
-        <app-daily-chart [dataSource]="dailyData$ | async"></app-daily-chart>
+        <app-daily-chart [dataSource]="dailyData"></app-daily-chart>
       </div>
     </div>
     <div class="col-md-4 col-lg-4 col-sm-12">
       <div class="card shadow">
         <span class="chart-title">Финансы</span>
-        <app-finance-chart></app-finance-chart>
+        <app-finance-chart [financesData]="financeData"></app-finance-chart>
         <table mdbTable hover="true" [small]="true">
           <thead>
             <tr>
