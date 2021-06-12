@@ -16,11 +16,25 @@ export class CompanyService {
   selectedCompany: Company = {id: 0, name: null, address: null};
   constructor(private http: HttpClient, private store: Store<AppState>) {}
 
+  // COMPANY
   createCompany(company: Company): Observable<string>{
     return this.http.post<{company: Company, message: string}>(`/api/companies/create`, company)
     .pipe(map(response => response.message));
   }
 
+  updateCompany(companyName: string, terminalAccount: string | number){
+    return this.http.put<{company: Company, message: string}>(`/api/companies/edit/${this.selectedCompany.id}`, {
+      companyName, terminalAccount
+    })
+    .pipe(map(response => response.message));
+  }
+
+  removeCompany(){
+    return this.http.delete<{company: Company, message: string}>(`/api/companies/remove/${this.selectedCompany.id}`)
+    .pipe(map(response => response.message));
+  }
+
+  // WORK SHIFTS
   getWorkShifts(id = null): Observable<WorkShift[] | WorkShift>{
 
     return this.store.select(getSelectedCompany)
@@ -245,5 +259,10 @@ export class CompanyService {
   removeSupplier(id): Observable<string>{
     return this.http.delete<any>(`/api/suppliers/remove/${id}`)
     .pipe(map(resp => resp.message));;
+  }
+
+  //////////
+  getAllExpanses(date: Date): Observable<number[]>{
+    return this.http.post<number[]>(`/api/analytics/get-expanses`, {companyId: this.selectedCompany.id, date});
   }
 }

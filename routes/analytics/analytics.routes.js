@@ -88,20 +88,35 @@ async function getPercentage(data, companyId){
   return percentage;
 }
 
-router.get('/get-expanses', auth, async(req, res) => {
+router.post('/get-expanses', auth, async(req, res) => {
 
-  // const {date, companyId} = req.body;
+  const {companyId} = req.body;
+  const date = new Date(req.body.date);
+  const expanses = await Expense.findAll({where: {CompanyId: companyId}});
+  const workShiftExpanses = await WorkShiftExpense.findAll({where: {CompanyId: companyId}});
+  const response = [];
 
-  // const expanses = await Expense.findAll({where: {CompanyId: companyId}});
-  // const workShiftExpanses = await WorkShiftExpense.findAll({where: {CompanyId: companyId}});
+  if(!!expanses){
+    for (const exp of expanses) {
 
-  // const response = [];
+      const year = exp.dataValues.createdAt.getFullYear();
+      const month = exp.dataValues.createdAt.getMonth();
+      if(date.getFullYear() == year && month == date.getMonth())
+        response.push(parseFloat(exp.dataValues.expenseAmount));
+    }
+  }
 
-  // for (const exp of expanses) {
+  if(!!workShiftExpanses){
+    for (const exp of workShiftExpanses) {
 
-  //   if(exp.dataValues.createdAt)
-  //     response.push(exp.dataValues.expenseAmount);
-  // }
+      const year = exp.dataValues.createdAt.getFullYear();
+      const month = exp.dataValues.createdAt.getMonth();
+      if(date.getFullYear() == year && month == date.getMonth())
+        response.push(parseFloat(exp.dataValues.sum));
+    }
+  }
+
+  res.status(200).json(response);
 });
 
 router.post(

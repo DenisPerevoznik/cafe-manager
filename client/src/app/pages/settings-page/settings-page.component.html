@@ -1,1 +1,65 @@
-<p>settings-page works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+          <h3 class="page-title">Управление {{companyName}}</h3>
+        </div>
+    </div>
+    <hr>
+
+    <app-page-loader [show]="loader"></app-page-loader>
+
+    <ng-container *ngIf="!loader">
+        <form [formGroup]="form" (ngSubmit)="saveChanges()">
+            <div class="row">
+                <div class="col-md-4 col-sm-12">
+                    <label>Счет для терминала</label>
+                    <select formControlName="terminalAccount" class="form-control">
+                        <option [ngValue]="null">Не выбрано</option>
+                        <option [value]="account.id" *ngFor="let account of accounts">{{account.title}}</option>
+                    </select>
+                </div>
+    
+                <div class="col-md-4 col-sm-12">
+                    <label>Название заведения</label>
+                    <input type="text" class="form-control" formControlName="companyName" placeholder="Введите название">
+                    <small class="invalid" *ngIf="submitted && form.get('companyName').invalid">Заполните это поле</small>
+                </div>
+    
+                <div class="col-md-4 col-sm-12 mt-4">
+                    <button mdbBtn color="danger" type="button" size="sm"
+                        (click)="removeClick()">Удалить компанию {{companyName}}</button>
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col-3 mt-3">
+                    <button mdbBtn color="success" type="submit" size="sm">Сохранить изменения</button>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</div>
+
+
+<ng-template #removeModal>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-12">
+                <p>
+                    Вы уверены, что хотите удалить эту компанию ? <br><b>После удаления все данные будут утеряны безвозвратно!</b>
+                </p>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-end">
+                <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <button mdbBtn size="sm" color="danger" (click)="confirmToRemove()"
+                 [disabled]="modalLoader">Удалить {{companyName}} и очистить данные</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -3,6 +3,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { CurrentStatistic, DailyData, MonthlyData } from '@app/shared/interfaces';
 import { AnalyticsService } from '@app/shared/services/analytics.service';
 import { AppHelpService } from '@app/shared/services/app-help.service';
+import { CompanyService } from '@app/shared/services/company.service';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FinanceData } from './finance-chart/finance-chart.component';
@@ -36,7 +37,7 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
   };
 
   constructor(private analyticsService: AnalyticsService, private helpService: AppHelpService,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe, private companyService: CompanyService) { }
 
   ngAfterViewInit(): void {
     this.getMonthlyData();
@@ -86,42 +87,46 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
 
     forkJoin({
       currentMonthData: this.analyticsService.getDailyAnalytics(selectedDate),
-      previousMonthData: this.analyticsService.getDailyAnalytics(prevDate)
+      previousMonthData: this.analyticsService.getDailyAnalytics(prevDate),
+      currentExpanses: this.companyService.getAllExpanses(new Date()),
+      prevExpanses: this.companyService.getAllExpanses(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))
     })
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(data => {
         this.dailyData = data.currentMonthData;
-        this.setFinances(data.currentMonthData, data.previousMonthData);
+        this.setFinances(data.currentMonthData, data.previousMonthData, data.currentExpanses, data.prevExpanses);
     });
   }
 
-  private setFinances(currentData: DailyData, prevData: DailyData){
+  private setFinances(currentData: DailyData, prevData: DailyData, currentExp: number[], prevExp: number[]){
 
     const currentProfit = this.helpService.getSum(currentData.profitArr);
     const prevProfit = this.helpService.getSum(prevData.profitArr);
     const currentReceiptSum = this.helpService.getSum(currentData.receiptArr);
     const prevReceiptSum = this.helpService.getSum(prevData.receiptArr);
+    const currentExpSum = this.helpService.getSum(currentExp);
+    const prevExpSum = this.helpService.getSum(prevExp);
 
     const currentAverageCheck = currentReceiptSum == 0
     ? 0
-    : this.helpService.getSum(currentData.revenueArr) / currentReceiptSum;
+    : this.helpService.trimAfterDecimalPoint(this.helpService.getSum(currentData.revenueArr) / currentReceiptSum);
 
     const prevAverageCheck = prevReceiptSum == 0 
     ? 0
-    : this.helpService.getSum(prevData.revenueArr) / prevReceiptSum;
+    : this.helpService.trimAfterDecimalPoint(this.helpService.getSum(prevData.revenueArr) / prevReceiptSum);
 
     this.financeData = {
       income: {
         value: currentProfit,
-        difference: this.helpService.getDifference(currentProfit, prevProfit)
+        difference: this.helpService.getDifference(prevProfit, currentProfit)
       },
       averageCheck: {
         value: currentAverageCheck,
-        difference: this.helpService.getDifference(currentAverageCheck, prevAverageCheck)
+        difference: this.helpService.getDifference(prevAverageCheck, currentAverageCheck)
       },
       costs: {
-        value: 100,
-        difference: 20
+        value: currentExpSum,
+        difference: this.helpService.getDifference(prevExpSum, currentExpSum)
       },
       differencePrevMonth: 0
     };

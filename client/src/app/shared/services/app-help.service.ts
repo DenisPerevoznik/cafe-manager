@@ -28,7 +28,17 @@ export class AppHelpService {
     return array.reduce((acc, val) => acc += val, 0);
   }
 
-  public getDifference(number1: number, number2: number, countNumberAfterDecimal: number = 2): number{
-    return this.trimAfterDecimalPoint((number1 / number2 - 1) * 100, countNumberAfterDecimal);
+  public getDifference(prevNumber: number, currentNumber: number, countNumberAfterDecimal: number = 2): number{
+
+    const a = prevNumber >= currentNumber ? currentNumber : prevNumber;
+    const b = prevNumber >= currentNumber ? prevNumber : currentNumber;
+
+
+    const num = b - a;
+    if(num == 0) return 0;
+
+    if(a == 0) return 0;
+
+    return this.trimAfterDecimalPoint(num / a * 100, countNumberAfterDecimal);
   }
 }
