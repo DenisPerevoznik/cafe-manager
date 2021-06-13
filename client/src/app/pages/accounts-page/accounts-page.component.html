@@ -36,9 +36,9 @@
                           <tr mdbTableCol *ngFor="let acc of accounts">
                             <td style="width: 15%" class="position-relative">
                                 <button mdbBtn size="sm" color="primary" (click)="openUpdateBalanceModal(acc)"
-                                    *ngIf="mainAccountId !== acc.id">Пополнить</button>
+                                    *ngIf="mainAccountId != acc.id">Пополнить</button>
 
-                                <ng-container *ngIf="mainAccountId === acc.id">
+                                <ng-container *ngIf="mainAccountId == acc.id">
                                     <div title="Терминал заведения использует этот счет в качестве кассы">
                                         <span class="material-icons-outlined gear-icon rot">settings</span>
                                         <span class="material-icons-outlined terminal-icon">view_sidebar</span>
@@ -69,7 +69,7 @@
 
 <ng-template #createAccModal>
     <div class="container-fluid">
-        <form [formGroup]="createForm" (ngSubmit)="createExpenseSubmit()">
+        <form [formGroup]="createForm" (ngSubmit)="createAccount()">
             <div class="row">
                 <div class="col-12">
                     <label for="title">Название</label>
@@ -86,7 +86,7 @@
                     <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <button mdbBtn size="sm" color="success" type="submit" (click)="createAccount()" *ngIf="!modalLoader">Создать</button>
+                    <button mdbBtn size="sm" color="success" type="submit" *ngIf="!modalLoader">Создать</button>
                 </div>
             </div>
         </form>
@@ -101,7 +101,7 @@
                 <div class="col-12">
                     <p>Вы уверены, что хотите удалить выбранную ячейку ?</p>
                     <div class="alert alert-warning" role="alert">
-                        Обратите внимание! После удаления данной ячейки, она больше не будет 
+                        Обратите внимание! После удаления данной ячейки, она больше не будет
                         отображатся в тех местах, где используется
                     </div>
                 </div>
@@ -124,8 +124,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 mt-2">
-                <label for="balance">Сумма пополнения</label>
-                <input type="number" [(ngModel)]="topUpBalance" placeholder="0" id="balance" class="form-control">
+                <label for="balance-topup">Сумма пополнения</label>
+                <input type="number" [(ngModel)]="topUpBalance" placeholder="0" id="balance-topup" class="form-control">
             </div>
         </div>
         <div class="row mt-2">

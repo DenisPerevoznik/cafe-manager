@@ -31,8 +31,8 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
   formSubmitted = false;
 
   constructor(private company: CompanyService, private toastService: ToastService,
-    private modalService: MDBModalService) { }
-    
+              private modalService: MDBModalService) { }
+
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
@@ -48,28 +48,28 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
     this.getAccounts();
   }
 
-  getAccounts(){
+  getAccounts(): void{
     this.loader = true;
     this.company.getAccounts()
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
     .subscribe(accounts => {
       this.accounts = accounts;
     });
   }
 
-  onCreateClick(){
+  onCreateClick(): void{
 
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,
-        title: "Создание ячейки"
+        title: 'Создание ячейки'
       }
     });
   }
 
-  createAccount(){
+  createAccount(): void{
     this.formSubmitted = true;
-    if(this.createForm.invalid) return;
+    if (this.createForm.invalid) { return; }
 
     this.modalLoader = true;
     const account: Account = {
@@ -78,7 +78,7 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
     };
 
     this.company.createAccount(account)
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; }))
     .subscribe(message => {
 
       this.formSubmitted = false;
@@ -91,13 +91,13 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  removeAccount(){
+  removeAccount(): void{
 
-    if(!this.selectedAccount) return;
+    if (!this.selectedAccount) { return; }
 
     this.modalLoader = true;
     this.company.removeAccount(this.selectedAccount.id)
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; }))
     .subscribe(message => {
 
       this.modalService.hide(1);
@@ -108,23 +108,23 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  onRemoveClick(account: Account){
-    
+  onRemoveClick(account: Account): void{
+
     this.selectedAccount = account;
     this.modalService.show(ModalComponent, {
       data: {
         content: this.removeModal,
-        title: "Удаление ячейки"
+        title: 'Удаление ячейки'
       }
     });
   }
 
-  topUpBalanceClick(){
-    if(!this.selectedAccount) return;
+  topUpBalanceClick(): void{
+    if (!this.selectedAccount) { return; }
 
     this.modalLoader = true;
     this.company.topUpAccountBalance(this.topUpBalance, this.selectedAccount)
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; }))
     .subscribe(message => {
 
       this.topUpBalance = 0;
@@ -136,7 +136,7 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  openUpdateBalanceModal(account: Account){
+  openUpdateBalanceModal(account: Account): void{
 
     this.selectedAccount = account;
     this.modalService.show(ModalComponent, {
@@ -144,6 +144,6 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
         content: this.topUpBalanceModal,
         title: `Пополнение баланса для ${this.selectedAccount.title}`
       }
-    })
+    });
   }
 }

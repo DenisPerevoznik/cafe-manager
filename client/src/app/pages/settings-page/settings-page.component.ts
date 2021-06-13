@@ -27,14 +27,14 @@ export class SettingsPageComponent implements OnInit {
 
   private unsubscribe: Subject<void> = new Subject();
   constructor(private company: CompanyService, private modalService: MDBModalService,
-    private store: Store, private toast: ToastService) { }
+              private store: Store, private toast: ToastService) { }
 
   ngOnInit(): void {
 
     this.companyName = this.company.selectedCompany.name;
 
     this.form = new FormGroup({
-      terminalAccount: new FormControl(null),
+      terminalAccount: new FormControl(this.company.selectedCompany.mainAccount),
       companyName: new FormControl(this.companyName, [Validators.required])
     });
 
@@ -70,14 +70,14 @@ export class SettingsPageComponent implements OnInit {
 
   saveChanges(){
     this.submitted = true;
-    if(this.form.invalid) return;
+    if (this.form.invalid) { return; }
 
     this.loader = true;
     const mainAccount = this.form.value.terminalAccount;
     const name = this.form.value.companyName;
 
     this.company.updateCompany(name, mainAccount)
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
     .subscribe(message => {
       this.store.dispatch(new SelectCompany({...this.company.selectedCompany, mainAccount, name}));
       this.companyName = name;
