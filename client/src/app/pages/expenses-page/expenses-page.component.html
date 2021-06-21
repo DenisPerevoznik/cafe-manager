@@ -35,7 +35,7 @@
                           <tr mdbTableCol *ngFor="let exp of expenses">
                             <td><mdb-badge color="pink">₴ -{{exp.expenseAmount}}</mdb-badge></td>
                             <td>{{exp.description}}</td>
-                            <td>{{exp.AccountId | checkAccount:accounts}}</td>
+                            <td>{{mainAccount && exp.AccountId == mainAccount.id ? mainAccount.title : (exp.AccountId | checkAccount:accounts)}}</td>
                             <td>{{exp.createdAt}}</td>
                             <td>
                                 <button mdbBtn size="sm" color="danger" (click)="onRemoveClick(exp)">

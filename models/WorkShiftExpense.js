@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 
-const WorkShiftExpense = db.define('workshift_expense', {
+const WorkShiftExpense = db.define('WorkShiftExpense', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

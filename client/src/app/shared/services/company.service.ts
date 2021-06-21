@@ -49,7 +49,7 @@ export class CompanyService {
       }
     }));
   }
-  
+
   getWorkShiftByDate(date: string | number): Observable<WorkShift[]>{
 
     if(typeof date !== 'string'){
@@ -85,17 +85,22 @@ export class CompanyService {
   }
 
   // ACCOUNTS:
-  getAccounts(withoutMain: boolean = false): Observable<Account[]>{
+  getAccounts(withoutMain: boolean = false): Observable<{mainAccount: Account, accounts: Account[]}>{
     return this.http.get<{accounts: Account[]}>(`/api/accounts/${this.selectedCompany.id}`)
     .pipe(map(response => {
 
-      const accounts = response.accounts.map(acc => ({...acc, balance: parseFloat(acc.balance.toString())}));
-      if(withoutMain){
-        return accounts.filter(acc => acc.id !== this.selectedCompany.mainAccount)
+      const data = {
+        mainAccount: this.selectedCompany.mainAccount
+        ? response.accounts.find(acc => acc.id == this.selectedCompany.mainAccount) : null,
+        accounts: []
+      };
+      data.accounts = response.accounts.map(acc => ({...acc, balance: parseFloat(acc.balance.toString())}));
+      if (withoutMain){
+        data.accounts = data.accounts.filter(acc => acc.id != this.selectedCompany.mainAccount);
       }
 
-      return accounts;
-    }));  
+      return data;
+    }));
   }
 
   createAccount(account: Account): Observable<string>{

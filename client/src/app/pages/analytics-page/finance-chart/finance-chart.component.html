@@ -3,7 +3,7 @@
         <h4> {{financesData.differencePrevMonth > 0 ? ('+' + financesData.differencePrevMonth) : financesData.differencePrevMonth}}%</h4>
         <span>С прошлого месяца</span>
     </div>
-    <canvas baseChart 
+    <canvas baseChart
       [data]="doughnutChartData"
       [labels]="doughnutChartLabels"
       [legend]="false"

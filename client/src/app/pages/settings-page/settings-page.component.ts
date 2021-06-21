@@ -39,13 +39,13 @@ export class SettingsPageComponent implements OnInit {
     });
 
     this.company.getAccounts()
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
-    .subscribe(accounts => {
-      this.accounts = accounts;
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
+    .subscribe(data => {
+      this.accounts = data.accounts;
     });
   }
 
-  removeClick(){
+  removeClick(): void{
     this.modalService.show(ModalComponent, {
       data: {
         title: `Удаление`,
@@ -54,11 +54,11 @@ export class SettingsPageComponent implements OnInit {
     });
   }
 
-  confirmToRemove(){
+  confirmToRemove(): void{
     this.loader = true;
 
     this.company.removeCompany()
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
     .subscribe(message => {
       this.store.dispatch(new SelectCompany(null));
       window.location.reload();
@@ -68,7 +68,7 @@ export class SettingsPageComponent implements OnInit {
     });
   }
 
-  saveChanges(){
+  saveChanges(): void{
     this.submitted = true;
     if (this.form.invalid) { return; }
 

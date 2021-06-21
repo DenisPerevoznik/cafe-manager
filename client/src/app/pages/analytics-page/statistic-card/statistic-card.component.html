@@ -20,6 +20,6 @@
         С прошлого рабочего дня
       </h6>
     </div>
-    <button *ngIf="showButton" mdbBtn size="sm" color="primary" class="statistic-card-btn">
+    <button *ngIf="showButton" mdbBtn size="sm" color="primary" class="statistic-card-btn" (click)="onCustomBtnClick()">
       <span class="material-icons-outlined mr-2" style="font-size: 16px" *ngIf="btnIcon">{{btnIcon}}</span> {{btnText}}</button>
   </div>

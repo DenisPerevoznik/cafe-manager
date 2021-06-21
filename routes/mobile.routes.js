@@ -40,7 +40,6 @@ router.post('/sync', async(req, res) => {
 
   const {companyId, workShifts} = req.body;
 
-  console.log('BODY: '.green, req.body);
   await synchronization(workShifts, companyId);
 
   const products = await Product.findAll({where: {published: 1, CompanyId: companyId}});
@@ -61,88 +60,89 @@ router.get('/get-employees/:companyId', (req, res) => {
 });
 
 async function synchronization(workShifts, companyId){
-  if(!workShifts.length) return;
 
-  const companyModel = await Company.findOne({where: {id: companyId}});
-  for (const reqWorkShift of workShifts) {
+  try {
+    if(!workShifts.length) return;
 
-    const workShiftModel = await WorkShift.findOne({where: {
-      CompanyId: companyId,
-      date: reqWorkShift.date,
-      openingTime: reqWorkShift.openingTime
-    }});
+    const companyModel = await Company.findOne({where: {id: companyId}});
+    for (const reqWorkShift of workShifts) {
 
-    const reqExpenses = workShifts.expenses;
-    const reqReports = workShifts.reports;
-    const workShiftId = 0;
+      const workShiftModel = await WorkShift.findOne({where: {
+        CompanyId: companyId,
+        date: reqWorkShift.date,
+        openingTime: reqWorkShift.openingTime
+      }});
 
-    if(workShiftModel){ // if workshift existing in the db
+      const reqExpenses = reqWorkShift.expenses;
+      const reqReports = reqWorkShift.reports;
+      let workShiftId = 0;
 
-      workShiftId = workShiftModel.dataValues.id;
+      if(workShiftModel){ // if workshift existing in the db
 
-      // expenses
-      const shiftExpenses = await workShiftModel.getWorkShiftExpenses();
+        workShiftId = workShiftModel.dataValues.id;
 
-      if(shiftExpenses.length){
-        for (const expense of shiftExpenses) {
-          await WorkShiftExpense.destroy({where: {id: expense.dataValues.id}})
+        // expenses
+        const shiftExpenses = await workShiftModel.getWorkShiftExpenses();
+
+        if(shiftExpenses.length){
+          for (const expense of shiftExpenses) {
+            await WorkShiftExpense.destroy({where: {id: expense.dataValues.id}})
+          }
         }
+
+        const updateWorkShift = {};
+        if(workShiftModel.dataValues.status == true && reqWorkShift.status == false){
+
+          updateWorkShift.closingTime = reqWorkShift.closingTime;
+          updateWorkShift.closingBalance = reqWorkShift.closingBalance;
+          updateWorkShift.collection = reqWorkShift.collection;
+          updateWorkShift.status = false;
+        }
+
+        updateWorkShift.receipts = reqWorkShift.receipts;
+        updateWorkShift.revenue = reqWorkShift.revenue;
+        await WorkShift.update(updateWorkShift, {where: {id: workShiftId}});
+      }
+      else{ // иначе если смены не существует в базе и ее нужно создать
+
+        const createdWorkShift = await companyModel.createWorkShift(reqWorkShift);
+        workShiftId = createdWorkShift.dataValues.id;
       }
 
-      const updateWorkShift = {};
-      if(workShiftModel.dataValues.status == true && reqWorkShift.status == false){
-
-        updateWorkShift.closingTime = reqWorkShift.closingTime;
-        updateWorkShift.closingBalance = reqWorkShift.closingBalance;
-        updateWorkShift.collection = reqWorkShift.collection;
-        updateWorkShift.status = false;
+      for (const expense of reqExpenses) {
+        expense.WorkshiftId = workShiftId;
+        await companyModel.createWorkShiftExpense(expense);
       }
 
-      updateWorkShift.receipts = reqWorkShift.receipts;
-      updateWorkShift.revenue = reqWorkShift.revenue;
-      await WorkShift.update(updateWorkShift, {where: {id: workShiftId}});
-    }
-    else{ // иначе если смены не существует в базе и ее нужно создать
-
-      const createdWorkShift = await companyModel.createWorkshift(reqWorkShift);
-      workShiftId = createdWorkShift.dataValues.id;
+      await processingOfIngredientsAndReports(reqReports, workShiftId, companyModel);
     }
 
-    for (const expense of reqExpenses) {
-      expense.WorkshiftId = workShiftId;
-      await companyModel.createWorkShiftExpense(expense);
-    }
+    WorkShift.findAll({
+      limit: 1,
+      where: {CompanyId: companyId},
+      order: [ [ 'createdAt', 'DESC' ]]
+    })
+    .then(async (shifts) => {
 
-    await processingOfIngredientsAndReports(reqReports, workShiftId, companyModel);
+      const lastWorkShiftModel = shifts[0];
+      let mainAccountBalance = 0;
+
+      if(mainAccountModel && lastWorkShiftModel){
+
+        if(lastWorkShiftModel.dataValues.status == true){// если смена открыта, то баланс счета принимает сумму собранную на смене
+          mainAccountBalance = parseFloat(lastWorkShiftModel.dataValues.revenue) + parseFloat(lastWorkShiftModel.dataValues.openingBalance);
+        }
+        else{ // иначе, если смена закрыта, то в кассе лежат деньги оставленные на след. день
+          mainAccountBalance = parseFloat(lastWorkShiftModel.dataValues.closingBalance);
+        }
+
+        const accountModel = await companyModel.getMainAccount();
+        await Account.update({balance: mainAccountBalance}, {where: {id: accountModel.dataValues.id}});
+      }
+    });
+  } catch (error) {
+    console.log('SYNC error: '.red, error);
   }
-
-  WorkShift.findAll({
-    limit: 1,
-    where: {CompanyId: companyId},
-    order: [ [ 'createdAt', 'DESC' ]]
-  })
-  .then(async (shifts) => {
-
-    const lastWorkShiftModel = shifts[0];
-    let mainAccountBalance = 0;
-
-    if(mainAccountModel && lastWorkShiftModel){
-
-      if(lastWorkShiftModel.dataValues.status == true){// если смена открыта, то баланс счета принимает сумму собранную на смене
-        mainAccountBalance = parseFloat(lastWorkShiftModel.dataValues.revenue) + parseFloat(lastWorkShiftModel.dataValues.openingBalance);
-      }
-      else{ // иначе, если смена закрыта, то в кассе лежат деньги оставленные на след. день
-        mainAccountBalance = parseFloat(lastWorkShiftModel.dataValues.closingBalance);
-      }
-
-      const accountModel = await companyModel.getMainAccount();
-      await Account.update({balance: mainAccountBalance}, {where: {id: accountModel.dataValues.id}});
-    }
-  });
-  // console.log('SYNC workShifts: '.blue, workShifts);
-  // console.log('SYNC reports: '.blue, workShifts[0].reports);
-  // console.log('SYNC expenses: '.blue, workShifts[0].expenses);
-  // console.log('SYNC report: '.blue, report);
 }
 
 async function processingOfIngredientsAndReports(reqReports, workShiftId, companyModel){

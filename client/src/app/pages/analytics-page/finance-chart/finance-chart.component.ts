@@ -22,15 +22,15 @@ export class FinanceChartComponent implements OnChanges {
   ];
 
   colors: Color[] = [
-    {backgroundColor: ['#4782da', '#f44336']}, //#ff9800
+    {backgroundColor: ['#4782da', '#f44336']},
   ];
 
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
+
     if(changes.financesData)
-      this.doughnutChartData = [[this.financesData.income.value, this.financesData.costs.value, 
+      this.doughnutChartData = [[this.financesData.income.value, this.financesData.costs.value,
         this.financesData.averageCheck.value]];
   }
 }

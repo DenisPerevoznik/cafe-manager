@@ -59,8 +59,19 @@ export interface WorkShift {
   receipts: number;
   revenue: number;
   slaes: Sales[];
+  expenses: WorkShiftExpense[];
   status: boolean;
   updatedAt?: Date;
+}
+
+export interface WorkShiftExpense {
+  id?: number;
+  sum: number;
+  comment: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  WorkShiftId?: number;
+  CompanyId?: number;
 }
 
 export interface Sales {

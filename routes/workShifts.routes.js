@@ -86,6 +86,7 @@ async function generateResponseData(shifts) {
 
 async function pasteDataToShift(shift){
   const emp = await shift.getEmployee();
+  const expenses = await shift.getWorkShiftExpenses();
   return {
     ...shift.dataValues,
     date: getDate(shift.date),
@@ -93,6 +94,7 @@ async function pasteDataToShift(shift){
     openingTime: shift.openingTime.substr(0, 5),
     closingTime: shift.closingTime ? shift.closingTime.substr(0, 5) : null,
     sales: await getSales(shift),
+    expenses: expenses.map(exp => ({...exp.dataValues, sum: parseFloat(exp.dataValues.sum)}))
   }
 }
 

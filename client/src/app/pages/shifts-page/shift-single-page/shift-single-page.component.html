@@ -24,7 +24,7 @@
       </div>
       <div class="col-md-8 col-sm-12 d-flex align-items-center">
           <span class="mr-2">Просматриваемая дата </span>
-          <input type="date" class="form-control" (change)="onDateChange($event)" style="width: 14rem" id="date-field" 
+          <input type="date" class="form-control" (change)="onDateChange($event)" style="width: 14rem" id="date-field"
             [attr.data-prev]="'null'" #datepicker>
           <button type="button" mdbBtn color="primary" size="sm" (click)="moreShiftsClick()"
             mdbWavesEffect class="ml-2" *ngIf="workShiftsByDate.length > 1">
@@ -54,15 +54,15 @@
         <div class="col-sm-12 col-md-9">
             <div class="row">
                 <div class="col-4">
-                    <app-statistic-card [title]="'Выручка'" [value]="'₴' + selectedShift.revenue" 
+                    <app-statistic-card [title]="'Выручка'" [value]="'₴' + selectedShift.revenue"
                         [iconName]="'attach_money'"></app-statistic-card>
                 </div>
                 <div class="col-4">
-                    <app-statistic-card [title]="'Касса в начале'" [value]="'₴' + selectedShift.openingBalance" 
+                    <app-statistic-card [title]="'Касса в начале'" [value]="'₴' + selectedShift.openingBalance"
                         [iconName]="'table_view'"></app-statistic-card>
                 </div>
                 <div class="col-4">
-                    <app-statistic-card [title]="'Инкасация'" [value]="'₴' + selectedShift.collection" 
+                    <app-statistic-card [title]="'Инкасация'" [value]="'₴' + selectedShift.collection"
                         [iconName]="'request_quote'"></app-statistic-card>
                 </div>
             </div>
@@ -76,8 +76,8 @@
                       [iconName]="'payments'"></app-statistic-card>
               </div>
               <div class="col-4">
-                  <app-statistic-card [title]="'Сумма расходов'" [value]="'₴ 12'" btnText="Подробнее"
-                      [iconName]="'money_off'" [showButton]="true"></app-statistic-card>
+                  <app-statistic-card [title]="'Сумма расходов'" [value]="'₴' + expensesSum" btnText="Подробнее"
+                      [iconName]="'money_off'" [showButton]="true" (customBtnClick)="showExpensesModal()"></app-statistic-card>
               </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
       <div class="col-10">
         <div class="card shadow p-4">
           <div class="d-flex">
-            <span class="material-icons-outlined mr-2">assessment</span> 
+            <span class="material-icons-outlined mr-2">assessment</span>
             <h5>Продажи на смене</h5>
           </div>
           <table mdbTable hover="true">
@@ -114,7 +114,7 @@
       <div class="col-1"></div>
     </div>
     </ng-container>
-    
+
 </div>
 
 <ng-template #conflictModalContent>
@@ -132,6 +132,27 @@
           <span class="text-success" *ngIf="shift.status">Открыта</span>
           <button class="btn btn-sm btn-primary" (click)="selectShiftFromConflict(shift)">Выбрать</button>
         </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #expensesModalContent>
+  <div class="container-fluid">
+    <div class="row mt-3">
+      <div class="col-12" *ngFor="let shift of workShiftsByDate">
+        <table>
+          <thead>
+            <th>Сумма расхода</th>
+            <th>Комментарий</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let exp of shift.expenses">
+              <td>₴ {{exp.sum}}</td>
+              <td>{{exp.comment}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

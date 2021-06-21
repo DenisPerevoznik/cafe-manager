@@ -36,7 +36,7 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
   createForm: FormGroup;
   deliveryRows: DeliveryRowModel[] = [];
   constructor(private route: ActivatedRoute, private company: CompanyService,
-    private router: Router, private toats: ToastService, private helpService: AppHelpService) { }
+              private router: Router, private toats: ToastService, private helpService: AppHelpService) { }
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
@@ -52,36 +52,36 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
     this.getData();
   }
 
-  getData(){
+  getData(): void{
     this.loader = true;
 
     forkJoin({
-      accounts: this.company.getAccounts(),
+      accountsData: this.company.getAccounts(),
       ingredients: this.company.getIngredients(),
       suppliers: this.company.getSuppliers()
     })
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
     .subscribe(data => {
-      this.accounts = data.accounts;
+      this.accounts = data.accountsData.accounts;
       this.ingredients = data.ingredients;
       this.suppliers = data.suppliers;
     });
   }
 
-  removeDeliveryItem(index){
+  removeDeliveryItem(index): void{
     this.deliveryRows.splice(index, 1);
     this.updateSelectedIngredient();
     this.updateTotalSum();
   }
 
-  updateSelectedIngredient(){
+  updateSelectedIngredient(): void{
     this.selectedIngredients = this.deliveryRows
     .filter(row => row.ingredientId)
     .map(row => row.ingredientId);
     this.ingredients = [...this.ingredients];
   }
 
-  addDeliveryItem(){
+  addDeliveryItem(): void{
     this.deliveryRows.push({
       ingredientId: null,
       price: 0,
@@ -90,18 +90,19 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
       unit: null
     });
   }
-  
+
   get deliveriesIsValid(): boolean{
 
     for (const dRow of this.deliveryRows) {
-      if(!dRow.ingredientId || !(dRow.quantity >= 0) || !(dRow.price >= 0) || !(dRow.sum >= 0))
+      if (!dRow.ingredientId || !(dRow.quantity >= 0) || !(dRow.price >= 0) || !(dRow.sum >= 0)) {
         return false;
+      }
     }
 
     return true;
   }
 
-  onSelectIngredient(rowItem: DeliveryRowModel){
+  onSelectIngredient(rowItem: DeliveryRowModel): void{
 
     const ingredient = this.ingredients.find(ing => ing.id == rowItem.ingredientId);
 
@@ -110,32 +111,30 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
     this.updateTotalSum();
   }
 
-  updateTotalSum(){
+  updateTotalSum(): void{
     this.totalSum = this.deliveryRows.reduce((acc, ing) => acc += ing.sum, 0);
   }
 
-  onChangePriceOrQuantity(event, index, isPriceChanged = true){
+  onChangePriceOrQuantity(event, index, isPriceChanged = true): void{
     const row = this.deliveryRows[index];
     const price = isPriceChanged ? event.target.value : row.price;
     row.sum = price * row.quantity;
     this.updateTotalSum();
   }
 
-  onChangeSum(event, index){
+  onChangeSum(event, index): void{
     const sum = event.target.value;
     const row = this.deliveryRows[index];
     row.price = this.helpService.trimAfterDecimalPoint(sum / row.quantity);
     this.updateTotalSum();
   }
 
-  
-
-  onSubmit(){
+  onSubmit(): void{
     this.submitted = true;
-    if(this.createForm.invalid || !this.deliveriesIsValid || !this.deliveryRows.length){
+    if (this.createForm.invalid || !this.deliveriesIsValid || !this.deliveryRows.length){
       return;
     }
-    
+
     this.loader = true;
     const delivery: Delivery = {
       comment: this.createForm.value.comment,
@@ -147,10 +146,10 @@ export class CreateDeliveryPageComponent implements OnInit, OnDestroy {
     const ingredients = this.deliveryRows.map(it => ({id: it.ingredientId, quantity: it.quantity, sum: it.sum, unitPrice: it.price}));
 
     this.company.createDelivery(delivery, ingredients)
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
     .subscribe(message => {
       this.router.navigate(['/dashboard/deliveries']);
       this.toats.show('success', message);
-    }, resp => {this.toats.show('error', resp.error.message)});
+    }, resp => {this.toats.show('error', resp.error.message); });
   }
 }

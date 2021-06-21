@@ -20,6 +20,7 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
 
   expenses: Expense[] = [];
   accounts: Account[] = [];
+  mainAccount: Account = null;
   returnSumToAcc = true;
   selectedExpenseForRemove: Expense = null;
   unsubscribe: Subject<any> = new Subject<any>();
@@ -28,7 +29,7 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
   createForm: FormGroup;
   formSubmitted = false;
   constructor(private company: CompanyService, private toastService: ToastService,
-    private modalService: MDBModalService) { }
+              private modalService: MDBModalService) { }
 
   ngOnDestroy(): void {
     this.unsubscribe.next();
@@ -46,29 +47,30 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  getData(){
+  getData(): void{
 
     forkJoin({
       expenses: this.company.getExpenses(),
-      accounts: this.company.getAccounts(true)
+      accountsData: this.company.getAccounts(true)
     })
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
     .subscribe(response => {
       this.expenses = response.expenses;
-      this.accounts = response.accounts;
+      this.accounts = response.accountsData.accounts;
+      this.mainAccount = response.accountsData.mainAccount;
     });
   }
 
-  onCreateClick(){
+  onCreateClick(): void{
     this.modalService.show(ModalComponent, {
       data: {
         content: this.createModal,
-        title: "Добавление расхода"
+        title: 'Добавление расхода'
       }
     });
   }
 
-  onRemoveClick(expense: Expense){
+  onRemoveClick(expense: Expense): void{
     this.returnSumToAcc = true;
     this.selectedExpenseForRemove = expense;
     this.modalService.show(ModalComponent, {
@@ -76,12 +78,12 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
         content: this.removeModal,
         title: 'Удаление расхода'
       }
-    })
+    });
   }
 
-  createExpenseSubmit(){
+  createExpenseSubmit(): void{
     this.formSubmitted = true;
-    if(this.createForm.invalid) return;
+    if (this.createForm.invalid) { return; }
 
     this.modalLoader = true;
     const expense: Expense = {
@@ -92,7 +94,7 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
       expenseAmount: this.createForm.value.sum
     };
     this.company.createExpense(expense)
-    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
+    .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false; }))
     .subscribe(message => {
       this.formSubmitted = false;
       this.createForm.reset();
@@ -104,16 +106,17 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  removeExpense(){
+  removeExpense(): void{
     this.modalLoader = true;
 
-    if(!this.accountOfExpense)
+    if (!this.accountOfExpense) {
       this.returnSumToAcc = false;
+    }
 
     this.company.removeExpense(this.returnSumToAcc, this.selectedExpenseForRemove)
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.modalLoader = false}))
     .subscribe(message => {
-      
+
       this.modalService.hide(1);
       this.toastService.show('success', message);
       this.getData();
@@ -122,12 +125,12 @@ export class ExpensesPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  get accountOfExpense(){
-    if(!this.selectedExpenseForRemove){
+  get accountOfExpense(): Account{
+    if (!this.selectedExpenseForRemove){
       return null;
     }
 
-    const foundAccount = this.accounts.find(acc => acc.id == this.selectedExpenseForRemove.AccountId);
+    const foundAccount = this.accounts.find(acc => acc.id === this.selectedExpenseForRemove.AccountId);
     return !!foundAccount ? foundAccount : null;
   }
 }

@@ -36,8 +36,8 @@ export class DailyChartComponent implements OnChanges, OnInit {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
-    if(changes.dataSource && !!this.dataSource){
+
+    if (changes.dataSource && !!this.dataSource){
       this.lineChartData = [
         { data: this.dataSource.revenueArr, label: 'Выручка' },
         { data: this.dataSource.profitArr, label: 'Марж. прибыль' },

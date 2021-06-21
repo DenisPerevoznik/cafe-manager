@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
-import { WorkShift } from '@app/shared/interfaces';
+import {WorkShift, WorkShiftExpense} from '@app/shared/interfaces';
 import { CompanyService } from '@app/shared/services/company.service';
 import { ToastService } from '@app/shared/services/toast.service';
 import { MDBModalService } from 'angular-bootstrap-md';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import {AppHelpService} from "@app/shared/services/app-help.service";
 
 @Component({
   selector: 'app-shift-single-page',
@@ -16,21 +17,24 @@ import { finalize, takeUntil } from 'rxjs/operators';
 export class ShiftSinglePageComponent implements OnDestroy, OnInit, AfterViewInit {
 
   @ViewChild('conflictModalContent') modalContent;
+  @ViewChild('expensesModalContent') expensesModal;
   @ViewChild('datepicker') datePicker;
   selectedShift: WorkShift = null;
   loader: boolean;
+  expensesSum = 0;
   unsubscribe: Subject<any> = new Subject<any>();
   selectedDate: Date;
   workShiftsByDate: WorkShift[] = [];
   private oldShift: WorkShift = null;
   private previousDateValue;
   private previousDateArray = [];
-  private dateSelected: boolean = true;
+  private dateSelected = true;
 
   constructor(private route: ActivatedRoute, private toasts: ToastService,
-    private companyService: CompanyService, private router: Router, 
-    private modalService: MDBModalService, private cd: ChangeDetectorRef) { }
-  
+              private help: AppHelpService,
+              private companyService: CompanyService, private router: Router,
+              private modalService: MDBModalService, private cd: ChangeDetectorRef) { }
+
    ngAfterViewInit(): void {
 
     this.route.params
@@ -42,7 +46,7 @@ export class ShiftSinglePageComponent implements OnDestroy, OnInit, AfterViewIni
       .subscribe((shift: WorkShift) => {
 
         this.companyService.getWorkShiftByDate(shift.date.dbValue)
-        .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false}))
+        .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
         .subscribe(workShifts => {
           this.workShiftsByDate = workShifts;
           this.selectedDate = new Date(shift.date.dbValue);
@@ -52,11 +56,12 @@ export class ShiftSinglePageComponent implements OnDestroy, OnInit, AfterViewIni
         this.previousDateValue = shift.date.dbValue;
         this.datePicker.nativeElement.value = shift.date.dbValue;
         this.datePicker.nativeElement.dataset.prev = shift.date.dbValue;
+        this.expensesSum = this.help.getSum(shift.expenses.map(exp => exp.sum));
         this.cd.detectChanges();
       }, () => {
-        this.toasts.show('error', "Не удалось загрузить смену. Повторите попытку");
+        this.toasts.show('error', 'Не удалось загрузить смену. Повторите попытку');
         this.router.navigate(['dashboard/shifts']);
-      })
+      });
     });
   }
 
@@ -71,21 +76,21 @@ export class ShiftSinglePageComponent implements OnDestroy, OnInit, AfterViewIni
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(() => {
       this.loader = false;
-      if(!this.selectedShift){
+      if (!this.selectedShift){
         this.selectedShift = this.oldShift;
         this.workShiftsByDate = this.previousDateArray;
       }
-      if(!this.dateSelected){
+      if (!this.dateSelected){
         this.workShiftsByDate = this.previousDateArray;
         this.dateSelected = false;
       }
 
       this.datePicker.nativeElement.value = this.previousDateValue;
       this.cd.detectChanges();
-    })
+    });
   }
 
-  onDateChange(event){
+  onDateChange(event): void{
     this.previousDateValue = this.datePicker.nativeElement.dataset.prev;
     const value = event.target.value;
     this.selectedDate = new Date(value);
@@ -93,22 +98,22 @@ export class ShiftSinglePageComponent implements OnDestroy, OnInit, AfterViewIni
     this.companyService.getWorkShiftByDate(value)
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(workShifts => {
-      
+
       this.previousDateArray = this.workShiftsByDate;
       this.workShiftsByDate = workShifts;
 
-      if(workShifts.length > 1){
+      if (workShifts.length > 1){
         this.loader = true;
         this.oldShift = this.selectedShift;
         this.selectedShift = null;
         this.modalService.show(ModalComponent, {
           data: {
-            title: "Выберите смену",
+            title: 'Выберите смену',
             content: this.modalContent
           }
         });
       }
-      else if(workShifts.length === 1){
+      else if (workShifts.length === 1){
         this.selectedShift = workShifts[0];
         this.loader = false;
       }
@@ -121,16 +126,25 @@ export class ShiftSinglePageComponent implements OnDestroy, OnInit, AfterViewIni
     this.datePicker.nativeElement.dataset.prev = event.target.value;
   }
 
-  moreShiftsClick(){
+  moreShiftsClick(): void{
     this.modalService.show(ModalComponent, {
       data: {
-        title: "Выберите смену",
+        title: 'Выберите смену',
         content: this.modalContent
       }
     });
   }
 
-  selectShiftFromConflict(shift: WorkShift){
+  showExpensesModal(): void{
+    this.modalService.show(ModalComponent, {
+      data: {
+        title: 'Расходы на этой смене',
+        content: this.expensesModal
+      }
+    });
+  }
+
+  selectShiftFromConflict(shift: WorkShift): void{
     this.dateSelected = true;
     this.selectedShift = shift;
     this.modalService.hide(1);

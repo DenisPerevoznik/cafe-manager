@@ -52,8 +52,8 @@ export class AccountsPageComponent implements OnInit, OnDestroy {
     this.loader = true;
     this.company.getAccounts()
     .pipe(takeUntil(this.unsubscribe), finalize(() => {this.loader = false; }))
-    .subscribe(accounts => {
-      this.accounts = accounts;
+    .subscribe(data => {
+      this.accounts = data.accounts;
     });
   }
 
