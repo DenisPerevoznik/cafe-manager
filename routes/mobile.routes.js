@@ -109,9 +109,10 @@ async function synchronization(workShifts, companyId){
         workShiftId = createdWorkShift.dataValues.id;
       }
 
+      console.log('EXPENSES: '.red, reqExpenses);
       for (const expense of reqExpenses) {
         expense.WorkshiftId = workShiftId;
-        await companyModel.createWorkShiftExpense(expense);
+        await companyModel.createWorkShiftExpense({comment: expense.comment, sum: expense.sum, WorkShiftId: expense.WorkshiftId});
       }
 
       await processingOfIngredientsAndReports(reqReports, workShiftId, companyModel);
@@ -173,7 +174,7 @@ async function processingOfIngredientsAndReports(reqReports, workShiftId, compan
     }
     else{
       // создаем новый объект отчета
-      await companyModel.createReport({WorkShiftId: workShiftId, date});
+      await companyModel.createReport({...reqReport, WorkShiftId: workShiftId, date});
     }
   }
 }

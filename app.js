@@ -24,6 +24,7 @@ app.use(cors({origin: '*'}));
 ////////
 
 app.use(express.json({ extended: true }));
+// app.use(express.static(process.cwd()+"/client/dist/client-a/"));
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/companies', require('./routes/company.routes'));
 app.use('/api/analytics', require('./routes/analytics/analytics.routes'));
@@ -39,6 +40,10 @@ app.use('/api/suppliers', require('./routes/suppliers.routes'));
 
 // mobile app routes
 app.use('/api/app', require('./routes/mobile.routes'));
+
+// app.get('/', (req,res) => {
+//   res.sendFile(process.cwd()+"/client/dist/client-a/index.html")
+// });
 
 db.sync({ alter: false, force: false });
 

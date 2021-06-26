@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    <div class="row mt-4 mb-3">
       <div class="col-1"></div>
       <div class="col-10">
         <div class="card shadow p-4">
@@ -140,14 +140,19 @@
 <ng-template #expensesModalContent>
   <div class="container-fluid">
     <div class="row mt-3">
-      <div class="col-12" *ngFor="let shift of workShiftsByDate">
-        <table>
+      <div class="col-12">
+        <h6 *ngIf="!selectedShift.expenses || !selectedShift.expenses.length">
+          - Список расходов пуст -
+        </h6>
+        <table mdbTable hover="true" *ngIf="selectedShift.expenses && selectedShift.expenses.length">
           <thead>
-            <th>Сумма расхода</th>
-            <th>Комментарий</th>
+            <tr>
+              <th scope="col">Сумма расхода</th>
+              <th scope="col">Комментарий</th>
+            </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let exp of shift.expenses">
+            <tr mdbTableCol *ngFor="let exp of selectedShift.expenses">
               <td>₴ {{exp.sum}}</td>
               <td>{{exp.comment}}</td>
             </tr>
