@@ -65,11 +65,15 @@ export class CategoriesPageComponent implements OnInit, OnDestroy {
     this.createForm.get('color').patchValue(color);
   }
 
-  removeClick(id){
-    this.selectedCategoryId = id;
+  removeClick(category: Category){
+
+    if(!category.allowToRemove)
+      return;
+
+    this.selectedCategoryId = category.id;
     this.modalService.show(ModalComponent, {
       data: {
-        title: `Удаление категории (${this.categories.find(c => c.id === id).title})`,
+        title: `Удаление категории (${this.categories.find(c => c.id === category.id).title})`,
         content: this.removeModal
       }
     });

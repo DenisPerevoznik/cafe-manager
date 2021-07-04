@@ -38,7 +38,7 @@
     <ng-container *ngIf="selectedShift && !loader">
       <div class="row">
         <div class="col-sm-12 col-md-3">
-          <div class="card shadow d-flex align-items-center flex-column p-3">
+          <div class="card shadow d-flex align-items-center flex-column p-3 mb-3">
               <div class="user-photo"></div>
               <h6>{{selectedShift.employeeName}}</h6>
               <mdb-badge primary="true" class="mt-1">
@@ -53,29 +53,29 @@
         </div>
         <div class="col-sm-12 col-md-9">
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-4 col-sm-12">
                     <app-statistic-card [title]="'Выручка'" [value]="'₴' + selectedShift.revenue"
                         [iconName]="'attach_money'"></app-statistic-card>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4 col-sm-12">
                     <app-statistic-card [title]="'Касса в начале'" [value]="'₴' + selectedShift.openingBalance"
                         [iconName]="'table_view'"></app-statistic-card>
                 </div>
-                <div class="col-4">
+                <div class="col-md-4 col-sm-12">
                     <app-statistic-card [title]="'Инкасация'" [value]="'₴' + selectedShift.collection"
                         [iconName]="'request_quote'"></app-statistic-card>
                 </div>
             </div>
             <div class="row mt-2">
-              <div class="col-4">
+              <div class="col-md-4 col-sm-12">
                   <app-statistic-card [title]="'Чеки'" [value]="selectedShift.receipts + ' шт.'"
                       [iconName]="'receipt_long'"></app-statistic-card>
               </div>
-              <div class="col-4" *ngIf="!selectedShift.status">
+              <div class="col-md-4 col-sm-12" *ngIf="!selectedShift.status">
                   <app-statistic-card [title]="'Остаток на размен'" [value]="'₴' + selectedShift.closingBalance"
                       [iconName]="'payments'"></app-statistic-card>
               </div>
-              <div class="col-4">
+              <div class="col-md-4 col-sm-12">
                   <app-statistic-card [title]="'Сумма расходов'" [value]="'₴' + expensesSum" btnText="Подробнее"
                       [iconName]="'money_off'" [showButton]="true" (customBtnClick)="showExpensesModal()"></app-statistic-card>
               </div>
@@ -85,8 +85,8 @@
 
     <div class="row mt-4 mb-3">
       <div class="col-1"></div>
-      <div class="col-10">
-        <div class="card shadow p-4">
+      <div class="col-md-10 col-sm-12">
+        <div class="card shadow p-4 horizontal-scroll">
           <div class="d-flex">
             <span class="material-icons-outlined mr-2">assessment</span>
             <h5>Продажи на смене</h5>

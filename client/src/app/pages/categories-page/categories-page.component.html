@@ -20,12 +20,16 @@
 
     <ng-container *ngIf="!loader && categories.length">
         <div class="row mt-2">
-            <div class="col-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="d-flex">
                     <span class="material-icons-outlined mt-2 mr-2">search</span>
-                    <input type="text" style="width: 30%" placeholder="Поиск" [(ngModel)]="searchText" class="form-control mb-2">
+                    <input type="text" style="width: 100%" placeholder="Поиск" [(ngModel)]="searchText" class="form-control mb-2">
                 </div>
-                <div class="card shadow p-2">
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="card shadow p-2 horizontal-scroll">
                     <table mdbTable bordered="true" striped="true" class="custom-tbl">
                         <thead>
                           <tr>
@@ -57,7 +61,9 @@
                                         <span class="material-icons-outlined icon">edit</span> Изменить
                                     </div>
                                 </button>
-                                <button mdbBtn size="sm" color="danger" (click)="removeClick(category.id)">
+                                <button mdbBtn size="sm" color="danger"
+                                    [disabled]="!category.allowToRemove"
+                                    (click)="removeClick(category)" [title]="!category.allowToRemove ? 'Удаление запрещено так как эту категорию используют некоторые продукты' : ''">
                                     <div class="btn-content">
                                         <span class="material-icons-outlined icon">delete</span> Удалить
                                     </div>

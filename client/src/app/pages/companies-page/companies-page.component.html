@@ -16,7 +16,7 @@
     <hr>
     <app-page-loader [show]="loader"></app-page-loader>
     <div class="row" *ngIf="!loader">
-      <div class="col-sm-12 col-md-3" *ngFor="let company of companies" (click)="onCompanyClick(company)">
+      <div class="col-sm-12 col-md-3 mt-3" *ngFor="let company of companies" (click)="onCompanyClick(company)">
         <div class="card shadow">
           <div class="left-part">
             <span class="material-icons-outlined left-part-icon">store</span>
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div class="col-sm-12 col-md-3 d-flex justify-content-center align-items-center">
+      <div class="col-sm-12 col-md-3 d-flex justify-content-center align-items-center mt-3">
         <div class="new-company-card" (click)="createCompanyClick()">
           <div class="new-company-card-left">
             <span class="material-icons-outlined">add_business</span>

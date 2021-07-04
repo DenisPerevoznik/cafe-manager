@@ -15,6 +15,7 @@ import { ColorPickerComponent } from './components/color-picker/color-picker.com
 import { SearchPipe } from './pipes/search.pipe';
 import { AppHelpService } from './services/app-help.service';
 import { ProductUnitPipe } from './pipes/product-unit.pipe';
+import { ToDecimalPipe } from './pipes/to-decimal.pipe';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { ProductUnitPipe } from './pipes/product-unit.pipe';
     MDBBootstrapModule.forRoot(),
   ],
   providers: [ToastService, MDBModalService, AppHelpService],
-  declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent, CheckAccountPipe, ColorPickerComponent, SearchPipe, ProductUnitPipe],
+  declarations: [HeaderComponent, PageLoaderComponent, ModalComponent, NoDataComponent, CheckAccountPipe, ColorPickerComponent, SearchPipe, ProductUnitPipe, ToDecimalPipe],
   exports: [
     HttpClientModule,
     CommonModule,
@@ -40,7 +41,8 @@ import { ProductUnitPipe } from './pipes/product-unit.pipe';
     ModalComponent,
     ColorPickerComponent,
     SearchPipe,
-    ProductUnitPipe
+    ProductUnitPipe,
+    ToDecimalPipe
   ],
 })
 export class SharedModule {}

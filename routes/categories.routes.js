@@ -10,8 +10,9 @@ const config = require('config');
 router.get('/:companyId', auth, (req, res) => {
     const companyId = req.params.companyId;
     Category.findAll({ where: { CompanyId: companyId } })
-      .then(categories => {
-        res.json(categories);
+      .then(async (categories) => {
+        const response = await checkingCategoriesForUsing(categories);
+        res.json(response);
       })
       .catch((error) => {
         res.status(400).json({ message: error.message });
@@ -91,5 +92,16 @@ router.get('/:companyId', auth, (req, res) => {
       });
     }
   );
+
+  async function checkingCategoriesForUsing(categories){
+
+    const response = [];
+    for (const category of categories) {
+      const products = await category.getProducts();
+
+      response.push({...category.dataValues, allowToRemove: !products || (products && !products.length)});
+    }
+    return response;
+  }
 
   module.exports = router;

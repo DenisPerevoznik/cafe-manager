@@ -41,6 +41,10 @@ app.use('/api/suppliers', require('./routes/suppliers.routes'));
 // mobile app routes
 app.use('/api/app', require('./routes/mobile.routes'));
 
+app.get('*', (req, res) => {
+  res.status(301).redirect('/');
+});
+
 // app.get('/', (req,res) => {
 //   res.sendFile(process.cwd()+"/client/dist/client-a/index.html")
 // });

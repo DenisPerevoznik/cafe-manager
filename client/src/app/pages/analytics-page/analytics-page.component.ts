@@ -1,9 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { CurrentStatistic, DailyData, MonthlyData } from '@app/shared/interfaces';
+import { CurrentStatistic, DailyData, MonthlyData, User } from '@app/shared/interfaces';
 import { AnalyticsService } from '@app/shared/services/analytics.service';
 import { AppHelpService } from '@app/shared/services/app-help.service';
 import { CompanyService } from '@app/shared/services/company.service';
+import { getCurrentUser } from '@app/store/selectors/common.selector';
+import { AppState } from '@app/store/state/app.state';
+import { Store } from '@ngrx/store';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FinanceData } from './finance-chart/finance-chart.component';
@@ -16,7 +19,7 @@ import { FinanceData } from './finance-chart/finance-chart.component';
 })
 export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit {
 
-  currentUser = {name: 'Denis'};
+  currentUser: User = {name: '', email: ''};
 
   financeData: FinanceData = {
     differencePrevMonth: 0,
@@ -37,7 +40,7 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
   };
 
   constructor(private analyticsService: AnalyticsService, private helpService: AppHelpService,
-    private datePipe: DatePipe, private companyService: CompanyService) { }
+    private datePipe: DatePipe, private companyService: CompanyService, private store: Store<AppState>) { }
 
   ngAfterViewInit(): void {
     this.getMonthlyData();
@@ -54,6 +57,12 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     this.analyticsService.getCurrentStatistic()
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(response => {this.currentStatistic = response});
+
+    this.store.select(getCurrentUser)
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   get currentDate(): Date{

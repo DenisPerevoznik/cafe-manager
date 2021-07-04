@@ -20,7 +20,7 @@ export class ToastService {
         switch (type) {
           case 'success':
             icon = 'far fa-check-circle';
-            title = "Успех";
+            title = "Успешно";
             break;
 
           case 'error':

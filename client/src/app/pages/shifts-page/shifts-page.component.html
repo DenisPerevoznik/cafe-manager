@@ -3,10 +3,10 @@
         <div class="col-12">
           <h3 class="page-title">Рабочие смены</h3>
         </div>
-        <div class="col-3">
+        <div class="col-md-3 col-sm-12">
             <input type="month" #monthpicker class="form-control" style="width: 18.5rem" (change)="getByMonth($event)">
         </div>
-        <div class="col-9">
+        <div class="col-md-9 col-sm-12">
             <button mdbBtn size="sm" color="primary" (click)="getAllShifts()">За все время</button>
         </div>
     </div>
@@ -17,7 +17,7 @@
     <ng-container *ngIf="!loader">
         <div class="row mt-3">
             <div class="col-lg-3 col-md-4 col-sm-12" *ngFor="let shift of workShiftsData">
-                <div class="card shadow p-2">
+                <div class="card shadow p-2 mb-3">
                     <div class="card-shift-header">
                         <h5>{{shift.date.stringFullDate}}</h5>
                         <mdb-badge color="indigo" style="height: fit-content" *ngIf="!shift.status">
@@ -42,7 +42,9 @@
                             <span class="title">Касса в начале: </span> <span class="value">₴ {{shift.openingBalance}}</span>
                         </div>
                         <div class="shift-element">
-                            <span class="title">Касса: </span> <span class="value">₴ {{shift.revenue}}</span>
+                            <span class="title">Касса: </span> <span class="value">
+                                ₴ {{(shift.revenue | toDecimal) + (shift.openingBalance | toDecimal)}}
+                            </span>
                         </div>
                         <div class="shift-element">
                             <span class="title">На смене: </span> <span class="value">{{shift.employeeName}}</span>

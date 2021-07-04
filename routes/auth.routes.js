@@ -85,6 +85,17 @@ router.post(
   }
 );
 
+router.get('/current-user', auth, async(req, res) => {
+
+  const userId = req.user.userId;
+  const user = await User.findByPk(userId);
+
+  if (user)
+    return res.status(200).json({name: user.dataValues.name, surname: user.dataValues.surname, email: user.dataValues.email});
+
+  res.status(401).json({message: "Нужна повторная авторизация"});
+});
+
 router.get('/check', auth, (req, res) => {
   res.status(200).json({ message: 'Авторизация выполнена' });
 });

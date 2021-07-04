@@ -1,6 +1,8 @@
 export interface User {
   id?: number | string;
   email: string;
+  name?: string;
+  surname?: string;
 }
 
 export interface Company {
@@ -107,6 +109,7 @@ export interface Category{
   title: string;
   published: boolean;
   color: string;
+  allowToRemove?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

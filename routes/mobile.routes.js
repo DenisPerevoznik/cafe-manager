@@ -126,9 +126,10 @@ async function synchronization(workShifts, companyId){
     .then(async (shifts) => {
 
       const lastWorkShiftModel = shifts[0];
+      const mainAccountId = companyModel.dataValues.mainAccount;
       let mainAccountBalance = 0;
 
-      if(mainAccountModel && lastWorkShiftModel){
+      if(mainAccountId && lastWorkShiftModel){
 
         if(lastWorkShiftModel.dataValues.status == true){// если смена открыта, то баланс счета принимает сумму собранную на смене
           mainAccountBalance = parseFloat(lastWorkShiftModel.dataValues.revenue) + parseFloat(lastWorkShiftModel.dataValues.openingBalance);
@@ -137,8 +138,7 @@ async function synchronization(workShifts, companyId){
           mainAccountBalance = parseFloat(lastWorkShiftModel.dataValues.closingBalance);
         }
 
-        const accountModel = await companyModel.getMainAccount();
-        await Account.update({balance: mainAccountBalance}, {where: {id: accountModel.dataValues.id}});
+        await Account.update({balance: mainAccountBalance}, {where: {id: mainAccountId}});
       }
     });
   } catch (error) {

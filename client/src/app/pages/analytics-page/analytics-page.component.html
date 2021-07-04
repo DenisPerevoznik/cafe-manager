@@ -51,7 +51,7 @@
         <app-daily-chart [dataSource]="dailyData"></app-daily-chart>
       </div>
     </div>
-    <div class="col-md-4 col-lg-4 col-sm-12">
+    <div class="col-md-4 col-lg-4 col-sm-12 mt-3">
       <div class="card shadow">
         <span class="chart-title">Финансы</span>
         <app-finance-chart [financesData]="financeData"></app-finance-chart>
@@ -144,7 +144,7 @@
         </div>
       </div>
     </div>
-    <div class="col-9">
+    <div class="col-md-9 col-sm-12 mt-3">
       <div class="card shadow">
         <select class="form-control select-year" (change)="onMonthlyYearChange($event)">
           <option value="2020">2020</option>

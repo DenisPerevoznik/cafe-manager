@@ -11,26 +11,37 @@
     <hr>
     <app-page-loader [show]="loader"></app-page-loader>
     <form [formGroup]="createForm" (ngSubmit)="onSubmit()" *ngIf="!loader">
+
         <div class="row">
             <div class="col-md-9 col-sm-12">
-                <div class="card shadow p-3 ml-2 mb-4" сlass="form50">
-                    <label class="mt-3">Поставщик</label>
-                    <select class="form-control w-50" formControlName="supplier">
-                        <option [ngValue]="null">Выберите поставщика</option>
-                        <option [value]="supplier.id" *ngFor="let supplier of suppliers">{{supplier.name}}</option>
-                    </select>
-                    <small class="invalid" *ngIf="submitted && createForm.get('supplier').invalid">Выберите поставщика</small>
-
-                    <label class="mt-3">Счет для списания средств</label>
-                    <select class="form-control w-50" formControlName="account">
-                        <option [ngValue]="null">Выберите счет</option>
-                        <option [value]="account.id" *ngFor="let account of accounts">{{account.title}}</option>
-                    </select>
-                    <small class="invalid" *ngIf="submitted && createForm.get('account').invalid">Выберите счет</small>
-
-                    <label class="mt-3">Комментарий</label>
-                    <textarea formControlName="comment" cols="20" rows="5" placeholder="Введите комментарий к поставке"
-                        class="form-control w-50"></textarea>
+                <div class="card shadow p-3 ml-2 mb-4">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <label class="mt-3">Поставщик</label>
+                            <select class="form-control" formControlName="supplier">
+                                <option [ngValue]="null">Выберите поставщика</option>
+                                <option [value]="supplier.id" *ngFor="let supplier of suppliers">{{supplier.name}}</option>
+                            </select>
+                            <small class="invalid" *ngIf="submitted && createForm.get('supplier').invalid">Выберите поставщика</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <label class="mt-3">Счет для списания средств</label>
+                            <select class="form-control" formControlName="account">
+                                <option [ngValue]="null">Выберите счет</option>
+                                <option [value]="account.id" *ngFor="let account of accounts">{{account.title}}</option>
+                            </select>
+                            <small class="invalid" *ngIf="submitted && createForm.get('account').invalid">Выберите счет</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <label class="mt-3">Комментарий</label>
+                            <textarea formControlName="comment" cols="20" rows="5" placeholder="Введите комментарий к поставке"
+                                class="form-control"></textarea>
+                        </div>
+                    </div>
 
                     <div class="ingredients-container mt-3 p-3">
                         
@@ -90,7 +101,7 @@
                         <small class="invalid" *ngIf="submitted && !deliveryRows.length">Нужно добавить хотя бы одну поставку</small>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button mdbBtn size="sm" style="width: 20%" color="primary" type="button" 
+                        <button mdbBtn size="sm" color="primary" type="button" 
                             class="ml-3" (click)="addDeliveryItem()">
                             <div class="btn-content">
                                 <span class="material-icons-outlined icon">add</span> Добавить еще
@@ -104,7 +115,7 @@
                     </div>
 
                     <div class="d-flex justify-content-center">
-                        <button type="submit" mdbBtn color="success" class="mt-4" style="width: 35%" size="md">
+                        <button type="submit" mdbBtn color="success" class="mt-4" size="md">
                             Оформить поставку
                         </button>
                     </div>

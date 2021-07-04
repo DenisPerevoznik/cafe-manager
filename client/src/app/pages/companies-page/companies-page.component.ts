@@ -4,13 +4,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalComponent } from '@app/shared/components/modal/modal.component';
 import { CompanyService } from '@app/shared/services/company.service';
-import { SelectCompany } from '@app/store/actions/common.actions';
+import { SelectCompany, SetCurrentUser } from '@app/store/actions/common.actions';
 import { AppState } from '@app/store/state/app.state';
 import { Store } from '@ngrx/store';
 import { MDBModalService } from 'angular-bootstrap-md';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { Company } from 'src/app/shared/interfaces';
+import { Company, User } from 'src/app/shared/interfaces';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
@@ -42,6 +42,12 @@ export class CompaniesPageComponent implements OnInit, OnDestroy {
       address: new FormControl(null, [Validators.required])
     });
     this.getCompanies();
+
+    this.http.get('/api/auth/current-user')
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe((user: User) => {
+      this.store.dispatch(new SetCurrentUser(user));
+    });
   }
 
   private getCompanies(){

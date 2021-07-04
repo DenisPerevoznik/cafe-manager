@@ -346,6 +346,12 @@ table{
       font-size: 25px;
     }
   }
+
+  white-space: nowrap;
+}
+
+.horizontal-scroll{
+  overflow-x: auto;
 }
 
 /* LOADER */

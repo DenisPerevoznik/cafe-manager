@@ -6,6 +6,9 @@ export const commonReducers = (state = initialCommonState, action: CommonActions
     switch (action.type) {
         case ECommonActions.SelectCompany:
             return {...state, selectedCompany: action.payload}
+
+        case ECommonActions.SetCurrentUser:
+            return {...state, currentUser: action.payload}
     
         default:
             return state;

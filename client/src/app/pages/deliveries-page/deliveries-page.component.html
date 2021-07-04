@@ -29,7 +29,7 @@
                     </button>
                 </div>
                 <div class="col-12">
-                    <div class="card p-2">
+                    <div class="card p-2 horizontal-scroll">
                         <h6>Просмотр поставки ({{currentDelivery.createdAt | date:'dd.MM.yyyy HH:mm'}})</h6>
                         <p>{{currentDelivery.comment ? currentDelivery.comment : 'Коментарий отсутствует'}}</p>
                         <table mdbTable bordered="true" striped="true" class="custom-tbl">
@@ -52,7 +52,7 @@
                 </div>
             </ng-container>
             <div class="col-12" *ngIf="!currentDelivery">
-                <div class="card shadow p-2">
+                <div class="card shadow p-2 horizontal-scroll">
                     <table mdbTable bordered="true" striped="true" class="custom-tbl">
                         <thead>
                           <tr>
