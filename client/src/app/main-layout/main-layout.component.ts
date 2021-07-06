@@ -46,6 +46,11 @@ export class MainLayoutComponent implements OnInit {
     this.checkIsMobile();
   }
 
+  elementMenuClick(){
+    if(this.isMobile)
+      this.sideBarStatus = false;
+  }
+
   private checkIsMobile(){
     if(window.innerWidth >= 320 && window.innerWidth <= 1360){
       this.isMobile = true;

@@ -4,7 +4,7 @@
     [showBackdrop]="this.isMobile">
     <div class="ng-sidebar__company-name">{{selectedCompany ? selectedCompany.name : ''}}</div>
     <nav>
-      <ul>
+      <ul (click)="elementMenuClick()">
         <a routerLink="analytics">
           <li><i class="far fa-chart-bar"></i> Аналитика</li>
         </a>

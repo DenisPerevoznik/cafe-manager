@@ -22,12 +22,14 @@
             </div>
         </div>
       </div>
-      <div class="col-md-8 col-sm-12 d-flex align-items-center">
+      <div class="col-md-5 col-sm-12 d-flex align-items-center">
           <span class="mr-2">Просматриваемая дата </span>
           <input type="date" class="form-control" (change)="onDateChange($event)" style="width: 14rem" id="date-field"
             [attr.data-prev]="'null'" #datepicker>
-          <button type="button" mdbBtn color="primary" size="sm" (click)="moreShiftsClick()"
-            mdbWavesEffect class="ml-2" *ngIf="workShiftsByDate.length > 1">
+      </div>
+      <div class="col-md-4 col-sm-12 d-flex align-items-center">
+        <button type="button" mdbBtn color="primary" size="sm" (click)="moreShiftsClick()"
+            mdbWavesEffect class="ml-2"  *ngIf="workShiftsByDate.length > 1">
             Другие смены за эту дату</button>
       </div>
     </div>

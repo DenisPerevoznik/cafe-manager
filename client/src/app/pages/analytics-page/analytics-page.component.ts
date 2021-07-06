@@ -69,10 +69,14 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     return new Date();
   }
 
+  get currentYear(){
+    return this.currentDate.getFullYear();
+  }
+
   getMonthlyData(year = null){
 
     if(!year)
-      year = new Date().getFullYear();
+      year = this.currentYear;
 
     this.analyticsService.getMonthlyAnalytics(year)
     .pipe(takeUntil(this.unsubscribe))

@@ -11,7 +11,6 @@ export class HeaderComponent implements OnInit {
   @Input() showSidebarToggle = true;
   @Input() showHomeButton = true;
   @Output() sidebarToggleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  sidebarStatus = true;
 
   constructor(private auth: AuthService) { }
 
@@ -22,8 +21,7 @@ export class HeaderComponent implements OnInit {
     this.auth.logout();
   }
 
-  sidebarToggle(){
-    this.sidebarStatus = !this.sidebarStatus;
-    this.sidebarToggleChange.emit(this.sidebarStatus);
+  openSidebar(){
+    this.sidebarToggleChange.emit(true);
   }
 }
