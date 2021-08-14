@@ -1,14 +1,14 @@
 <div class="chart-container">
-    <div class="chart-container-content">
-        <h4> {{financesData.differencePrevMonth > 0 ? ('+' + financesData.differencePrevMonth) : financesData.differencePrevMonth}}%</h4>
-        <span>С прошлого месяца</span>
-    </div>
+<!--    <div class="chart-container-content">-->
+<!--        <h4> {{financesData.differencePrevMonth > 0 ? ('+' + financesData.differencePrevMonth) : financesData.differencePrevMonth}}%</h4>-->
+<!--        <span>С прошлого месяца</span>-->
+<!--    </div>-->
     <canvas baseChart
       [data]="doughnutChartData"
       [labels]="doughnutChartLabels"
       [legend]="false"
       [colors]="colors"
-      [options]="{cutoutPercentage: 80}"
+      [options]="{cutoutPercentage: 50}"
       [chartType]="'doughnut'">
     </canvas>
   </div>

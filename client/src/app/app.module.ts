@@ -33,6 +33,7 @@ import { DeliveriesPageComponent } from './pages/deliveries-page/deliveries-page
 import { CreateDeliveryPageComponent } from './pages/deliveries-page/create-delivery-page/create-delivery-page.component';
 import { SuppliersPageComponent } from './pages/suppliers-page/suppliers-page.component';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
+import { AttendanceChartComponent } from './pages/analytics-page/attendance-chart/attendance-chart.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { SettingsPageComponent } from './pages/settings-page/settings-page.compo
     CreateDeliveryPageComponent,
     SuppliersPageComponent,
     SettingsPageComponent,
+    AttendanceChartComponent,
   ],
   imports: [
     BrowserModule,

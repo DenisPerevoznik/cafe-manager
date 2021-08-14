@@ -22,6 +22,21 @@ const Ingredient = db.define('Ingredient', {
     allowNull: false,
     defaultValue: 'шт.',
   },
+  // optional: {
+  //  type: DataTypes.BOOLEAN,
+  //   allowNull: false,
+  //   defaultValue: false
+  // },
+  consignment: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    defaultValue: 0
+  },
+  minStock: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false,
+    defaultValue: 0
+  },
   quantity: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,

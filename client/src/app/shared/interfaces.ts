@@ -23,6 +23,11 @@ export interface DailyData{
   receiptArr: number[];
 }
 
+export interface AttendanceData {
+  labels: string[];
+  receiptArr: number[];
+}
+
 export interface MonthlyData{
 
   profitArr: number[];
@@ -119,10 +124,13 @@ export interface Ingredient {
   title: string;
   price?: number;
   unit: IngredientUnitEnum;
+  // optional: boolean;
   isUsing?: boolean;
   quantity?: number;
   createdAt?: string;
   usingInOne?: number;
+  consignment: number;
+  minStock: number;
   updatedAt?: string;
   CompanyId?: number;
 }
@@ -141,7 +149,7 @@ export interface Product {
   published: boolean;
   costPrice: number;
   type?: string;
-  ingredients?: Ingredient[],
+  ingredients?: Ingredient[];
   createdAt?: string;
   updatedAt?: string;
   category?: Category;

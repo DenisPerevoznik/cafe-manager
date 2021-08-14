@@ -37,8 +37,9 @@
   <hr>
   <div class="row mt-3">
     <div class="col-12">
+      <h4 class="page-sub-title">Финансы</h4>
       <div class="form-inline">
-        <h4 class="page-sub-title">Месяц </h4>
+        <h6 class="page-title-second-text mr-2">Месяц</h6>
         <input type="month" [value]="currentDailyDate | date:'yyyy-MM'" class="form-control" (change)="onDailyDateChange($event)">
       </div>
     </div>
@@ -51,28 +52,29 @@
         <app-daily-chart [dataSource]="dailyData"></app-daily-chart>
       </div>
     </div>
-    <div class="col-md-4 col-lg-4 col-sm-12 mt-3">
+    <div class="col-md-4 col-lg-4 col-sm-12 mt-sm-3">
       <div class="card shadow">
-        <span class="chart-title">Финансы</span>
+        <span class="chart-title">Разница с прошлым месяцом</span>
         <app-finance-chart [financesData]="financeData"></app-finance-chart>
-        <table mdbTable hover="true" [small]="true">
-          <thead>
+        <div class="horizontal-scroll">
+          <table mdbTable hover="true" [small]="true">
+            <thead>
             <tr>
               <th scope="col">Название</th>
               <th scope="col">Значение</th>
               <th scope="col">Разница</th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             <tr mdbTableCol>
               <td class="finance-title-td">
                 <span class="material-icons-outlined fin-icon" style="color: #4782da">donut_large</span>
                 Доход
               </td>
               <td>₴ {{financeData.income.value}}</td>
-              <td class="finance-chart-value" 
-              [ngStyle]="{color: financeData.income.difference < 0 ? '#F4436B' : '#66BB6A'}">
-              {{(financeData.income.difference > 0 ? '+' : '') + financeData.income.difference}}%</td>
+              <td class="finance-chart-value"
+                  [ngStyle]="{color: financeData.income.difference < 0 ? '#F4436B' : '#66BB6A'}">
+                {{(financeData.income.difference > 0 ? '+' : '') + financeData.income.difference}}%</td>
             </tr>
             <tr mdbTableCol>
               <td class="finance-title-td">
@@ -81,21 +83,34 @@
               </td>
               <td>₴ {{financeData.costs.value}}</td>
               <td class="finance-chart-value"
-              [ngStyle]="{color: financeData.costs.difference < 0 ? '#F4436B' : '#66BB6A'}">
-              {{(financeData.costs.difference > 0 ? '+' : '') + financeData.costs.difference}}%</td>
+                  [ngStyle]="{color: financeData.costs.difference < 0 ? '#F4436B' : '#66BB6A'}">
+                {{(financeData.costs.difference > 0 ? '+' : '') + financeData.costs.difference}}%</td>
             </tr>
-            <tr mdbTableCol>
-              <td class="finance-title-td">
-                <span class="material-icons-outlined fin-icon" style="color: #E5E5E5">donut_large</span>
-                Средний чек
-              </td>
-              <td>₴ {{financeData.averageCheck.value}}</td>
-              <td class="finance-chart-value"
-              [ngStyle]="{color: financeData.averageCheck.difference < 0 ? '#F4436B' : '#66BB6A'}">
-                {{(financeData.averageCheck.difference > 0 ? '+' : '') + financeData.averageCheck.difference}}%</td>
-            </tr>
-          </tbody>
-        </table>
+<!--            <tr mdbTableCol>-->
+<!--              <td class="finance-title-td">-->
+<!--                <span class="material-icons-outlined fin-icon" style="color: #E5E5E5">donut_large</span>-->
+<!--                Средний чек-->
+<!--              </td>-->
+<!--              <td>₴ {{financeData.averageCheck.value}}</td>-->
+<!--              <td class="finance-chart-value"-->
+<!--                  [ngStyle]="{color: financeData.averageCheck.difference < 0 ? '#F4436B' : '#66BB6A'}">-->
+<!--                {{(financeData.averageCheck.difference > 0 ? '+' : '') + financeData.averageCheck.difference}}%</td>-->
+<!--            </tr>-->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-4 col-lg-4 col-sm-1 d-flex justify-content-center align-items-center">
+      <span class="material-icons-outlined big-icon">supervisor_account</span>
+    </div>
+    <div class="col-md-8 col-lg-8 col-sm-12">
+      <div class="card shadow">
+        <span class="chart-title">График посещаемости</span>
+        <app-attendance-chart [dataSource]="attendanceData"></app-attendance-chart>
       </div>
     </div>
   </div>

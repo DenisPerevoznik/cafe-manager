@@ -35,6 +35,8 @@ router.get('/:companyId', auth, (req, res) => {
     [
       auth,
       check('title', 'Название обязательно к заполнению').not().isEmpty().isString(),
+      check('consignment', 'Нужно заполнить поле "Минимальный запас"').not().isEmpty(),
+      check('minStock', 'Нужно заполнить поле "Партия"').not().isEmpty(),
       check('unit', 'Единица измерения указана не верно').isString().custom(unit => {
         return unit === 'кг.' || unit === 'шт.' || unit === 'л.'
       })
@@ -44,7 +46,7 @@ router.get('/:companyId', auth, (req, res) => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ message: errors.array()[0].msg });
       }
-  
+
       Company.findByPk(req.body.companyId)
         .then((company) => {
           company.createIngredient({ ...req.body }).then((ingredient) => {

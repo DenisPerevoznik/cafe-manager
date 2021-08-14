@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { CurrentStatistic, DailyData, MonthlyData, User } from '@app/shared/interfaces';
+import {AttendanceData, CurrentStatistic, DailyData, MonthlyData, User} from '@app/shared/interfaces';
 import { AnalyticsService } from '@app/shared/services/analytics.service';
 import { AppHelpService } from '@app/shared/services/app-help.service';
 import { CompanyService } from '@app/shared/services/company.service';
@@ -31,6 +31,7 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
   private unsubscribe: Subject<any> = new Subject<any>();
   public monthlyData: MonthlyData;
   public dailyData: DailyData;
+  public attendanceData: AttendanceData;
   public monthlyAverage = {profit: 0, revenue: 0, receipts: 0};
   public currentDailyDate;
   public currentStatistic: CurrentStatistic = {
@@ -107,6 +108,7 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(data => {
         this.dailyData = data.currentMonthData;
+        this.attendanceData = {labels: data.currentMonthData.labels, receiptArr: data.currentMonthData.receiptArr};
         this.setFinances(data.currentMonthData, data.previousMonthData, data.currentExpanses, data.prevExpanses);
     });
   }
@@ -124,7 +126,7 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     ? 0
     : this.helpService.trimAfterDecimalPoint(this.helpService.getSum(currentData.revenueArr) / currentReceiptSum);
 
-    const prevAverageCheck = prevReceiptSum == 0 
+    const prevAverageCheck = prevReceiptSum == 0
     ? 0
     : this.helpService.trimAfterDecimalPoint(this.helpService.getSum(prevData.revenueArr) / prevReceiptSum);
 
@@ -162,16 +164,16 @@ export class AnalyticsPageComponent implements OnDestroy, OnInit, AfterViewInit 
     const revenueSum = revenueArr.reduce((acc, val) => acc += val, 0);
     const receiptsSum = receiptsArr.reduce((acc, val) => acc += val, 0);
 
-    const profit = profitArr.length 
+    const profit = profitArr.length
     ? this.helpService.trimAfterDecimalPoint(profitSum / profitArr.length )
     : 0;
 
-    const revenue = revenueArr.length 
-    ? this.helpService.trimAfterDecimalPoint(revenueSum / revenueArr.length) 
+    const revenue = revenueArr.length
+    ? this.helpService.trimAfterDecimalPoint(revenueSum / revenueArr.length)
     : 0;
 
-    const receipts = receiptsArr.length 
-    ? this.helpService.trimAfterDecimalPoint(receiptsSum / receiptsArr.length) 
+    const receipts = receiptsArr.length
+    ? this.helpService.trimAfterDecimalPoint(receiptsSum / receiptsArr.length)
     : 0;
 
     this.monthlyAverage = {

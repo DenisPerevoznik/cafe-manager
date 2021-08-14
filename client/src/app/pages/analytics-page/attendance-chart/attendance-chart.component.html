@@ -1,0 +1,9 @@
+<canvas baseChart
+        [datasets]="lineChartData"
+        [labels]="dataSource ? dataSource.labels : []"
+        [colors]="lineChartColors"
+        [legend]="true"
+        [chartType]="'line'"
+        [options]="{responsive: true}"
+        [plugins]="[]">
+</canvas>

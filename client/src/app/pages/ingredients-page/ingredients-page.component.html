@@ -4,14 +4,32 @@
           <h3 class="page-title">Ингредиенты и товары</h3>
         </div>
 
-        <div class="col-12">
+        <div class="col-md-3 col-sm-12">
             <button mdbBtn size="sm" color="success" [disabled]="loader"
-            (click)="onCreateIngredientClick()">
-            <div class="btn-content">
-                <span class="material-icons-outlined icon">add</span> Добавить новый
-            </div>
-        </button>
+                (click)="onCreateIngredientClick()">
+                <div class="btn-content">
+                    <span class="material-icons-outlined icon">add</span> Добавить новый
+                </div>
+            </button>
         </div>
+
+<!--        <div class="col-md-3 col-sm-12">-->
+<!--            <button mdbBtn size="sm" color="primary" [disabled]="loader"-->
+<!--                (click)="createIngredientsDoc()">-->
+<!--                <div class="btn-content">-->
+<!--                    <span class="material-icons-outlined icon">description</span> Создать документ-->
+<!--                </div>-->
+<!--            </button>-->
+<!--        </div>-->
+
+<!--        <div class="col-md-3 col-sm-12">-->
+<!--          <button mdbBtn size="sm" color="primary" [disabled]="loader"-->
+<!--                  (click)="createDelivery()">-->
+<!--            <div class="btn-content">-->
+<!--              <span class="material-icons-outlined icon">local_shipping</span> Сделать поставку нужных-->
+<!--            </div>-->
+<!--          </button>-->
+<!--        </div>-->
     </div>
 
     <hr>
@@ -80,30 +98,55 @@
                         <input type="text" formControlName="title" placeholder="Введите название" id="title" class="form-control">
                         <small class="invalid" *ngIf="createForm.get('title').invalid && submitted">Заполните это поле</small>
                     </div>
-                    <div class="col-12 mt-2" *ngIf="!isEdit || (isEdit && !selectedIngredient.isUsing)">
-                        <label for="">Выберите единицу измерения</label>
+                    <div class="col-12 mt-3" *ngIf="!isEdit || (isEdit && !selectedIngredient.isUsing)">
+                        <label>Выберите единицу измерения</label>
                         <br>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" name="unit" value="шт." class="custom-control-input" id="count" formControlName="unit" mdbInput>
+                            <input type="radio" name="unit" value="шт." class="custom-control-input" id="count"
+                                formControlName="unit" mdbInput (change)="onChangeUnit()">
                             <label class="custom-control-label" for="count">Штуки</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" name="unit" value="кг." class="custom-control-input" id="kg" formControlName="unit" mdbInput>
+                            <input type="radio" name="unit" value="кг." class="custom-control-input" id="kg"
+                                formControlName="unit" mdbInput (change)="onChangeUnit()">
                             <label class="custom-control-label" for="kg">Килограммы</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" name="unit" value="л." class="custom-control-input" id="l" formControlName="unit" mdbInput>
+                            <input type="radio" name="unit" value="л." class="custom-control-input" id="l"
+                                formControlName="unit" mdbInput (change)="onChangeUnit()">
                             <label class="custom-control-label" for="l">Литры</label>
                         </div>
                         <br>
                         <small class="invalid" *ngIf="createForm.get('unit').invalid && submitted">Выберите ед. измерения</small>
                     </div>
 
+<!--                    <ng-container *ngIf="unitChanged">-->
+<!--                        <div class="col-12 mt-3">-->
+<!--                            <label>Минимальный запас ({{createForm.value.unit | productUnit}})</label>-->
+<!--                            <input type="number" formControlName="minStock" placeholder="Укажите минимальный запас" class="form-control">-->
+<!--                            <small class="invalid" *ngIf="createForm.get('minStock').invalid && submitted">Заполните это поле</small>-->
+<!--                        </div>-->
+<!--                        <div class="col-12 mt-3">-->
+<!--                            <label>Партия ({{createForm.value.unit}})</label>-->
+<!--                            <input type="number" formControlName="consignment" placeholder="Укажите партию" class="form-control">-->
+<!--                            <small class="invalid" *ngIf="createForm.get('consignment').invalid && submitted">Заполните это поле</small>-->
+<!--                        </div>-->
+<!--                    </ng-container>-->
+
                     <div class="col-12 mt-3" *ngIf="isEdit && selectedIngredient.isUsing">
                         <div class="alert alert-warning" role="alert" style="font-size: 13px">
                             Вы не можете изменить фасовку, так как этот ингредиент уже используется в поставках или продуктах
                         </div>
                     </div>
+<!--                    <div class="col-12 mt-3">-->
+<!--                      <div class="form-check">-->
+<!--                        <input class="form-check-input" id="optionalCheck" type="checkbox" formControlName="optional">-->
+<!--                        <label class="form-check-label" for="optionalCheck">-->
+<!--                          Необязательный ресурс-->
+<!--                        </label>-->
+<!--                      </div>-->
+<!--                      <small>Выберите этот пункт, если этот ресурс отпускается по желанию клиента</small>-->
+<!--                    </div>-->
                 </div>
             </ng-container>
 
@@ -134,7 +177,7 @@
                     </p>
                 </div>
             </div>
-    
+
             <div class="row mt-2">
                 <div class="col-12 d-flex justify-content-end">
                     <div class="spinner-border spinner-border-sm" role="status" *ngIf="modalLoader">

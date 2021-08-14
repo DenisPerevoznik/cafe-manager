@@ -25,11 +25,6 @@ export class DailyChartComponent implements OnChanges, OnInit {
       backgroundColor: 'rgba(28, 56, 83, 0.05)',
       borderDash: [12, 5],
       pointHitRadius: 2
-    },
-    {
-      backgroundColor: 'rgba(210, 25, 110, 0)',
-      borderColor: 'rgba(210, 25, 110, 0.9)',
-      pointHitRadius: 2,
     }
   ];
 
@@ -41,7 +36,6 @@ export class DailyChartComponent implements OnChanges, OnInit {
       this.lineChartData = [
         { data: this.dataSource.revenueArr, label: 'Выручка' },
         { data: this.dataSource.profitArr, label: 'Марж. прибыль' },
-        { data: this.dataSource.receiptArr, label: 'Посещаемость', lineTension: 0 },
       ];
     }
   }
@@ -50,7 +44,6 @@ export class DailyChartComponent implements OnChanges, OnInit {
     this.lineChartData = [
       { data: [], label: 'Выручка' },
       { data: [], label: 'Марж. прибыль' },
-      { data: [], label: 'Посещаемость', lineTension: 0 },
     ];
   }
 
